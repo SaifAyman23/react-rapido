@@ -1,0 +1,322 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* ============================================================
+   TAILWIND CUSTOM VARIANT
+   ============================================================ */
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   THEME TOKENS
+   ============================================================ */
+@theme inline {
+  /* Radius scale */
+  --radius-sm:  calc(var(--radius) - 4px);
+  --radius-md:  calc(var(--radius) - 2px);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Semantic color aliases */
+  --color-background:               var(--background);
+  --color-foreground:               var(--foreground);
+  --color-card:                     var(--card);
+  --color-card-foreground:          var(--card-foreground);
+  --color-popover:                  var(--popover);
+  --color-popover-foreground:       var(--popover-foreground);
+  --color-primary:                  var(--primary);
+  --color-primary-foreground:       var(--primary-foreground);
+  --color-secondary:                var(--secondary);
+  --color-secondary-foreground:     var(--secondary-foreground);
+  --color-muted:                    var(--muted);
+  --color-muted-foreground:         var(--muted-foreground);
+  --color-accent:                   var(--accent);
+  --color-accent-foreground:        var(--accent-foreground);
+  --color-destructive:              var(--destructive);
+  --color-border:                   var(--border);
+  --color-input:                    var(--input);
+  --color-ring:                     var(--ring);
+  --color-chart-1:                  var(--chart-1);
+  --color-chart-2:                  var(--chart-2);
+  --color-chart-3:                  var(--chart-3);
+  --color-chart-4:                  var(--chart-4);
+  --color-chart-5:                  var(--chart-5);
+  --color-sidebar:                  var(--sidebar);
+  --color-sidebar-foreground:       var(--sidebar-foreground);
+  --color-sidebar-primary:          var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent:           var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border:           var(--sidebar-border);
+  --color-sidebar-ring:             var(--sidebar-ring);
+
+}
+
+/* ============================================================
+   LIGHT THEME  (unchanged colors)
+   ============================================================ */
+:root {
+  --radius: 0.65rem;
+  --background:             oklch(1.000 0.000 89.9);
+  --foreground:             oklch(0.141 0.005 285.823);
+  --card:                   oklch(1 0 0);
+  --card-foreground:        oklch(0.141 0.005 285.823);
+  --popover:                oklch(1 0 0);
+  --popover-foreground:     oklch(0.141 0.005 285.823);
+  --primary:                oklch(0.488 0.243 264.376);
+  --primary-foreground:     oklch(0.97 0.014 254.604);
+  --secondary:              oklch(0.967 0.001 286.375);
+  --secondary-foreground:   oklch(0.21 0.006 285.885);
+  --muted:                  oklch(0.967 0.001 286.375);
+  --muted-foreground:       oklch(0.552 0.016 285.938);
+  --accent:                 oklch(0.967 0.001 286.375);
+  --accent-foreground:      oklch(0.21 0.006 285.885);
+  --destructive:            oklch(0.577 0.245 27.325);
+  --border:                 oklch(0.92 0.004 286.32);
+  --input:                  oklch(0.92 0.004 286.32);
+  --ring:                   oklch(0.708 0 0);
+  --chart-1:                oklch(0.809 0.105 251.813);
+  --chart-2:                oklch(0.623 0.214 259.815);
+  --chart-3:                oklch(0.546 0.245 262.881);
+  --chart-4:                oklch(0.488 0.243 264.376);
+  --chart-5:                oklch(0.424 0.199 265.638);
+  --sidebar:                oklch(0.985 0 0);
+  --sidebar-foreground:     oklch(0.141 0.005 285.823);
+  --sidebar-primary:        oklch(0.546 0.245 262.881);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+  --sidebar-accent:         oklch(0.967 0.001 286.375);
+  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+  --sidebar-border:         oklch(0.92 0.004 286.32);
+  --sidebar-ring:           oklch(0.708 0 0);
+
+}
+
+/* ============================================================
+   DARK THEME  (unchanged colors)
+   ============================================================ */
+.dark {
+  --background:             oklch(0.141 0.005 285.823);
+  --foreground:             oklch(0.985 0 0);
+  --card:                   oklch(0.174 0.004 286.0);
+  --card-foreground:        oklch(0.985 0 0);
+  --popover:                oklch(0.21 0.006 285.885);
+  --popover-foreground:     oklch(0.985 0 0);
+  --primary:                oklch(0.488 0.243 264.376);
+  --primary-foreground:     oklch(0.97 0.014 254.604);
+  --secondary:              oklch(0.274 0.006 286.033);
+  --secondary-foreground:   oklch(0.985 0 0);
+  --muted:                  oklch(0.215 0.008 285.7);
+  --muted-foreground:       oklch(0.705 0.015 286.067);
+  --accent:                 oklch(0.274 0.006 286.033);
+  --accent-foreground:      oklch(0.985 0 0);
+  --destructive:            oklch(0.704 0.191 22.216);
+  --border:                 oklch(1 0 0 / 10%);
+  --input:                  oklch(1 0 0 / 15%);
+  --ring:                   oklch(0.556 0 0);
+  --chart-1:                oklch(0.809 0.105 251.813);
+  --chart-2:                oklch(0.623 0.214 259.815);
+  --chart-3:                oklch(0.546 0.245 262.881);
+  --chart-4:                oklch(0.488 0.243 264.376);
+  --chart-5:                oklch(0.424 0.199 265.638);
+  --sidebar:                oklch(0.21 0.006 285.885);
+  --sidebar-foreground:     oklch(0.985 0 0);
+  --sidebar-primary:        oklch(0.623 0.214 259.815);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+  --sidebar-accent:         oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border:         oklch(1 0 0 / 10%);
+  --sidebar-ring:           oklch(0.439 0 0);
+
+}
+
+/* ============================================================
+   BASE LAYER
+   ============================================================ */
+@layer base {
+
+  /* Border & outline defaults */
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  /* ── Body ── */
+  body {
+    @apply bg-background text-foreground;
+    font-size: 1rem;
+    line-height: 1.6;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Headings — JetBrains Mono ── */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--foreground);
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.1;
+  }
+
+  h2 {
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    line-height: 1.15;
+  }
+
+  h3 {
+    font-size: clamp(1.35rem, 2.5vw, 1.875rem);
+    line-height: 1.25;
+  }
+
+  h4 {
+    font-size: clamp(1.1rem, 2vw, 1.375rem);
+    line-height: 1.35;
+  }
+
+  h5 {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+
+  h6 {
+    font-size: 1rem;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+
+  /* ── Paragraphs ── */
+  p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--foreground);
+  }
+
+  /* ── Lead paragraph ── */
+  p.lead {
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--muted-foreground);
+  }
+
+  /* ── Small text ── */
+
+  /* ── Small text ── */
+  small, .text-small {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  /* ── Links ── */
+  a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+  }
+
+  a:hover {
+    opacity: 0.8;
+  }
+
+  /* ── Small text ── */
+  small, .text-small {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  /* ── Strong / Bold ── */
+  strong, b {
+    font-weight: 600;
+  }
+
+  /* ── Horizontal rule ── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  /* ── Code ── */
+  code, pre {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 0.875em;
+  }
+
+  code {
+    background: var(--muted);
+    color: var(--foreground);
+    padding: 0.15em 0.4em;
+    border-radius: var(--radius-sm);
+  }
+
+  pre {
+    background: var(--muted);
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+
+  pre code {
+    background: transparent;
+    padding: 0;
+  }
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes caret-blink {
+  0%, 70%, 100% { opacity: 1; }
+  20%, 50%      { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-scale {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Utility animation classes */
+.animate-fade-in       { animation: fade-in 0.5s ease forwards; }
+.animate-fade-in-scale { animation: fade-in-scale 0.4s ease forwards; }
+
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3b3d42 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #3b3d42;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #5a5c63;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}

@@ -1,0 +1,21 @@
+# Development Dockerfile (not for production)
+# Usage:
+#   docker build -f Dockerfile.dev -t app-template-dev .
+#   docker run --rm -it -p 5173:5173 -v ${PWD}:/app -w /app app-template-dev npm run dev -- --host 0.0.0.0 --port 5173
+#   Alternatively, use Docker Compose with the same file.
+
+FROM node:20-bookworm
+
+WORKDIR /app
+
+# Install dependencies first (leverages Docker layer cache)
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Copy the rest of the source
+COPY . .
+
+EXPOSE 3000
+
+# Default command: start Vite dev server on all interfaces
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
