@@ -181,18 +181,16 @@ For SPA hosting, configure your server to route all paths to `index.html` (e.g.,
 
 ## Testing
 
-*(Test framework setup is left to the consumer. Recommended: Vitest + React Testing Library.)*
+The template ships with **Vitest + React Testing Library + jsdom + axe-core**:
 
 ```bash
-# Install testing dependencies
-npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
+npm run test        # Run once
+npm run test:watch  # Watch mode
 ```
 
-Run tests with:
-
-```bash
-npx vitest
-```
+- Test infra lives in `src/test/`: `setup-env.ts` (sets `IS_REACT_ACT_ENVIRONMENT`), `setup.ts` (jest-dom matchers), `axe.ts` (axe-core runner).
+- `a11y-*.test.tsx` runs axe scans on components to catch missing labels, contrast, and ARIA misuse.
+- Keep the suite green and lint-clean before committing (see `AGENTS.md`).
 
 ---
 

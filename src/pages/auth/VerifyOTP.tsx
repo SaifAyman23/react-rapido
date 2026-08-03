@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import { AuthLayout } from "@/components/auth/AuthLayout"
 import { FormError } from "@/components/auth/FormError"
@@ -30,11 +30,11 @@ export function VerifyOTP() {
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const [timer, setTimer] = useState(60)
-  const [canResend, setCanResend] = useState(false)
+
+  const canResend = timer <= 0
 
   const verifyMutation = useVerifyOTP()
   const sendCodeMutation = useSendVerificationCode()
-  const autoVerifiedRef = useRef(false)
 
   useEffect(() => {
     if (timer > 0) {
@@ -42,8 +42,6 @@ export function VerifyOTP() {
         setTimer((prev) => prev - 1)
       }, 1000)
       return () => clearInterval(interval)
-    } else {
-      setCanResend(true)
     }
   }, [timer])
 
@@ -72,25 +70,13 @@ export function VerifyOTP() {
           replace: true,
         })
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("OTP Verification Error:", err)
       setError(extractErrorMessage(err, "Invalid or expired code. Please try again."))
       setOtp("")
-      setCanResend(true)
       setTimer(0)
     }
   }, [otp, email, purpose, verifyMutation, navigate])
-
-  useEffect(() => {
-    if (otp.length === 6 && !verifyMutation.isPending) {
-      if (!autoVerifiedRef.current) {
-        autoVerifiedRef.current = true
-        handleVerify()
-      }
-    } else {
-      autoVerifiedRef.current = false
-    }
-  }, [otp, handleVerify, verifyMutation.isPending])
 
   const handleResend = async () => {
     if (!canResend) return
@@ -99,7 +85,6 @@ export function VerifyOTP() {
     setSuccess("")
     setOtp("")
     setTimer(60)
-    setCanResend(false)
 
     try {
       const data = await sendCodeMutation.mutateAsync({ email, type: purpose })

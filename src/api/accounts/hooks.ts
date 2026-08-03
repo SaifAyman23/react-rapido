@@ -72,7 +72,7 @@ export const useRegisterWithZustand = () => {
     onMutate: () => {
       setLoading(true);
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       setLoading(false);
     },
     onError: (error) => {

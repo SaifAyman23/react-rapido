@@ -1,20 +1,118 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+  <html lang="en" dir="ltr">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="React Rapido V1.0 — Modern frontend starter template." />
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>React Rapido — Modern Frontend Starter</title>
+    <meta name="description" content="A modern, scalable, production-ready React 19 + TypeScript + Vite project template." />
     <meta name="author" content="React Rapido" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#4880ff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="canonical" href="https://example.com/" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="apple-touch-icon" href="/vite.svg" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="React Rapido" />
+    <meta name="msapplication-TileColor" content="#4880ff" />
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="React Rapido V1.0" />
-    <meta property="og:description" content="A modern, scalable, and production-ready React project template." />
+    <meta property="og:site_name" content="React Rapido" />
+    <meta property="og:title" content="React Rapido — Modern Frontend Starter" />
+    <meta property="og:description" content="A modern, scalable, production-ready React 19 + TypeScript + Vite project template." />
+    <meta property="og:url" content="https://example.com/" />
+    <meta property="og:image" content="https://example.com/vite.svg" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="React Rapido" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="React Rapido — Modern Frontend Starter" />
+    <meta name="twitter:description" content="A modern, scalable, production-ready React 19 + TypeScript + Vite project template." />
+    <meta name="twitter:image" content="https://example.com/vite.svg" />
+    <meta name="twitter:image:alt" content="React Rapido" />
+
+    <!-- Fonts load async (non-render-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
-    <title>React Rapido V1.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" /></noscript>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "React Rapido",
+      "url": "https://example.com",
+      "logo": "https://example.com/vite.svg",
+      "description": "Modern, production-ready React 19 + TypeScript + Vite project template."
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "React Rapido",
+      "url": "https://example.com",
+      "description": "Modern, production-ready React 19 + TypeScript + Vite project template.",
+      "inLanguage": "en"
+    }
+    </script>
+    <style>
+      #loading-skeleton {
+        position: fixed; inset: 0; z-index: 9999;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        transition: opacity 0.3s ease;
+      }
+      #loading-skeleton .brand {
+        font-size: 40px; font-weight: 800; letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #4880ff 0%, #a5b4fc 50%, #f472b6 100%);
+        background-size: 200% 200%;
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: splash-gradient 3s ease infinite;
+        margin-bottom: 24px;
+      }
+      #loading-skeleton .loader-bar {
+        width: 160px; height: 3px; background: #e4e2e1; border-radius: 4px; overflow: hidden;
+      }
+      #loading-skeleton .loader-bar-inner {
+        width: 40%; height: 100%; background: #4880ff; border-radius: 4px;
+        animation: splash-loader 1.4s ease-in-out infinite;
+      }
+      @keyframes splash-gradient {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+      @keyframes splash-loader {
+        0% { transform: translateX(0); width: 20%; }
+        50% { width: 60%; transform: translateX(100px); }
+        100% { transform: translateX(280px); width: 20%; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #loading-skeleton .brand,
+        #loading-skeleton .loader-bar-inner {
+          animation: none;
+        }
+      }
+    </style>
   </head>
   <body>
+    <div id="loading-skeleton">
+      <div class="brand" dir="ltr">React Rapido<span style="color:#f472b6; -webkit-text-fill-color:#f472b6">.</span></div>
+      <div class="loader-bar"><div class="loader-bar-inner"></div></div>
+    </div>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
   </body>
 </html>

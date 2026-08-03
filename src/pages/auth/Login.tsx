@@ -17,7 +17,7 @@ export function Login() {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
-  const [success, setSuccess] = useState(location.state?.message || "")
+  const [success] = useState(location.state?.message || "")
   const loginMutation = useLogin();
  
 
@@ -42,7 +42,7 @@ export function Login() {
       onSuccess: () => {
         navigate("/")
       },
-      onError: (error: any) => {
+      onError: (error: unknown) => {
         setError(extractErrorMessage(error, "Login failed"))
       },
     }

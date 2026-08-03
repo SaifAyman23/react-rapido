@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './MainLayout';
+import { SeoUpdater } from '@/components/SeoUpdater';
 import { ROUTES } from '@/lib/constants';
 
 const Home = lazy(() => import('@/pages/Home'));
@@ -13,6 +14,7 @@ const ResetPassword = lazy(() => import('@/pages/auth/ResetPassword').then(m => 
 function App() {
   return (
     <Router>
+      <SeoUpdater />
       <Suspense fallback={null}>
         <Routes>
           <Route element={<MainLayout />}>

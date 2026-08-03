@@ -38,7 +38,7 @@ export function Register() {
         password_confirm: confirmPassword
       })
       navigate("/verify-otp", { state: { email, purpose: "email_verification" } })
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Registration error:", err)
       setError(extractErrorMessage(err))
     }

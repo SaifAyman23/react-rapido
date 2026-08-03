@@ -54,17 +54,24 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-const extractErrorMessage = (err: any, fallback = "An unexpected error occurred."): string => {
-  if (!err) return fallback;
+interface ApiError {
+  detail?: string
+  message?: string
+  details?: Record<string, unknown> | unknown
+}
 
-  if (err?.detail) return err.detail;
+const extractErrorMessage = (err: unknown, fallback = "An unexpected error occurred."): string => {
+  const error = err as ApiError | null | undefined;
+  if (!error) return fallback;
 
-  if (err?.message && !err.message.startsWith("Request failed with")) {
-    return err.message;
+  if (error.detail) return error.detail;
+
+  if (error.message && !error.message.startsWith("Request failed with")) {
+    return error.message;
   }
 
-  const details = err?.details;
-  if (details && typeof details === 'object') {
+  const details = error.details;
+  if (details && typeof details === 'object' && !Array.isArray(details)) {
     const values = Object.values(details);
     if (values.length > 0) {
       const first = values[0];
@@ -74,7 +81,7 @@ const extractErrorMessage = (err: any, fallback = "An unexpected error occurred.
     }
   }
 
-  return err?.message || fallback;
+  return error.message || fallback;
 };
 
 export { axiosInstance, API_BASE_URL, extractErrorMessage };

@@ -14,7 +14,6 @@ import { extractErrorMessage } from "@/api/axiosInstance"
 export function ResetPassword() {
   const navigate = useNavigate()
   const location = useLocation()
-  const email = location.state?.email || ""
   const token = location.state?.token || ""
 
   const [newPassword, setNewPassword] = useState("")

@@ -125,6 +125,7 @@ function AnimatedGroup({
   );
 
   return (
+    // eslint-disable-next-line react-hooks/static-components
     <MotionComponent
       initial='hidden'
       animate='visible'
