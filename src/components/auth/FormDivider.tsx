@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 interface FormDividerProps {
   className?: string
@@ -6,7 +6,7 @@ interface FormDividerProps {
 
 export function FormDivider({ className }: FormDividerProps) {
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn('relative', className)}>
       <div className="absolute inset-0 flex items-center">
         <span className="w-full border-t border-border" />
       </div>

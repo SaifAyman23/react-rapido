@@ -2,7 +2,7 @@
 
 **A modern, scalable, and production-ready React project template.**
 
-*Updated for React 19 • TypeScript • Tailwind v4*
+_Updated for React 19 • TypeScript • Tailwind v4_
 
 ---
 
@@ -68,6 +68,7 @@ npm run dev
 ```
 
 **Access URLs:**
+
 - Application: `http://localhost:5173`
 
 ---
@@ -121,10 +122,10 @@ src/
 
 Configuration is managed via environment variables prefixed with `VITE_`:
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `VITE_API_URL` | Backend API base URL | `http://localhost:8000/api/v1` |
-| `VITE_APP_NAME` | Application display name | `React Rapido V1.0` |
+| Variable        | Description              | Default                        |
+| --------------- | ------------------------ | ------------------------------ |
+| `VITE_API_URL`  | Backend API base URL     | `http://localhost:8000/api/v1` |
+| `VITE_APP_NAME` | Application display name | `React Rapido V1.0`            |
 
 **Note:** Never commit the populated `.env` file to version control.
 
@@ -134,21 +135,37 @@ Configuration is managed via environment variables prefixed with `VITE_`:
 
 ### Common Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start the Vite development server with HMR |
-| `npm run build` | Production build to `dist/` |
-| `npm run preview` | Preview the production build locally |
+| Command           | Description                                |
+| ----------------- | ------------------------------------------ |
+| `npm run dev`     | Start the Vite development server with HMR |
+| `npm run build`   | Production build to `dist/`                |
+| `npm run preview` | Preview the production build locally       |
 
 ### Code Quality & Formatting
 
-```bash
-# TypeScript type checking
-npx tsc --noEmit
+Quality is enforced by tooling, not discipline. Run `npm run check` (typecheck + lint + format check + tests) before committing — the same gate runs in CI (`.github/workflows/ci.yml`) on every push/PR:
 
-# Lint with ESLint
+```bash
+# One command: everything
+npm run check
+
+# TypeScript type checking
+npm run typecheck
+
+# Lint with ESLint (incl. import order, no non-null assertions, thin pages)
 npm run lint
+
+# Format with Prettier (also gated via `format:check`)
+npm run format
 ```
+
+| Command                | Description                                            |
+| ---------------------- | ------------------------------------------------------ |
+| `npm run check`        | typecheck + lint + format:check + test (CI-equivalent) |
+| `npm run typecheck`    | `tsc -b --noEmit`                                      |
+| `npm run lint`         | ESLint (flat config)                                   |
+| `npm run format`       | Prettier write over the repo                           |
+| `npm run format:check` | Prettier check (fails on drift)                        |
 
 ---
 
@@ -157,8 +174,8 @@ npm run lint
 All page components are lazy-loaded using `React.lazy()` + dynamic `import()` for automatic code splitting:
 
 ```tsx
-const Home = lazy(() => import('@/pages/Home'));
-const Login = lazy(() => import('@/pages/auth/Login'));
+const Home = lazy(() => import('@/pages/Home'))
+const Login = lazy(() => import('@/pages/auth/Login'))
 ```
 
 Each route generates its own chunk during the build, keeping the initial bundle lean.

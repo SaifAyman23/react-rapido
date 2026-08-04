@@ -1,49 +1,50 @@
-import * as React from "react"
-import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { ArrowLeft } from "lucide-react"
-import { AuthLayout } from "@/components/auth/AuthLayout"
-import { FormError } from "@/components/auth/FormError"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useSendVerificationCode } from "@/api/accounts/hooks"
-import type { OTPurpose } from "@/api/accounts/endpoints"
-import { extractErrorMessage } from "@/api/axiosInstance"
+import { ArrowLeft } from 'lucide-react'
+import * as React from 'react'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+
+import type { OTPurpose } from '@/api/accounts/endpoints'
+import { useSendVerificationCode } from '@/api/accounts/hooks'
+import { extractErrorMessage } from '@/api/axiosInstance'
+import { AuthLayout } from '@/components/auth/AuthLayout'
+import { FormError } from '@/components/auth/FormError'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 export function ForgotPassword() {
   const navigate = useNavigate()
-  const [email, setEmail] = useState("")
-  const [error, setError] = useState("")
+  const [email, setEmail] = useState('')
+  const [error, setError] = useState('')
 
   const sendCodeMutation = useSendVerificationCode()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
+    setError('')
 
     if (!email) {
-      setError("Please enter your email address")
+      setError('Please enter your email address')
       return
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address")
+      setError('Please enter a valid email address')
       return
     }
 
     try {
       await sendCodeMutation.mutateAsync({
         email,
-        type: "password_reset" as OTPurpose,
+        type: 'password_reset' as OTPurpose,
       })
 
-      navigate("/verify-otp", {
-        state: { email, purpose: "password_reset" as OTPurpose },
+      navigate('/verify-otp', {
+        state: { email, purpose: 'password_reset' as OTPurpose },
       })
     } catch (err) {
-      setError(extractErrorMessage(err, "Failed to send verification code"))
+      setError(extractErrorMessage(err, 'Failed to send verification code'))
     }
   }
 
@@ -69,12 +70,8 @@ export function ForgotPassword() {
           />
         </div>
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={sendCodeMutation.isPending}
-        >
-          {sendCodeMutation.isPending ? "Sending code..." : "Send verification code"}
+        <Button type="submit" className="w-full" disabled={sendCodeMutation.isPending}>
+          {sendCodeMutation.isPending ? 'Sending code...' : 'Send verification code'}
         </Button>
       </form>
 

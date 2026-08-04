@@ -1,17 +1,18 @@
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import type { User } from '@/types';
-import { APP_NAME } from '@/lib/constants';
+import { create } from 'zustand'
+import { devtools, persist } from 'zustand/middleware'
+
+import { APP_NAME } from '@/lib/constants'
+import type { User } from '@/types'
 
 export interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  error: string | null;
-  setUser: (user: User | null) => void;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
-  logout: () => void;
+  user: User | null
+  isAuthenticated: boolean
+  isLoading: boolean
+  error: string | null
+  setUser: (user: User | null) => void
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
+  logout: () => void
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -44,4 +45,4 @@ export const useAuthStore = create<AuthState>()(
     ),
     { name: `${APP_NAME}-auth-store` }
   )
-);
+)

@@ -1,27 +1,27 @@
-import { axiosInstance } from '@/api/axiosInstance';
-import type { PaginatedResponse } from '@/api/types';
+import { axiosInstance } from '@/api/axiosInstance'
+import type { PaginatedResponse } from '@/api/types'
 
 export interface UserProfile {
-  id: string;
-  full_name: string;
-  phone_number: string;
-  position: string;
-  country: string;
-  biography: string;
-  profile_image: string | null;
-  created_at: string;
-  updated_at: string;
+  id: string
+  full_name: string
+  phone_number: string
+  position: string
+  country: string
+  biography: string
+  profile_image: string | null
+  created_at: string
+  updated_at: string
 }
 
 export interface Resume {
-  id: string;
-  file: string;
-  original_filename: string;
-  file_size: number;
-  parsed_data: Record<string, unknown> | null;
-  parse_status: string;
-  is_default: boolean;
-  created_at: string;
+  id: string
+  file: string
+  original_filename: string
+  file_size: number
+  parsed_data: Record<string, unknown> | null
+  parse_status: string
+  is_default: boolean
+  created_at: string
 }
 
 export const profileEndpoints = {
@@ -30,7 +30,7 @@ export const profileEndpoints = {
   resume: '/accounts/resumes/',
   retrieve: (id: string) => `/accounts/profile/${id}/`,
   resumeRetrieve: (id: string) => `/accounts/resumes/${id}/`,
-};
+}
 
 export const profileApi = {
   list: (params?: { page?: number }) =>
@@ -66,4 +66,4 @@ export const profileApi = {
 
   resumeList: (params?: { page?: number }) =>
     axiosInstance.get<PaginatedResponse<Resume>>(profileEndpoints.resume, { params }),
-};
+}

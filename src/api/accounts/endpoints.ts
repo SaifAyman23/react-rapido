@@ -1,4 +1,4 @@
-import { axiosInstance } from '@/api/axiosInstance';
+import { axiosInstance } from '@/api/axiosInstance'
 
 export const authEndpoints = {
   login: '/accounts/login/',
@@ -9,28 +9,32 @@ export const authEndpoints = {
   verifyOnboarding: '/accounts/users/verify-onboarding-token/',
   logout: '/accounts/users/logout/',
   me: '/accounts/users/me/',
-};
+}
 
-export type OTPurpose = 'email_verification' | 'password_reset';
+export type OTPurpose = 'email_verification' | 'password_reset'
 
 export interface VerifyOTPResponse {
-  onboarding_token?: string;
-  token?: string;
-  message?: string;
-  verified?: boolean;
+  onboarding_token?: string
+  token?: string
+  message?: string
+  verified?: boolean
 }
 
 export interface SendCodeResponse {
-  message: string;
-  code_sent?: boolean;
+  message: string
+  code_sent?: boolean
 }
 
 export const authApi = {
   login: (data: { email: string; password: string }) =>
     axiosInstance.post<{ token: string; message: string }>(authEndpoints.login, data),
 
-  register: (data: { email: string; username: string; password: string; password_confirm: string }) =>
-    axiosInstance.post<{ message: string }>(authEndpoints.register, data),
+  register: (data: {
+    email: string
+    username: string
+    password: string
+    password_confirm: string
+  }) => axiosInstance.post<{ message: string }>(authEndpoints.register, data),
 
   verify: (data: { code: string; email?: string; purpose?: OTPurpose }) =>
     axiosInstance.post<VerifyOTPResponse>(authEndpoints.verify, data),
@@ -44,6 +48,5 @@ export const authApi = {
   verifyOnboarding: (data: { token: string }) =>
     axiosInstance.post<{ message: string }>(authEndpoints.verifyOnboarding, data),
 
-  logout: () =>
-    axiosInstance.post<{ message: string }>(authEndpoints.logout),
-};
+  logout: () => axiosInstance.post<{ message: string }>(authEndpoints.logout),
+}

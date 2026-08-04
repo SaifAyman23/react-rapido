@@ -10,21 +10,21 @@ This document is the single source of truth for AI coding assistants working on 
 
 ## 1. Tech Stack
 
-| Layer | Technology | Notes |
-|-------|-----------|-------|
-| Framework | React 19 | — |
-| Language | TypeScript 5.x | strict mode |
-| Bundler | Vite 7+ | HMR, code splitting |
-| Styling | Tailwind CSS v4 | CSS variables, nesting |
-| UI primitives | Radix UI (`radix-ui`) | via shadcn/ui |
-| Animations | `motion` (framer-motion v12) | use sparingly; respect `prefers-reduced-motion` |
-| Icons | `lucide-react` | — |
-| Client state | Zustand | persisted auth store |
-| Server state | TanStack Query v5 | mutations, queries |
-| HTTP | Axios 1.x | interceptors |
-| Routing | React Router v7 | lazy-loaded routes |
-| Font | DM Sans + JetBrains Mono | loaded non-render-blocking |
-| Testing | Vitest 4 + RTL 16 + jsdom | axe-core a11y scans |
+| Layer         | Technology                   | Notes                                           |
+| ------------- | ---------------------------- | ----------------------------------------------- |
+| Framework     | React 19                     | —                                               |
+| Language      | TypeScript 5.x               | strict mode                                     |
+| Bundler       | Vite 7+                      | HMR, code splitting                             |
+| Styling       | Tailwind CSS v4              | CSS variables, nesting                          |
+| UI primitives | Radix UI (`radix-ui`)        | via shadcn/ui                                   |
+| Animations    | `motion` (framer-motion v12) | use sparingly; respect `prefers-reduced-motion` |
+| Icons         | `lucide-react`               | —                                               |
+| Client state  | Zustand                      | persisted auth store                            |
+| Server state  | TanStack Query v5            | mutations, queries                              |
+| HTTP          | Axios 1.x                    | interceptors                                    |
+| Routing       | React Router v7              | lazy-loaded routes                              |
+| Font          | DM Sans + JetBrains Mono     | loaded non-render-blocking                      |
+| Testing       | Vitest 4 + RTL 16 + jsdom    | axe-core a11y scans                             |
 
 ## 2. Project Structure
 
@@ -100,25 +100,27 @@ api/<domain>/
 
 ### 3.2 Naming
 
-| What | Convention | Example |
-|------|-----------|---------|
-| API functions | `camelCase` on a named const | `accountsApi.login` |
-| Hooks | `use<Verb><Noun>` | `useLogin`, `useRegister` |
-| Mutation variables | `mutate({ data })` with destructured params | — |
-| Page components | Default export, PascalCase | `export default function Home()` |
-| Other components | Named export, PascalCase | `export function OAuthButtons()` |
-| Types/interfaces | PascalCase | `RegisterRequest` |
-| CSS classes | Tailwind utility classes | no custom CSS files |
+| What               | Convention                                  | Example                          |
+| ------------------ | ------------------------------------------- | -------------------------------- |
+| API functions      | `camelCase` on a named const                | `accountsApi.login`              |
+| Hooks              | `use<Verb><Noun>`                           | `useLogin`, `useRegister`        |
+| Mutation variables | `mutate({ data })` with destructured params | —                                |
+| Page components    | Default export, PascalCase                  | `export default function Home()` |
+| Other components   | Named export, PascalCase                    | `export function OAuthButtons()` |
+| Types/interfaces   | PascalCase                                  | `RegisterRequest`                |
+| CSS classes        | Tailwind utility classes                    | no custom CSS files              |
 
 ### 3.3 Imports Order
 
-1. React / framework (`react`, `react-router-dom`)
-2. Third-party libraries (`axios`, `@tanstack/react-query`, `lucide-react`, `motion`)
-3. Local UI components (`@/components/ui/...`)
-4. Local business components (`@/components/auth/...`, `@/components/layout/...`)
-5. API layer (`@/api/accounts/hooks`, `@/api/accounts`)
-6. Store (`@/store`)
-7. Lib/constants (`@/lib/constants`, `@/lib/utils`)
+Enforced automatically by `eslint-plugin-import-x` (`import-x/order`) — alphabetical within group, blank line between groups:
+
+1. Builtins
+2. External (third-party libraries: `react`, `axios`, `@tanstack/react-query`, `lucide-react`, `motion`)
+3. Internal (`@/components/...`, `@/api/...`, `@/store`, `@/lib/...`)
+4. Parent / sibling (relative `./...`, `../...`)
+5. Index
+
+Run `npx eslint . --fix` to auto-sort imports.
 
 ### 3.4 Always Use Components
 
@@ -127,6 +129,7 @@ Every UI element MUST use an existing component from `@/components/ui/` if one i
 ### 3.5 No Comments in Implementation Code
 
 Business logic files should NOT have explanatory comments. Code should be self-documenting through clear naming. Comments are reserved for:
+
 - JSDoc on public API functions
 - Section headers in complex files (e.g., `axiosInstance.ts` interceptor sections)
 
@@ -142,6 +145,7 @@ components/<domain>/
 ```
 
 **Rules:**
+
 - If a piece of UI appears in more than one page, extract it into `components/<domain>/`
 - Even if used once, extract if it has clear boundaries (form, card, filter panel, summary block)
 - Components receive data and callbacks via props — never access stores, routers, or query hooks directly
@@ -150,6 +154,7 @@ components/<domain>/
 - No single file should contain multiple major UI sections — split into separate component files
 
 **Pages should look like this:**
+
 ```tsx
 export default function SomePage() {
   // 1. Hooks: auth, data fetching, mutations
@@ -160,30 +165,43 @@ export default function SomePage() {
 
 ### 3.7 State Ownership
 
-| State | Tool | Persisted? |
-|-------|------|-----------|
-| Auth (user, token) | Zustand | Yes (localStorage) |
-| Server data (queries, mutations) | React Query | No (cache only) |
-| UI state (form inputs, modals, toggles) | React `useState` | No |
-| URL state (search params, route) | React Router | Yes (URL) |
+| State                                   | Tool             | Persisted?         |
+| --------------------------------------- | ---------------- | ------------------ |
+| Auth (user, token)                      | Zustand          | Yes (localStorage) |
+| Server data (queries, mutations)        | React Query      | No (cache only)    |
+| UI state (form inputs, modals, toggles) | React `useState` | No                 |
+| URL state (search params, route)        | React Router     | Yes (URL)          |
 
-### 3.8 Linting, Type Checking & Tests
+### 3.8 Linting, Formatting, Type Checking & Tests
+
+Formatting is enforced with **Prettier** (`.prettierrc.json`); consistency across editors comes from `.editorconfig`. Both are **gated in CI** (`.github/workflows/ci.yml`) and by the `check` script:
 
 ```bash
+# One command: typecheck + lint + format check + tests
+npm run check
+
 # Type check only
-npx tsc -b --noEmit
+npm run typecheck
 
-# Full build (includes type checking)
-npm run build
-
-# Lint
+# Lint (eslint)
 npm run lint
+
+# Format the whole repo
+npm run format
+
+# Verify formatting without modifying
+npm run format:check
 
 # Tests
 npm run test
 ```
 
-Always run `npx tsc -b --noEmit` and `npm run lint` after making changes. When tests exist, run `npm run test` and keep the suite green. Do not commit code with type errors or lint warnings.
+Always run `npm run check` before committing. Do not commit code with type errors, lint errors, or formatting drift. Non-negotiable ESLint rules in this template (beyond the recommended sets):
+
+- `@typescript-eslint/no-non-null-assertion` — forbids `user!`-style assertions; guard explicitly instead
+- `no-console` — `console.warn`/`console.error` allowed, `console.log` banned
+- `import-x/order` — import grouping enforced (see 3.3)
+- `max-lines` (≤ 200 on `src/pages/**`) — keeps pages thin per the component architecture rule
 
 ---
 
@@ -193,13 +211,13 @@ This is the playbook that earns green Lighthouse scores: **FCP 0.5s, CLS 0.001, 
 
 ## 4. Core Metrics
 
-| Metric | What it measures | Good target |
-|--------|-----------------|-------------|
-| **FCP** | First Contentful Paint — first text/image paints | < 1.8s |
-| **LCP** | Largest Contentful Paint — biggest visible element appears | < 2.5s |
-| **CLS** | Cumulative Layout Shift — unexpected layout jumps | < 0.1 |
-| **TBT / INP** | Main-thread blocking / interaction responsiveness | TBT < 200ms, INP < 200ms |
-| **Speed Index** | How quickly content is visually complete | < 3.4s |
+| Metric          | What it measures                                           | Good target              |
+| --------------- | ---------------------------------------------------------- | ------------------------ |
+| **FCP**         | First Contentful Paint — first text/image paints           | < 1.8s                   |
+| **LCP**         | Largest Contentful Paint — biggest visible element appears | < 2.5s                   |
+| **CLS**         | Cumulative Layout Shift — unexpected layout jumps          | < 0.1                    |
+| **TBT / INP**   | Main-thread blocking / interaction responsiveness          | TBT < 200ms, INP < 200ms |
+| **Speed Index** | How quickly content is visually complete                   | < 3.4s                   |
 
 ## 5. LCP Rules (biggest element = fastest)
 
@@ -230,17 +248,17 @@ This is the playbook that earns green Lighthouse scores: **FCP 0.5s, CLS 0.001, 
 
 ## 8. Lighthouse Diagnostic Vocabulary
 
-| Lighthouse diagnostic | Likely root cause & fix |
-|----------------------|------------------------|
-| "Minify JavaScript" / huge savings | You're measuring a **dev build** (unminified). Re-run against `npm run build` output / production URL. |
-| "Reduce unused JavaScript" | Dead routes/libs still bundled; remove unused deps; tighten lazy chunks. |
-| "Avoid enormous network payloads" | Heavy images (→ WebP), huge bundles (→ split), or unminified JS. |
-| "Improve image delivery" | Serve WebP/AVIF with `srcset`; add explicit dimensions. |
-| "Duplicated JavaScript" | A module statically imported in two chunks. Standardize on one. |
-| "Use efficient cache lifetimes" | Set `Cache-Control: max-age` on static assets at the hosting layer. |
-| "Image elements do not have explicit width and height" | Add `width`/`height` attrs or aspect containers. |
+| Lighthouse diagnostic                                  | Likely root cause & fix                                                                                |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| "Minify JavaScript" / huge savings                     | You're measuring a **dev build** (unminified). Re-run against `npm run build` output / production URL. |
+| "Reduce unused JavaScript"                             | Dead routes/libs still bundled; remove unused deps; tighten lazy chunks.                               |
+| "Avoid enormous network payloads"                      | Heavy images (→ WebP), huge bundles (→ split), or unminified JS.                                       |
+| "Improve image delivery"                               | Serve WebP/AVIF with `srcset`; add explicit dimensions.                                                |
+| "Duplicated JavaScript"                                | A module statically imported in two chunks. Standardize on one.                                        |
+| "Use efficient cache lifetimes"                        | Set `Cache-Control: max-age` on static assets at the hosting layer.                                    |
+| "Image elements do not have explicit width and height" | Add `width`/`height` attrs or aspect containers.                                                       |
 
-**Debugging rule of thumb**: FCP fast + LCP slow ⇒ the LCP element's *resource* is slow (image size, late discovery, render-blocking). CLS > 0.1 ⇒ missing reserved space for images/fonts. TBT > 200ms ⇒ too much JS on the main thread.
+**Debugging rule of thumb**: FCP fast + LCP slow ⇒ the LCP element's _resource_ is slow (image size, late discovery, render-blocking). CLS > 0.1 ⇒ missing reserved space for images/fonts. TBT > 200ms ⇒ too much JS on the main thread.
 
 ---
 
@@ -257,6 +275,7 @@ Emitted by a small Vite plugin (`siteFiles` in `vite.config.ts`) on every build,
 ## 10. Head meta (index.html)
 
 One hand-written, complete `<head>` in `index.html`:
+
 - `charset`, `viewport`, `description`, `author`, `robots` (`index, follow`)
 - `theme-color` (light + dark), `color-scheme`
 - `canonical` → `VITE_SITE_URL`
@@ -292,12 +311,17 @@ Single-page apps get one `<title>` unless you handle it per route. This template
 1. **Skip-to-content link** — first focusable element in every layout; `href="#main-content"`; `<main id="main-content" tabIndex={-1}>`. Use `sr-only focus:not-sr-only focus:fixed ...` styling so it appears only on focus.
 2. **`:focus-visible` outline** — a global rule in `index.css` so every keyboard-focused element has a visible ring:
    ```css
-   :focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+   :focus-visible {
+     outline: 3px solid var(--ring);
+     outline-offset: 2px;
+   }
    ```
 3. **`prefers-reduced-motion`** — a global media query that collapses animations/transitions to ~0 for users who ask:
    ```css
    @media (prefers-reduced-motion: reduce) {
-     *, *::before, *::after {
+     *,
+     *::before,
+     *::after {
        animation-duration: 0.01ms !important;
        animation-iteration-count: 1 !important;
        transition-duration: 0.01ms !important;
@@ -339,12 +363,14 @@ Single-page apps get one `<title>` unless you handle it per route. This template
 # Part G — Common Tasks
 
 ### Adding a new API domain
+
 1. Create `api/<domain>/endpoints.ts` with types, endpoint paths, and API functions
 2. Create `api/<domain>/hooks.ts` with React Query hooks (add `onError`)
 3. Create `api/<domain>/index.ts` barrel export
 4. Add export to `api/index.ts`
 
 ### Adding a new page
+
 1. Create `pages/<PageName>.tsx` with a default export
 2. Add lazy import in `App.tsx`: `const PageName = lazy(() => import('@/pages/<PageName>'))`
 3. Add route in `App.tsx` with the appropriate path and layout
@@ -352,31 +378,52 @@ Single-page apps get one `<title>` unless you handle it per route. This template
 5. **Add SEO copy for the route** to `ROUTE_SEO` in `lib/seo.ts`
 
 ### Adding a new API endpoint to an existing domain
+
 1. Add the function to the domain's `endpoints.ts`
 2. Add or update the hook in `hooks.ts`
 3. If creating a new hook file, add export to `index.ts`
 
 ### Adding a hero/LCP image
+
 1. Export as WebP/AVIF (never a large PNG)
 2. Add explicit `width` + `height`
 3. Mark `fetchPriority="high"` if it's the LCP element; `loading="lazy"` + `decoding="async"` otherwise
 4. Ensure its container reserves space (aspect ratio) to keep CLS at 0
 
 ### Adding a heavy third-party SDK
+
 1. Keep it out of the main bundle: dynamic `import()` at the point of use
 2. Never mix static + dynamic imports of the same module (causes duplicated JS)
 
 ### Adding a route to the sitemap
+
 Add it to `SITEMAP_PATHS` in `vite.config.ts` (it regenerates on every build).
 
 ---
 
-# Part H — Environment Variables
+# Part H — Continuous Integration
 
-| Variable | Required | Used In |
-|----------|----------|---------|
-| `VITE_API_URL` | No (has default) | `axiosInstance.ts` |
-| `VITE_APP_NAME` | No (has default) | `constants.ts` |
+## 17. CI Gate
+
+`.github/workflows/ci.yml` runs on every push to `main` and on every pull request. It is the **enforcement point** for all the standards above — never rely on self-discipline alone:
+
+1. `npm ci` (reproducible installs)
+2. `npm run typecheck`
+3. `npm run lint`
+4. `npm run format:check`
+5. `npm run test`
+6. `npm run build`
+
+A red pipeline means the PR is not ready to merge, period. When you start a new project from this template, the workflow comes with it — keep it.
+
+---
+
+# Part I — Environment Variables
+
+| Variable        | Required         | Used In                                               |
+| --------------- | ---------------- | ----------------------------------------------------- |
+| `VITE_API_URL`  | No (has default) | `axiosInstance.ts`                                    |
+| `VITE_APP_NAME` | No (has default) | `constants.ts`                                        |
 | `VITE_SITE_URL` | No (has default) | `seo.ts`, `vite.config.ts` (robots/sitemap/canonical) |
 
 Never commit `.env` files. Type env vars in `src/vite-env.d.ts` (`ImportMetaEnv`) so `import.meta.env.VITE_*` is checked at compile time.

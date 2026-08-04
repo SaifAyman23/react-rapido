@@ -5,9 +5,9 @@ services:
       dockerfile: Dockerfile.dev
     image: frontend
     working_dir: /app
-    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
+    command: ['npm', 'run', 'dev', '--', '--host', '0.0.0.0', '--port', '3000']
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - .:/app
       - /app/node_modules

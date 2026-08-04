@@ -13,7 +13,9 @@ export const validateEmail = (email: string): boolean => {
  * @param password - Password to validate
  * @returns Object with isValid flag and strength level
  */
-export const validatePassword = (password: string): {
+export const validatePassword = (
+  password: string
+): {
   isValid: boolean
   strength: 'weak' | 'fair' | 'good' | 'strong'
 } => {
@@ -22,10 +24,10 @@ export const validatePassword = (password: string): {
   const hasLowerCase = /[a-z]/.test(password)
   const hasNumbers = /\d/.test(password)
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password)
-  
+
   let strength: 'weak' | 'fair' | 'good' | 'strong' = 'weak'
   let isValid = false
-  
+
   if (length < 6) {
     strength = 'weak'
   } else if (length >= 6 && length < 8) {
@@ -50,7 +52,7 @@ export const validatePassword = (password: string): {
       isValid = hasUpperCase && hasLowerCase
     }
   }
-  
+
   return { isValid, strength }
 }
 
