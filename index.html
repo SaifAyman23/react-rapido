@@ -71,28 +71,20 @@
       #loading-skeleton {
         position: fixed; inset: 0; z-index: 9999;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
-        background: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #000000; font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
         transition: opacity 0.3s ease;
       }
       #loading-skeleton .brand {
-        font-size: 40px; font-weight: 800; letter-spacing: -0.02em;
-        background: linear-gradient(135deg, #4880ff 0%, #a5b4fc 50%, #f472b6 100%);
-        background-size: 200% 200%;
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text;
-        animation: splash-gradient 3s ease infinite;
+        font-size: 40px; font-weight: 700; letter-spacing: -0.02em;
+        color: #ffffff;
         margin-bottom: 24px;
       }
       #loading-skeleton .loader-bar {
-        width: 160px; height: 3px; background: #e4e2e1; border-radius: 4px; overflow: hidden;
+        width: 160px; height: 3px; background: #262f3f; border-radius: 4px; overflow: hidden;
       }
       #loading-skeleton .loader-bar-inner {
-        width: 40%; height: 100%; background: #4880ff; border-radius: 4px;
+        width: 40%; height: 100%; background: #ffffff; border-radius: 4px;
         animation: splash-loader 1.4s ease-in-out infinite;
-      }
-      @keyframes splash-gradient {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
       }
       @keyframes splash-loader {
         0% { transform: translateX(0); width: 20%; }
@@ -100,7 +92,6 @@
         100% { transform: translateX(280px); width: 20%; }
       }
       @media (prefers-reduced-motion: reduce) {
-        #loading-skeleton .brand,
         #loading-skeleton .loader-bar-inner {
           animation: none;
         }
@@ -109,7 +100,7 @@
   </head>
   <body>
     <div id="loading-skeleton">
-      <div class="brand" dir="ltr">React Rapido<span style="color:#f472b6; -webkit-text-fill-color:#f472b6">.</span></div>
+      <div class="brand" dir="ltr">React Rapido</div>
       <div class="loader-bar"><div class="loader-bar-inner"></div></div>
     </div>
     <div id="root"></div>
