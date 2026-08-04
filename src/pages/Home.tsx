@@ -21,8 +21,16 @@ export default function Home() {
   return (
     <div className="relative min-h-screen bg-background">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <svg className="absolute inset-0 w-full h-full opacity-[0.08] dark:opacity-[0.06] text-foreground"
-          xmlns="http://www.w3.org/2000/svg">
+        <svg
+          className="absolute inset-0 w-full h-full opacity-[0.08] dark:opacity-[0.06] text-foreground"
+          style={{
+            maskImage:
+              'radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.35) 90%)',
+            WebkitMaskImage:
+              'radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.35) 90%)',
+          }}
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <defs>
             <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
               <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5"/>
@@ -30,7 +38,6 @@ export default function Home() {
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
         </svg>
-        <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at center, hsl(var(--background)) 25%, transparent 70%)'}} />
       </div>
 
       <main className="relative mx-auto max-w-3xl px-6 py-24 text-center flex flex-col items-center justify-center min-h-screen">
