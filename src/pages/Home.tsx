@@ -1,3 +1,4 @@
+import { GridHighlight } from "@/components/astral";
 import { WordRotate } from "@/components/ui/word-rotate";
 import { APP_NAME } from "@/lib/constants";
 import { Shield, Zap, Palette, Blocks } from "lucide-react";
@@ -22,12 +23,12 @@ export default function Home() {
     <div className="relative min-h-screen bg-background">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <svg
-          className="absolute inset-0 w-full h-full opacity-[0.08] dark:opacity-[0.06] text-foreground"
+          className="absolute inset-0 w-full h-full opacity-[0.7] dark:opacity-[0.35] text-neutral-800 dark:text-neutral-500"
           style={{
             maskImage:
-              'radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.35) 90%)',
+              'radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.5) 90%)',
             WebkitMaskImage:
-              'radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.35) 90%)',
+              'radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.5) 90%)',
           }}
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -38,6 +39,7 @@ export default function Home() {
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
         </svg>
+        <GridHighlight />
       </div>
 
       <main className="relative mx-auto max-w-3xl px-6 py-24 text-center flex flex-col items-center justify-center min-h-screen">
