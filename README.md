@@ -1,4 +1,4 @@
-# REACT RAPIDO — BRUTAL STARTER
+# REACT RAPIDO — STARTER
 
 ```
 ┌────────────────────────────────────────────────────┐
@@ -12,7 +12,7 @@
 └────────────────────────────────────────────────────┘
 ```
 
-**PRODUCTION-READY // 0 RUNTIME DEBT — brutal, clean, fast.**
+**PRODUCTION-READY // 0 RUNTIME DEBT — clean, fast.**
 
 Thin pages. Decoupled components. 3-file API. Auth + SEO + a11y baked in.
 
@@ -31,7 +31,7 @@ Thin pages. Decoupled components. 3-file API. Auth + SEO + a11y baked in.
 ![CLS](https://img.shields.io/badge/CLS-0.00-000000?style=flat-square)
 ![License](https://img.shields.io/badge/LICENSE-MIT-000000?style=flat-square)
 
-`BRUTAL` `CLEAN` `FAST` `RAW`
+`CLEAN` `FAST` `RAW` `SOLID`
 
 ---
 
@@ -103,7 +103,7 @@ src/
 │   ├── axiosInstance.ts
 │   └── accounts/      # endpoints.ts + hooks.ts + index.ts
 ├── components/
-│   ├── brutal/        # BrutalPage — home hero + marquee + spec sheet
+│   ├── landing/       # LandingPage — home hero + marquee + spec sheet
 │   ├── auth/          # AuthLayout, FormError, OAuthButtons
 │   ├── bits/          # AccordionGallery, FlowingMenu, ScrollReveal (logic only)
 │   ├── ui/            # shadcn + Radix (button, card, input, FadeImage, stack, torn-text)
@@ -133,7 +133,7 @@ PAGES ARE THIN — components receive props, never hooks directly.
 | Router    | React Router 7 (lazy + `basename`)                                               |
 | FX        | GSAP + Lenis (on demand, respects `prefers-reduced-motion`)                      |
 
-Accent: `#8B5CF6` on `bg-white` / `bg-black` — brutal, high-contrast, WCAG AA.
+Accent: `#8B5CF6` on `bg-white` / `bg-black` — high-contrast, WCAG AA.
 
 ---
 
@@ -141,7 +141,7 @@ Accent: `#8B5CF6` on `bg-white` / `bg-black` — brutal, high-contrast, WCAG AA.
 
 ```tsx
 // App.tsx — lazy, split, no bloat
-const Home = lazy(() => import('@/pages/Home')) // BrutalPage → 17KB
+const Home = lazy(() => import('@/pages/Home')) // LandingPage → 17KB
 const Login = lazy(() => import('@/pages/auth/Login'))
 ```
 
@@ -191,7 +191,7 @@ docs/
 ```
 ┌──────────────────────────────────────────────┐
 │  © 2026 REACT RAPIDO — SHIP IT & FORGET IT  │
-│  RAW  //  CLEAN  //  BRUTAL                  │
+│  RAW  //  CLEAN  //  SOLID                   │
 └──────────────────────────────────────────────┘
 ```
 

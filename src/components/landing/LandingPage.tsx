@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import { ROUTES } from '@/lib/constants'
 
-export function BrutalPage() {
+export function LandingPage() {
   return (
     <div className="min-h-screen bg-[#F2F0E9] text-black selection:bg-black selection:text-white">
       <style>{`@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}`}</style>
@@ -85,7 +85,7 @@ export function BrutalPage() {
                 Thin pages. Decoupled components. API layer with 3-file pattern. Auth + SEO + a11y
                 baked in. Copy, ship, scale.
                 <br />
-                <span className="font-black">— brutal, clean, fast.</span>
+                <span className="font-black">— clean, fast.</span>
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3 font-mono text-xs font-black">

@@ -1,5 +1,5 @@
-import { BrutalPage } from '@/components/brutal/BrutalPage'
+import { LandingPage } from '@/components/landing/LandingPage'
 
 export default function Home() {
-  return <BrutalPage />
+  return <LandingPage />
 }

@@ -292,7 +292,7 @@
     line-height: 1.5;
   }
 
-  /* ── Links — brutalist: no blue, high-contrast mono ── */
+  /* ── Links — high-contrast mono ── */
   a {
     color: inherit;
     text-decoration: none;

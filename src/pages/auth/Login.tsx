@@ -50,7 +50,7 @@ export function Login() {
   }
 
   return (
-    <AuthLayout title="Welcome back" subtitle="Sign in to continue — brutal, clean, fast.">
+    <AuthLayout title="Welcome back" subtitle="Sign in to continue — clean, fast.">
       <form onSubmit={handleSubmit} className="space-y-4">
         <FormError message={error} />
         {success && !error && (
