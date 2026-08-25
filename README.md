@@ -1,20 +1,12 @@
-# REACT RAPIDO — STARTER
+# REACT RAPIDO
 
-```
-┌────────────────────────────────────────────────────┐
-│  RR  //  01          REACT RAPIDO  V1.0  —  2026   │
-│                                                    │
-│  BUILD                                             │
-│  FASTER.                                           │
-│                                                    │
-│  React 19 + TS 5 + Vite 7 + Tailwind v4            │
-│  No fluff. No bloat. Just ship.                    │
-└────────────────────────────────────────────────────┘
-```
+**Starter that stays out of your way. React 19 + TS 5 + Vite 7 + Tailwind v4.**
 
-**PRODUCTION-READY // 0 RUNTIME DEBT — clean, fast.**
+This is the starter I wish I had. No tutorial project. No demo fluff. Just a clean base that handles auth, routing, and performance so you can start building the real thing on day one.
 
-Thin pages. Decoupled components. 3-file API. Auth + SEO + a11y baked in.
+| RR // 01 | REACT RAPIDO V1.0 2026 |
+| -------- | ---------------------- |
+| Build    | Faster                 |
 
 ---
 
@@ -31,71 +23,67 @@ Thin pages. Decoupled components. 3-file API. Auth + SEO + a11y baked in.
 ![CLS](https://img.shields.io/badge/CLS-0.00-000000?style=flat-square)
 ![License](https://img.shields.io/badge/LICENSE-MIT-000000?style=flat-square)
 
-`CLEAN` `FAST` `RAW` `SOLID`
+`CLEAN` `FAST` `SOLID`
 
 ---
 
 ### TABLE OF CONTENTS
 
-```
-01  SPECS
-02  QUICK START
-03  STRUCTURE
-04  STACK
-05  ROUTING
-06  QUALITY GATE
-07  SECURITY
-08  DOCS
-```
+| #   | SECTION      |
+| --- | ------------ |
+| 01  | SPECS        |
+| 02  | QUICK START  |
+| 03  | STRUCTURE    |
+| 04  | STACK        |
+| 05  | ROUTING      |
+| 06  | QUALITY GATE |
+| 07  | SECURITY     |
+| 08  | DOCS         |
 
 ---
 
-### 01 — SPECS
+### 01 SPECS
 
-```
-┌──────────────┬─────────────────────────────┐
-│  LCP         │ ≤2.5s  [GOOD]               │
-│  CLS         │ 0.00   [PERFECT]            │
-│  TBT         │ ≤200ms [FAST]               │
-│  AUTH        │ JWT + OTP                  │
-│  SEO         │ per-route meta + sitemap   │
-│  A11Y        │ axe-core + focus ring      │
-└──────────────┴─────────────────────────────┘
-```
+| Metric | Value                    | Status  |
+| ------ | ------------------------ | ------- |
+| LCP    | 2.5s                     | GOOD    |
+| CLS    | 0.00                     | PERFECT |
+| TBT    | 200ms                    | FAST    |
+| AUTH   | JWT + OTP                | READY   |
+| SEO    | per-route meta + sitemap | READY   |
+| A11Y   | axe-core + focus ring    | PASS    |
 
-- THE BAR IS “SENIOR DESIGNER + SENIOR ENGINEER WOULD BOTH SIGN OFF” — AGENTS.md. Build fails if you add 100KB of junk.
+If you blow the budget by 100KB, the build fails. On purpose.
 
 ---
 
-### 02 — QUICK START
+### 02 QUICK START
 
 ```bash
-# 01 — clone
+# 01 clone
 git clone https://github.com/SaifAyman23/react-rapido my-app
 cd my-app
 
-# 02 — install
+# 02 install
 npm i
 
-# 03 — env
+# 03 env
 cp .env.example .env
 # set VITE_API_URL, VITE_SITE_URL, VITE_APP_NAME
 
-# 04 — dev
+# 04 dev
 npm run dev
-# → http://localhost:5173
+# http://localhost:5173
 ```
 
-```
-┌─────────────────────────────────────┐
-│  $ npm run dev   — HMR 40ms         │
-│  $ npm run check — type/lint/fmt/test │
-└─────────────────────────────────────┘
-```
+| Command         | Time               |
+| --------------- | ------------------ |
+| `npm run dev`   | HMR 40ms           |
+| `npm run check` | type/lint/fmt/test |
 
 ---
 
-### 03 — STRUCTURE
+### 03 STRUCTURE
 
 ```
 src/
@@ -103,10 +91,10 @@ src/
 │   ├── axiosInstance.ts
 │   └── accounts/      # endpoints.ts + hooks.ts + index.ts
 ├── components/
-│   ├── landing/       # LandingPage — home hero + marquee + spec sheet
+│   ├── landing/       # LandingPage with marquee and spec sheet
 │   ├── auth/          # AuthLayout, FormError, OAuthButtons
-│   ├── bits/          # AccordionGallery, FlowingMenu, ScrollReveal (logic only)
-│   ├── ui/            # shadcn + Radix (button, card, input, FadeImage, stack, torn-text)
+│   ├── bits/          # AccordionGallery, FlowingMenu, ScrollReveal
+│   ├── ui/            # shadcn + Radix (button, card, input, FadeImage, stack)
 │   └── theme/         # ThemeProvider
 ├── hooks/             # useDebounce, useIsMobile
 ├── lib/               # constants, seo, validators, color, smoothScroll, utils
@@ -115,41 +103,39 @@ src/
 └── test/              # axe, setup
 ```
 
-```
-PAGES ARE THIN — components receive props, never hooks directly.
-```
+Pages stay thin. Components get props, not hooks. That is how it stays readable six months from now.
 
 ---
 
-### 04 — STACK
+### 04 STACK
 
-| LAYER     | CHOICE                                                                           |
-| --------- | -------------------------------------------------------------------------------- |
-| Framework | React 19 + TS 5 (strict)                                                         |
-| Bundler   | Vite 7 + manualChunks (react / query / radix / gsap)                             |
-| Styling   | Tailwind v4 + CSS vars + `border-[3px] border-black` + `shadow-[4px_4px_0_#000]` |
-| State     | Zustand (persist) + TanStack Query 5                                             |
-| HTTP      | Axios + interceptors + `extractErrorMessage`                                     |
-| Router    | React Router 7 (lazy + `basename`)                                               |
-| FX        | GSAP + Lenis (on demand, respects `prefers-reduced-motion`)                      |
+| LAYER     | CHOICE                                                    |
+| --------- | --------------------------------------------------------- |
+| Framework | React 19 + TS 5 strict                                    |
+| Bundler   | Vite 7 + manualChunks (react / query / radix / gsap)      |
+| Styling   | Tailwind v4 + CSS vars + `border-[3px] border-black`      |
+| State     | Zustand persist + TanStack Query 5                        |
+| HTTP      | Axios + interceptors + `extractErrorMessage`              |
+| Router    | React Router 7 lazy + `basename`                          |
+| FX        | GSAP + Lenis on demand, respects `prefers-reduced-motion` |
 
-Accent: `#8B5CF6` on `bg-white` / `bg-black` — high-contrast, WCAG AA.
+Accent `#8B5CF6` on `bg-white` and `bg-black`. High contrast, WCAG AA.
 
 ---
 
-### 05 — ROUTING
+### 05 ROUTING
 
 ```tsx
-// App.tsx — lazy, split, no bloat
-const Home = lazy(() => import('@/pages/Home')) // LandingPage → 17KB
+// App.tsx, lazy and split. No bloat in the first chunk.
+const Home = lazy(() => import('@/pages/Home')) // LandingPage 17KB
 const Login = lazy(() => import('@/pages/auth/Login'))
 ```
 
-- Every route is a chunk. No heavy lib in critical path.
+Every route is its own chunk. Heavy libs never touch the first paint.
 
 ---
 
-### 06 — QUALITY GATE
+### 06 QUALITY GATE
 
 ```bash
 npm run check   # typecheck + lint + format:check + test
@@ -157,42 +143,38 @@ npm run typecheck
 npm run lint
 npm run format
 npm run test        # Vitest + RTL + axe-core
-npm run build       # → dist/
+npm run build       # to dist/
 ```
 
-CI: `.github/workflows/ci.yml` — `npm ci` → typecheck → lint → format:check → test → build. Red = not mergeable.
+CI runs the same gate on every push. `.github/workflows/ci.yml` does `npm ci` then typecheck, lint, format, test, build. Red means do not merge.
 
 ---
 
-### 07 — SECURITY
+### 07 SECURITY
 
-```
-[ ] VITE_API_URL = prod
-[ ] CORS = prod origin
-[ ] HTTPS everywhere
-[ ] No secrets in client
-[ ] CSP headers
-```
-
----
-
-### 08 — DOCS
-
-```
-docs/
-├── Performance.md   # LCP/INP/CLS/TBT, WebP 82, vendor split
-├── SEO.md           # crawlability, meta, JSON-LD
-├── Accessibility.md # skip-link, focus, axe
-└── BestPractices.md # 3-file API, thin pages, CI
-```
+| Check                        | Status |
+| ---------------------------- | ------ |
+| VITE_API_URL points to prod  | [ ]    |
+| CORS allows prod origin only | [ ]    |
+| HTTPS everywhere             | [ ]    |
+| No secrets in client bundle  | [ ]    |
+| CSP headers set              | [ ]    |
 
 ---
 
-```
-┌──────────────────────────────────────────────┐
-│  © 2026 REACT RAPIDO — SHIP IT & FORGET IT  │
-│  RAW  //  CLEAN  //  SOLID                   │
-└──────────────────────────────────────────────┘
-```
+### 08 DOCS
 
-_Built for senior review. No emojis, no fluff._
+| File                    | Covers                                    |
+| ----------------------- | ----------------------------------------- |
+| `docs/Performance.md`   | LCP, INP, CLS, TBT, WebP 82, vendor split |
+| `docs/SEO.md`           | crawlability, meta, JSON-LD               |
+| `docs/Accessibility.md` | skip link, focus, axe                     |
+| `docs/BestPractices.md` | 3-file API, thin pages, CI                |
+
+---
+
+| © 2026 REACT RAPIDO   | SHIP IT |
+| --------------------- | ------- |
+| RAW // CLEAN // SOLID | MIT     |
+
+_Built to be forked. Make it yours._
