@@ -1,25 +1,26 @@
 import { ArrowUpRight, Zap } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
+import { ModeToggle } from '@/components/theme/ModeToggle'
 import { Badge } from '@/components/ui/badge'
 import { ROUTES } from '@/lib/constants'
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#F2F0E9] text-black selection:bg-black selection:text-white">
+    <div className="min-h-screen bg-muted text-foreground selection:bg-foreground selection:text-background">
       <style>{`@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}`}</style>
 
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:border-[3px] focus:border-black focus:bg-white focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:font-bold focus:shadow-[4px_4px_0_#000]"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:border-[3px] focus:border-foreground focus:bg-card focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:font-bold focus:shadow-[4px_4px_0_var(--foreground)]"
       >
         Skip to content
       </a>
 
-      <header className="sticky top-0 z-40 border-b-[3px] border-black bg-white">
+      <header className="sticky top-0 z-40 border-b-[3px] border-foreground bg-card">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3 sm:px-6">
           <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center border-[3px] border-black bg-black text-white">
+            <div className="grid h-10 w-10 place-items-center border-[3px] border-foreground bg-foreground text-background">
               <span className="font-mono text-[11px] font-black leading-none">
                 RR
                 <br />
@@ -27,42 +28,47 @@ export function LandingPage() {
               </span>
             </div>
             <span className="font-mono text-sm font-black tracking-[0.14em]">REACT RAPIDO</span>
-            <span className="hidden border-l-[3px] border-black pl-3 font-mono text-[10px] leading-none tracking-widest sm:block">
+            <span className="hidden border-l-[3px] border-foreground pl-3 font-mono text-[10px] leading-none tracking-widest sm:block">
               V1.0
               <br />
               2026
             </span>
           </div>
-          <nav className="hidden items-center gap-2 font-mono text-xs font-bold sm:flex">
-            <a
-              href="https://github.com/SaifAyman23/react-rapido"
-              target="_blank"
-              rel="noreferrer"
-              className="border-[3px] border-black bg-white px-3 py-1.5 shadow-[3px_3px_0_#000] transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000]"
-            >
-              GITHUB [02]
-            </a>
+          <div className="flex items-center gap-2">
+            <nav className="hidden items-center gap-2 font-mono text-xs font-bold sm:flex">
+              <a
+                href="https://github.com/SaifAyman23/react-rapido"
+                target="_blank"
+                rel="noreferrer"
+                className="border-[3px] border-foreground bg-card px-3 py-1.5 shadow-[3px_3px_0_var(--foreground)] transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000]"
+              >
+                GITHUB [02]
+              </a>
+              <Link
+                to={ROUTES.LOGIN}
+                className="border-[3px] border-foreground bg-foreground px-3 py-1.5 text-background shadow-[3px_3px_0_var(--foreground)] transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000]"
+              >
+                DEMO →
+              </Link>
+            </nav>
+            <div className="border-[3px] border-foreground bg-card shadow-[3px_3px_0_var(--foreground)]">
+              <ModeToggle />
+            </div>
             <Link
               to={ROUTES.LOGIN}
-              className="border-[3px] border-black bg-black px-3 py-1.5 text-white shadow-[3px_3px_0_#000] transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000]"
+              className="border-[3px] border-foreground bg-foreground px-3 py-1.5 font-mono text-xs font-black text-background shadow-[3px_3px_0_var(--foreground)] sm:hidden"
             >
-              DEMO →
+              DEMO
             </Link>
-          </nav>
-          <Link
-            to={ROUTES.LOGIN}
-            className="border-[3px] border-black bg-black px-3 py-1.5 font-mono text-xs font-black text-white shadow-[3px_3px_0_#000] sm:hidden"
-          >
-            DEMO
-          </Link>
+          </div>
         </div>
       </header>
 
       <main id="main-content" tabIndex={-1} className="focus:outline-none">
-        <section className="mx-auto max-w-[1280px] border-x-[3px] border-black bg-white">
+        <section className="mx-auto max-w-[1280px] border-x-[3px] border-foreground bg-card">
           <div className="grid md:grid-cols-[1.35fr_0.85fr]">
-            <div className="border-b-[3px] border-black p-6 sm:p-10 md:border-b-0 md:border-r-[3px]">
-              <div className="inline-flex items-center gap-2 border-[3px] border-black bg-violet-500 px-3 py-1 font-mono text-[11px] font-black tracking-widest text-white shadow-[3px_3px_0_#000]">
+            <div className="border-b-[3px] border-foreground p-6 sm:p-10 md:border-b-0 md:border-r-[3px]">
+              <div className="inline-flex items-center gap-2 border-[3px] border-foreground bg-violet-500 px-3 py-1 font-mono text-[11px] font-black tracking-widest text-white shadow-[3px_3px_0_var(--foreground)]">
                 <Zap className="h-3 w-3" />
                 READY TO SHIP
               </div>
@@ -72,7 +78,7 @@ export function LandingPage() {
                   001 STARTER KIT
                 </span>
                 <span className="mt-3 block text-[clamp(2.8rem,9vw,5.8rem)]">BUILD</span>
-                <span className="block bg-black px-2 py-1 text-[clamp(2.8rem,9vw,5.8rem)] text-white">
+                <span className="block bg-foreground px-2 py-1 text-[clamp(2.8rem,9vw,5.8rem)] text-background">
                   FASTER.
                 </span>
                 <span className="mt-2 block font-mono text-[clamp(1rem,2.2vw,1.35rem)] font-bold leading-8 tracking-tight">
@@ -83,7 +89,7 @@ export function LandingPage() {
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-[52ch] border-l-[4px] border-black pl-4 font-mono text-[13px] leading-6 text-zinc-700">
+              <p className="mt-6 max-w-[52ch] border-l-[4px] border-foreground pl-4 font-mono text-[13px] leading-6 text-zinc-700">
                 Pages stay thin. Components take props. API follows the same three files. Auth and
                 SEO already handled. You handle the product.
                 <br />
@@ -93,19 +99,19 @@ export function LandingPage() {
               <div className="mt-8 flex flex-wrap gap-3 font-mono text-xs font-black">
                 <Link
                   to={ROUTES.REGISTER}
-                  className="inline-flex items-center gap-2 border-[3px] border-black bg-black px-5 py-3 text-white shadow-[5px_5px_0_#000] transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0_#000]"
+                  className="inline-flex items-center gap-2 border-[3px] border-foreground bg-foreground px-5 py-3 text-background shadow-[5px_5px_0_var(--foreground)] transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0_var(--foreground)]"
                 >
                   GET STARTER <ArrowUpRight className="h-4 w-4" />
                 </Link>
                 <a
                   href="#stack"
-                  className="inline-flex items-center gap-2 border-[3px] border-black bg-white px-5 py-3 shadow-[5px_5px_0_#000] transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0_#000]"
+                  className="inline-flex items-center gap-2 border-[3px] border-foreground bg-card px-5 py-3 shadow-[5px_5px_0_var(--foreground)] transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0_var(--foreground)]"
                 >
                   VIEW STACK [03]
                 </a>
               </div>
 
-              <div className="mt-8 grid grid-cols-3 divide-x-[3px] divide-black border-[3px] border-black bg-white font-mono text-xs">
+              <div className="mt-8 grid grid-cols-3 divide-x-[3px] divide-black border-[3px] border-foreground bg-card font-mono text-xs">
                 {[
                   ['LCP', '≤2.5s', 'GOOD'],
                   ['CLS', '0.00', 'PERFECT'],
@@ -120,13 +126,13 @@ export function LandingPage() {
               </div>
             </div>
 
-            <div className="bg-[#F2F0E9] p-4 sm:p-6">
-              <div className="border-[3px] border-black bg-white shadow-[8px_8px_0_#000]">
-                <div className="flex items-center justify-between border-b-[3px] border-black bg-black px-3 py-2 text-white">
+            <div className="bg-muted p-4 sm:p-6">
+              <div className="border-[3px] border-foreground bg-card shadow-[8px_8px_0_var(--foreground)]">
+                <div className="flex items-center justify-between border-b-[3px] border-foreground bg-foreground px-3 py-2 text-background">
                   <div className="flex items-center gap-1.5">
-                    <span className="h-3 w-3 border border-white bg-red-500" />
-                    <span className="h-3 w-3 border border-white bg-yellow-400" />
-                    <span className="h-3 w-3 border border-white bg-green-500" />
+                    <span className="h-3 w-3 border border-background bg-red-500" />
+                    <span className="h-3 w-3 border border-background bg-yellow-400" />
+                    <span className="h-3 w-3 border border-background bg-green-500" />
                   </div>
                   <span className="font-mono text-[10px] tracking-widest">
                     ~/ src/pages/Home.tsx — npm run dev
@@ -145,15 +151,15 @@ export function LandingPage() {
                   <div>src/api/ → 3-file pattern</div>
                   <div>src/components/ui/ → shadcn + Radix</div>
                   <div>src/lib/seo.ts → per-route meta</div>
-                  <div className="mt-3 inline-block border-[3px] border-black bg-violet-500 px-2 py-0.5 text-[11px] font-black text-white">
+                  <div className="mt-3 inline-block border-[3px] border-foreground bg-violet-500 px-2 py-0.5 text-[11px] font-black text-white">
                     + 8 BITS // DARKVEIL / BEAMS / SILK...
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3 border-t-[3px] border-black bg-[#F2F0E9] p-3 font-mono text-[11px] font-bold">
-                  <div className="border-[3px] border-black bg-white p-2 text-center shadow-[3px_3px_0_#000]">
+                <div className="grid grid-cols-2 gap-3 border-t-[3px] border-foreground bg-muted p-3 font-mono text-[11px] font-bold">
+                  <div className="border-[3px] border-foreground bg-card p-2 text-center shadow-[3px_3px_0_var(--foreground)]">
                     VITE 7 HMR 40ms
                   </div>
-                  <div className="border-[3px] border-black bg-black p-2 text-center text-white shadow-[3px_3px_0_#000]">
+                  <div className="border-[3px] border-foreground bg-foreground p-2 text-center text-background shadow-[3px_3px_0_var(--foreground)]">
                     TS 5 STRICT
                   </div>
                 </div>
@@ -163,7 +169,7 @@ export function LandingPage() {
                 {['AUTH ✓', 'SEO ✓', 'A11Y ✓'].map((t) => (
                   <div
                     key={t}
-                    className="border-[3px] border-black bg-white py-2 text-center shadow-[3px_3px_0_#000]"
+                    className="border-[3px] border-foreground bg-card py-2 text-center shadow-[3px_3px_0_var(--foreground)]"
                   >
                     {t}
                   </div>
@@ -172,7 +178,7 @@ export function LandingPage() {
             </div>
           </div>
 
-          <div className="overflow-hidden border-y-[3px] border-black bg-black text-white">
+          <div className="overflow-hidden border-y-[3px] border-foreground bg-foreground text-background">
             <div className="flex w-max animate-[marquee_18s_linear_infinite] whitespace-nowrap font-mono text-xs font-black tracking-[0.18em]">
               {[1, 2].map((k) => (
                 <span key={k} className="flex items-center gap-6 px-6 py-2">
@@ -193,9 +199,9 @@ export function LandingPage() {
 
         <section
           id="stack"
-          className="mx-auto max-w-[1280px] border-x-[3px] border-t-0 border-black bg-white"
+          className="mx-auto max-w-[1280px] border-x-[3px] border-t-0 border-foreground bg-card"
         >
-          <div className="grid divide-y-[3px] divide-black border-b-[3px] border-black md:grid-cols-3 md:divide-x-[3px] md:divide-y-0">
+          <div className="grid divide-y-[3px] divide-black border-b-[3px] border-foreground md:grid-cols-3 md:divide-x-[3px] md:divide-y-0">
             {[
               {
                 n: '01',
@@ -236,10 +242,10 @@ export function LandingPage() {
             ].map((f) => (
               <div key={f.n} className="p-6">
                 <div className="flex items-center justify-between">
-                  <span className="border-[3px] border-black bg-black px-2 py-0.5 font-mono text-xs font-black text-white">
+                  <span className="border-[3px] border-foreground bg-foreground px-2 py-0.5 font-mono text-xs font-black text-background">
                     {f.n}
                   </span>
-                  <Badge className="rounded-none border-[2px] border-black bg-violet-500 px-2 py-0 font-mono text-[10px] font-black text-white">
+                  <Badge className="rounded-none border-[2px] border-foreground bg-violet-500 px-2 py-0 font-mono text-[10px] font-black text-white">
                     {f.tag}
                   </Badge>
                 </div>
@@ -251,19 +257,19 @@ export function LandingPage() {
             ))}
           </div>
 
-          <div className="grid border-b-[3px] border-black md:grid-cols-[1.1fr_0.9fr]">
-            <div className="border-r-0 border-black p-0 md:border-r-[3px]">
-              <div className="bg-black px-4 py-2 font-mono text-xs font-black tracking-widest text-white">
+          <div className="grid border-b-[3px] border-foreground md:grid-cols-[1.1fr_0.9fr]">
+            <div className="border-r-0 border-foreground p-0 md:border-r-[3px]">
+              <div className="bg-foreground px-4 py-2 font-mono text-xs font-black tracking-widest text-background">
                 STACK SPEC SHEET
               </div>
               <table className="w-full border-collapse font-mono text-xs">
                 <thead>
-                  <tr className="border-b-[3px] border-black bg-violet-500 text-white">
-                    <th className="border-r-[3px] border-black px-3 py-2 text-left">LAYER</th>
+                  <tr className="border-b-[3px] border-foreground bg-violet-500 text-white">
+                    <th className="border-r-[3px] border-foreground px-3 py-2 text-left">LAYER</th>
                     <th className="px-3 py-2 text-left">CHOICE</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y border-black">
+                <tbody className="divide-y border-foreground">
                   {[
                     ['Framework', 'React 19 + TS 5 (strict)'],
                     ['Bundler', 'Vite 7 + manualChunks'],
@@ -274,7 +280,7 @@ export function LandingPage() {
                     ['FX', 'GSAP + OGL + three (on demand)'],
                   ].map(([k, v]) => (
                     <tr key={k}>
-                      <td className="border-r-[3px] border-black bg-zinc-50 px-3 py-2 font-black">
+                      <td className="border-r-[3px] border-foreground bg-zinc-50 px-3 py-2 font-black">
                         {k}
                       </td>
                       <td className="px-3 py-2">{v}</td>
@@ -287,7 +293,7 @@ export function LandingPage() {
               <h3 className="font-mono text-sm font-black uppercase tracking-tight">
                 Start in 14 seconds
               </h3>
-              <div className="mt-3 border-[3px] border-black bg-black p-3 font-mono text-xs leading-5 text-white">
+              <div className="mt-3 border-[3px] border-foreground bg-foreground p-3 font-mono text-xs leading-5 text-background">
                 <div>npm create vite@latest —template react-ts</div>
                 <div className="text-violet-500"># or use rapido</div>
                 <div>git clone https://github.com/SaifAyman23/react-rapido</div>
@@ -296,7 +302,7 @@ export function LandingPage() {
               <div className="mt-4 grid grid-cols-2 gap-2 font-mono text-[11px] font-black">
                 <Link
                   to={ROUTES.REGISTER}
-                  className="border-[3px] border-black bg-violet-500 py-2 text-center text-white shadow-[3px_3px_0_#000]"
+                  className="border-[3px] border-foreground bg-violet-500 py-2 text-center text-white shadow-[3px_3px_0_var(--foreground)]"
                 >
                   CREATE ACCOUNT →
                 </Link>
@@ -304,7 +310,7 @@ export function LandingPage() {
                   href="https://github.com/SaifAyman23/react-rapido"
                   target="_blank"
                   rel="noreferrer"
-                  className="border-[3px] border-black bg-white py-2 text-center shadow-[3px_3px_0_#000]"
+                  className="border-[3px] border-foreground bg-card py-2 text-center shadow-[3px_3px_0_var(--foreground)]"
                 >
                   GITHUB
                 </a>
@@ -316,23 +322,23 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1280px] border-x-[3px] border-black bg-violet-500 px-4 py-3 text-white">
+        <section className="mx-auto max-w-[1280px] border-x-[3px] border-foreground bg-violet-500 px-4 py-3 text-white">
           <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs font-black">
             <span>BUILT FOR REAL PROJECTS. NOT DEMOS.</span>
-            <span className="border-[3px] border-black bg-black px-2 py-1 text-white">
+            <span className="border-[3px] border-foreground bg-foreground px-2 py-1 text-background">
               AGENTS.md
             </span>
           </div>
         </section>
       </main>
 
-      <footer className="mx-auto max-w-[1280px] border-x-[3px] border-t-0 border-black bg-black px-4 py-6 text-white sm:px-6">
+      <footer className="mx-auto max-w-[1280px] border-x-[3px] border-t-0 border-foreground bg-foreground px-4 py-6 text-background sm:px-6">
         <div className="flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
           <span className="tracking-widest">© 2026 REACT RAPIDO</span>
           <div className="flex gap-2">
-            <span className="border border-white px-2 py-1">RAW</span>
-            <span className="border border-white bg-white px-2 py-1 text-black">CLEAN</span>
-            <span className="border border-white px-2 py-1">SOLID</span>
+            <span className="border border-background px-2 py-1">RAW</span>
+            <span className="border border-background bg-background px-2 py-1 text-foreground">CLEAN</span>
+            <span className="border border-background px-2 py-1">SOLID</span>
           </div>
         </div>
       </footer>

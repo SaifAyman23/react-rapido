@@ -54,7 +54,7 @@ export function Login() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <FormError message={error} />
         {success && !error && (
-          <div className="border-[3px] border-black bg-emerald-50 px-3 py-2 font-mono text-xs font-bold text-emerald-700">
+          <div className="border-[3px] border-foreground bg-emerald-50 px-3 py-2 font-mono text-xs font-bold text-emerald-700">
             {success}
           </div>
         )}
@@ -62,7 +62,7 @@ export function Login() {
         <div className="space-y-2">
           <Label
             htmlFor="email"
-            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+            className="font-mono text-xs font-black uppercase tracking-wide text-foreground"
           >
             Email
           </Label>
@@ -74,7 +74,7 @@ export function Login() {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
-            className="rounded-none border-[3px] border-black bg-white font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
+            className="rounded-none border-[3px] border-foreground bg-card font-mono text-sm shadow-[3px_3px_0_var(--foreground)] focus-visible:ring-black"
           />
         </div>
 
@@ -82,13 +82,13 @@ export function Login() {
           <div className="flex items-center justify-between">
             <Label
               htmlFor="password"
-              className="font-mono text-xs font-black uppercase tracking-wide text-black"
+              className="font-mono text-xs font-black uppercase tracking-wide text-foreground"
             >
               Password
             </Label>
             <Link
               to="/forgot-password"
-              className="font-mono text-xs font-bold text-black underline decoration-2 underline-offset-2 hover:bg-black hover:text-white hover:decoration-black"
+              className="font-mono text-xs font-bold text-foreground underline decoration-2 underline-offset-2 hover:bg-foreground hover:text-background hover:decoration-black"
             >
               Forgot?
             </Link>
@@ -102,12 +102,12 @@ export function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
-              className="rounded-none border-[3px] border-black bg-white pr-10 font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
+              className="rounded-none border-[3px] border-foreground bg-card pr-10 font-mono text-sm shadow-[3px_3px_0_var(--foreground)] focus-visible:ring-black"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-black bg-white p-1 hover:bg-black hover:text-white"
+              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-foreground bg-card p-1 hover:bg-foreground hover:text-background"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -117,18 +117,18 @@ export function Login() {
 
         <Button
           type="submit"
-          className="w-full rounded-none border-[3px] border-black bg-black font-mono text-xs font-black uppercase tracking-widest text-white shadow-[4px_4px_0_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-black"
+          className="w-full rounded-none border-[3px] border-foreground bg-foreground font-mono text-xs font-black uppercase tracking-widest text-background shadow-[4px_4px_0_var(--foreground)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-foreground"
           disabled={loginMutation.isPending}
         >
           {loginMutation.isPending ? 'Signing in...' : 'Sign in →'}
         </Button>
       </form>
 
-      <p className="mt-6 text-center font-mono text-xs font-bold text-black">
+      <p className="mt-6 text-center font-mono text-xs font-bold text-foreground">
         No account?{' '}
         <Link
           to="/register"
-          className="border-b-[3px] border-black bg-violet-500 px-1 py-0.5 text-white hover:bg-black hover:text-white"
+          className="border-b-[3px] border-foreground bg-violet-500 px-1 py-0.5 text-white hover:bg-foreground hover:text-background"
         >
           Sign up
         </Link>

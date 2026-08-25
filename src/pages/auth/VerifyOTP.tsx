@@ -115,7 +115,7 @@ export function VerifyOTP() {
       <div className="space-y-4">
         <FormError message={error} />
         {success && (
-          <div className="border-[3px] border-black bg-emerald-50 px-3 py-2 font-mono text-xs font-black text-emerald-700">
+          <div className="border-[3px] border-foreground bg-emerald-50 px-3 py-2 font-mono text-xs font-black text-emerald-700">
             {success}
           </div>
         )}
@@ -132,27 +132,27 @@ export function VerifyOTP() {
               <InputOTPGroup className="gap-2">
                 <InputOTPSlot
                   index={0}
-                  className="h-12 w-10 rounded-none border-[3px] border-black bg-white font-mono text-sm font-black shadow-[3px_3px_0_#000] data-[active=true]:border-black data-[active=true]:ring-0"
+                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground data-[active=true]:ring-0"
                 />
                 <InputOTPSlot
                   index={1}
-                  className="h-12 w-10 rounded-none border-[3px] border-black bg-white font-mono text-sm font-black shadow-[3px_3px_0_#000] data-[active=true]:border-black"
+                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground"
                 />
                 <InputOTPSlot
                   index={2}
-                  className="h-12 w-10 rounded-none border-[3px] border-black bg-white font-mono text-sm font-black shadow-[3px_3px_0_#000] data-[active=true]:border-black"
+                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground"
                 />
                 <InputOTPSlot
                   index={3}
-                  className="h-12 w-10 rounded-none border-[3px] border-black bg-white font-mono text-sm font-black shadow-[3px_3px_0_#000] data-[active=true]:border-black"
+                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground"
                 />
                 <InputOTPSlot
                   index={4}
-                  className="h-12 w-10 rounded-none border-[3px] border-black bg-white font-mono text-sm font-black shadow-[3px_3px_0_#000] data-[active=true]:border-black"
+                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground"
                 />
                 <InputOTPSlot
                   index={5}
-                  className="h-12 w-10 rounded-none border-[3px] border-black bg-white font-mono text-sm font-black shadow-[3px_3px_0_#000] data-[active=true]:border-black"
+                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground"
                 />
               </InputOTPGroup>
             </InputOTP>
@@ -161,21 +161,21 @@ export function VerifyOTP() {
 
         <Button
           type="button"
-          className="w-full rounded-none border-[3px] border-black bg-black font-mono text-xs font-black uppercase tracking-widest text-white shadow-[4px_4px_0_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-black"
+          className="w-full rounded-none border-[3px] border-foreground bg-foreground font-mono text-xs font-black uppercase tracking-widest text-background shadow-[4px_4px_0_var(--foreground)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-foreground"
           onClick={handleVerify}
           disabled={verifyMutation.isPending || otp.length !== 6}
         >
           {verifyMutation.isPending ? 'Verifying...' : 'Verify →'}
         </Button>
 
-        <div className="mt-2 text-center space-y-3 border-t-[3px] border-black pt-4">
+        <div className="mt-2 text-center space-y-3 border-t-[3px] border-foreground pt-4">
           {!canResend ? (
-            <p className="font-mono text-xs font-bold text-black">Resend in {formatTime(timer)}</p>
+            <p className="font-mono text-xs font-bold text-foreground">Resend in {formatTime(timer)}</p>
           ) : (
             <button
               type="button"
               onClick={handleResend}
-              className="border-[3px] border-black bg-violet-500 px-3 py-1 font-mono text-xs font-black uppercase tracking-wide text-white shadow-[3px_3px_0_#000] hover:bg-black"
+              className="border-[3px] border-foreground bg-violet-500 px-3 py-1 font-mono text-xs font-black uppercase tracking-wide text-white shadow-[3px_3px_0_var(--foreground)] hover:bg-foreground"
             >
               Resend code
             </button>
@@ -184,7 +184,7 @@ export function VerifyOTP() {
           <div>
             <Link
               to={purpose === 'password_reset' ? '/login' : '/register'}
-              className="font-mono text-xs font-bold text-black underline decoration-2 underline-offset-2 hover:bg-black hover:text-white"
+              className="font-mono text-xs font-bold text-foreground underline decoration-2 underline-offset-2 hover:bg-foreground hover:text-background"
             >
               {purpose === 'password_reset' ? '← Back to login' : 'Change email'}
             </Link>

@@ -82,7 +82,7 @@ export function ResetPassword() {
         <div className="space-y-2">
           <Label
             htmlFor="newPassword"
-            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+            className="font-mono text-xs font-black uppercase tracking-wide text-foreground"
           >
             New password
           </Label>
@@ -96,12 +96,12 @@ export function ResetPassword() {
               required
               autoComplete="new-password"
               autoFocus
-              className="rounded-none border-[3px] border-black bg-white pr-10 font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
+              className="rounded-none border-[3px] border-foreground bg-card pr-10 font-mono text-sm shadow-[3px_3px_0_var(--foreground)] focus-visible:ring-black"
             />
             <button
               type="button"
               onClick={() => setShowNewPassword(!showNewPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-black bg-white p-1 hover:bg-black hover:text-white"
+              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-foreground bg-card p-1 hover:bg-foreground hover:text-background"
               aria-label={showNewPassword ? 'Hide' : 'Show'}
             >
               {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -113,7 +113,7 @@ export function ResetPassword() {
         <div className="space-y-2">
           <Label
             htmlFor="confirmPassword"
-            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+            className="font-mono text-xs font-black uppercase tracking-wide text-foreground"
           >
             Confirm
           </Label>
@@ -126,12 +126,12 @@ export function ResetPassword() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               autoComplete="new-password"
-              className="rounded-none border-[3px] border-black bg-white pr-10 font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
+              className="rounded-none border-[3px] border-foreground bg-card pr-10 font-mono text-sm shadow-[3px_3px_0_var(--foreground)] focus-visible:ring-black"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-black bg-white p-1 hover:bg-black hover:text-white"
+              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-foreground bg-card p-1 hover:bg-foreground hover:text-background"
               aria-label={showConfirmPassword ? 'Hide' : 'Show'}
             >
               {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -141,7 +141,7 @@ export function ResetPassword() {
 
         <Button
           type="submit"
-          className="w-full rounded-none border-[3px] border-black bg-black font-mono text-xs font-black uppercase tracking-widest text-white shadow-[4px_4px_0_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-black"
+          className="w-full rounded-none border-[3px] border-foreground bg-foreground font-mono text-xs font-black uppercase tracking-widest text-background shadow-[4px_4px_0_var(--foreground)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-foreground"
           disabled={resetPasswordMutation.isPending}
         >
           {resetPasswordMutation.isPending ? 'Resetting...' : 'Reset →'}

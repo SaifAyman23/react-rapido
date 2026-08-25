@@ -53,7 +53,7 @@ export function Register() {
         <div className="space-y-2">
           <Label
             htmlFor="email"
-            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+            className="font-mono text-xs font-black uppercase tracking-wide text-foreground"
           >
             Email
           </Label>
@@ -65,14 +65,14 @@ export function Register() {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
-            className="rounded-none border-[3px] border-black bg-white font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
+            className="rounded-none border-[3px] border-foreground bg-card font-mono text-sm shadow-[3px_3px_0_var(--foreground)] focus-visible:ring-black"
           />
         </div>
 
         <div className="space-y-2">
           <Label
             htmlFor="password"
-            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+            className="font-mono text-xs font-black uppercase tracking-wide text-foreground"
           >
             Password
           </Label>
@@ -85,12 +85,12 @@ export function Register() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="new-password"
-              className="rounded-none border-[3px] border-black bg-white pr-10 font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
+              className="rounded-none border-[3px] border-foreground bg-card pr-10 font-mono text-sm shadow-[3px_3px_0_var(--foreground)] focus-visible:ring-black"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-black bg-white p-1 hover:bg-black hover:text-white"
+              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-foreground bg-card p-1 hover:bg-foreground hover:text-background"
               aria-label={showPassword ? 'Hide' : 'Show'}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -102,7 +102,7 @@ export function Register() {
         <div className="space-y-2">
           <Label
             htmlFor="confirmPassword"
-            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+            className="font-mono text-xs font-black uppercase tracking-wide text-foreground"
           >
             Confirm
           </Label>
@@ -115,12 +115,12 @@ export function Register() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               autoComplete="new-password"
-              className="rounded-none border-[3px] border-black bg-white pr-10 font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
+              className="rounded-none border-[3px] border-foreground bg-card pr-10 font-mono text-sm shadow-[3px_3px_0_var(--foreground)] focus-visible:ring-black"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-black bg-white p-1 hover:bg-black hover:text-white"
+              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-foreground bg-card p-1 hover:bg-foreground hover:text-background"
               aria-label={showConfirmPassword ? 'Hide' : 'Show'}
             >
               {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -130,18 +130,18 @@ export function Register() {
 
         <Button
           type="submit"
-          className="w-full rounded-none border-[3px] border-black bg-black font-mono text-xs font-black uppercase tracking-widest text-white shadow-[4px_4px_0_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-black"
+          className="w-full rounded-none border-[3px] border-foreground bg-foreground font-mono text-xs font-black uppercase tracking-widest text-background shadow-[4px_4px_0_var(--foreground)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-foreground"
           disabled={register.isPending}
         >
           {register.isPending ? 'Creating...' : 'Create account →'}
         </Button>
       </form>
 
-      <p className="mt-6 text-center font-mono text-xs font-bold text-black">
+      <p className="mt-6 text-center font-mono text-xs font-bold text-foreground">
         Have an account?{' '}
         <Link
           to="/login"
-          className="border-b-[3px] border-black bg-violet-500 px-1 py-0.5 text-white hover:bg-black"
+          className="border-b-[3px] border-foreground bg-violet-500 px-1 py-0.5 text-white hover:bg-foreground"
         >
           Sign in
         </Link>
