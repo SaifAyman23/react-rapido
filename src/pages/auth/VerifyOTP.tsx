@@ -175,7 +175,7 @@ export function VerifyOTP() {
             <button
               type="button"
               onClick={handleResend}
-              className="border-[3px] border-black bg-[#8B5CF6] px-3 py-1 font-mono text-xs font-black uppercase tracking-wide text-white shadow-[3px_3px_0_#000] hover:bg-black"
+              className="border-[3px] border-black bg-violet-500 px-3 py-1 font-mono text-xs font-black uppercase tracking-wide text-white shadow-[3px_3px_0_#000] hover:bg-black"
             >
               Resend code
             </button>

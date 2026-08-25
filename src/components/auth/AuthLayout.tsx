@@ -37,7 +37,7 @@ export function AuthLayout({ children, title, subtitle, className }: AuthLayoutP
       <div className={cn('flex flex-1 items-center justify-center px-4 py-10 sm:py-12', className)}>
         <div className="w-full max-w-[420px] border-[3px] border-black bg-white p-6 shadow-[8px_8px_0_#000] sm:p-8">
           <div className="mb-6 border-b-[3px] border-black pb-4">
-            <div className="inline-block border-[2px] border-black bg-[#8B5CF6] px-2 py-0.5 font-mono text-[10px] font-black tracking-widest text-white">
+            <div className="inline-block border-[2px] border-black bg-violet-500 px-2 py-0.5 font-mono text-[10px] font-black tracking-widest text-white">
               AUTH // 02
             </div>
             <h1 className="mt-3 font-mono text-2xl font-black uppercase tracking-tight">{title}</h1>

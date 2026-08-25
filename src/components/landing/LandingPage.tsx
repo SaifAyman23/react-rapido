@@ -62,7 +62,7 @@ export function LandingPage() {
         <section className="mx-auto max-w-[1280px] border-x-[3px] border-black bg-white">
           <div className="grid md:grid-cols-[1.35fr_0.85fr]">
             <div className="border-b-[3px] border-black p-6 sm:p-10 md:border-b-0 md:border-r-[3px]">
-              <div className="inline-flex items-center gap-2 border-[3px] border-black bg-[#8B5CF6] px-3 py-1 font-mono text-[11px] font-black tracking-widest text-white shadow-[3px_3px_0_#000]">
+              <div className="inline-flex items-center gap-2 border-[3px] border-black bg-violet-500 px-3 py-1 font-mono text-[11px] font-black tracking-widest text-white shadow-[3px_3px_0_#000]">
                 <Zap className="h-3 w-3" />
                 READY TO SHIP
               </div>
@@ -77,7 +77,7 @@ export function LandingPage() {
                 </span>
                 <span className="mt-2 block font-mono text-[clamp(1rem,2.2vw,1.35rem)] font-bold leading-8 tracking-tight">
                   React 19 + TS + Vite 7 + Tailwind v4.{' '}
-                  <span className="inline-block whitespace-nowrap bg-[#8B5CF6] px-1.5 py-0.5 leading-none text-white [box-decoration-break:clone]">
+                  <span className="inline-block whitespace-nowrap bg-violet-500 px-1.5 py-0.5 leading-none text-white [box-decoration-break:clone]">
                     Let&apos;s go
                   </span>
                 </span>
@@ -145,7 +145,7 @@ export function LandingPage() {
                   <div>src/api/ → 3-file pattern</div>
                   <div>src/components/ui/ → shadcn + Radix</div>
                   <div>src/lib/seo.ts → per-route meta</div>
-                  <div className="mt-3 inline-block border-[3px] border-black bg-[#8B5CF6] px-2 py-0.5 text-[11px] font-black text-white">
+                  <div className="mt-3 inline-block border-[3px] border-black bg-violet-500 px-2 py-0.5 text-[11px] font-black text-white">
                     + 8 BITS // DARKVEIL / BEAMS / SILK...
                   </div>
                 </div>
@@ -176,14 +176,14 @@ export function LandingPage() {
             <div className="flex w-max animate-[marquee_18s_linear_infinite] whitespace-nowrap font-mono text-xs font-black tracking-[0.18em]">
               {[1, 2].map((k) => (
                 <span key={k} className="flex items-center gap-6 px-6 py-2">
-                  <span>REACT 19</span> <span className="h-1.5 w-1.5 bg-[#8B5CF6]" />{' '}
-                  <span>TYPESCRIPT</span> <span className="h-1.5 w-1.5 bg-[#8B5CF6]" />{' '}
-                  <span>TAILWIND v4</span> <span className="h-1.5 w-1.5 bg-[#8B5CF6]" />{' '}
-                  <span>VITE 7</span> <span className="h-1.5 w-1.5 bg-[#8B5CF6]" />{' '}
-                  <span>ZUSTAND</span> <span className="h-1.5 w-1.5 bg-[#8B5CF6]" />{' '}
-                  <span>TANSTACK QUERY</span> <span className="h-1.5 w-1.5 bg-[#8B5CF6]" />{' '}
-                  <span>RADIX UI</span> <span className="h-1.5 w-1.5 bg-[#8B5CF6]" />{' '}
-                  <span>GSAP</span> <span className="h-1.5 w-1.5 bg-[#8B5CF6]" />{' '}
+                  <span>REACT 19</span> <span className="h-1.5 w-1.5 bg-violet-500" />{' '}
+                  <span>TYPESCRIPT</span> <span className="h-1.5 w-1.5 bg-violet-500" />{' '}
+                  <span>TAILWIND v4</span> <span className="h-1.5 w-1.5 bg-violet-500" />{' '}
+                  <span>VITE 7</span> <span className="h-1.5 w-1.5 bg-violet-500" />{' '}
+                  <span>ZUSTAND</span> <span className="h-1.5 w-1.5 bg-violet-500" />{' '}
+                  <span>TANSTACK QUERY</span> <span className="h-1.5 w-1.5 bg-violet-500" />{' '}
+                  <span>RADIX UI</span> <span className="h-1.5 w-1.5 bg-violet-500" />{' '}
+                  <span>GSAP</span> <span className="h-1.5 w-1.5 bg-violet-500" />{' '}
                   <span>AXE-CORE</span> <span className="mx-6">—</span>
                 </span>
               ))}
@@ -239,7 +239,7 @@ export function LandingPage() {
                   <span className="border-[3px] border-black bg-black px-2 py-0.5 font-mono text-xs font-black text-white">
                     {f.n}
                   </span>
-                  <Badge className="rounded-none border-[2px] border-black bg-[#8B5CF6] px-2 py-0 font-mono text-[10px] font-black text-white">
+                  <Badge className="rounded-none border-[2px] border-black bg-violet-500 px-2 py-0 font-mono text-[10px] font-black text-white">
                     {f.tag}
                   </Badge>
                 </div>
@@ -258,7 +258,7 @@ export function LandingPage() {
               </div>
               <table className="w-full border-collapse font-mono text-xs">
                 <thead>
-                  <tr className="border-b-[3px] border-black bg-[#8B5CF6] text-white">
+                  <tr className="border-b-[3px] border-black bg-violet-500 text-white">
                     <th className="border-r-[3px] border-black px-3 py-2 text-left">LAYER</th>
                     <th className="px-3 py-2 text-left">CHOICE</th>
                   </tr>
@@ -289,14 +289,14 @@ export function LandingPage() {
               </h3>
               <div className="mt-3 border-[3px] border-black bg-black p-3 font-mono text-xs leading-5 text-white">
                 <div>npm create vite@latest —template react-ts</div>
-                <div className="text-[#8B5CF6]"># or use rapido</div>
+                <div className="text-violet-500"># or use rapido</div>
                 <div>git clone https://github.com/SaifAyman23/react-rapido</div>
                 <div>npm run check — typecheck / lint / format / test</div>
               </div>
               <div className="mt-4 grid grid-cols-2 gap-2 font-mono text-[11px] font-black">
                 <Link
                   to={ROUTES.REGISTER}
-                  className="border-[3px] border-black bg-[#8B5CF6] py-2 text-center text-white shadow-[3px_3px_0_#000]"
+                  className="border-[3px] border-black bg-violet-500 py-2 text-center text-white shadow-[3px_3px_0_#000]"
                 >
                   CREATE ACCOUNT →
                 </Link>
@@ -316,7 +316,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1280px] border-x-[3px] border-black bg-[#8B5CF6] px-4 py-3 text-white">
+        <section className="mx-auto max-w-[1280px] border-x-[3px] border-black bg-violet-500 px-4 py-3 text-white">
           <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs font-black">
             <span>BUILT FOR REAL PROJECTS. NOT DEMOS.</span>
             <span className="border-[3px] border-black bg-black px-2 py-1 text-white">

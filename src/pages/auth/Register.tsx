@@ -141,7 +141,7 @@ export function Register() {
         Have an account?{' '}
         <Link
           to="/login"
-          className="border-b-[3px] border-black bg-[#8B5CF6] px-1 py-0.5 text-white hover:bg-black"
+          className="border-b-[3px] border-black bg-violet-500 px-1 py-0.5 text-white hover:bg-black"
         >
           Sign in
         </Link>
