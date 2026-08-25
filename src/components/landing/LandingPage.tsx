@@ -64,28 +64,30 @@ export function LandingPage() {
             <div className="border-b-[3px] border-black p-6 sm:p-10 md:border-b-0 md:border-r-[3px]">
               <div className="inline-flex items-center gap-2 border-[3px] border-black bg-[#8B5CF6] px-3 py-1 font-mono text-[11px] font-black tracking-widest text-white shadow-[3px_3px_0_#000]">
                 <Zap className="h-3 w-3" />
-                PRODUCTION-READY // 0 RUNTIME DEBT
+                READY TO SHIP
               </div>
 
               <h1 className="mt-6 font-black leading-[0.88] tracking-[-0.04em]">
                 <span className="block font-mono text-[13px] tracking-[0.32em] text-zinc-500">
-                  001 — STARTER KIT
+                  001 STARTER KIT
                 </span>
                 <span className="mt-3 block text-[clamp(2.8rem,9vw,5.8rem)]">BUILD</span>
                 <span className="block bg-black px-2 py-1 text-[clamp(2.8rem,9vw,5.8rem)] text-white">
                   FASTER.
                 </span>
-                <span className="mt-2 block font-mono text-[clamp(1rem,2.2vw,1.35rem)] font-bold tracking-tight">
+                <span className="mt-2 block font-mono text-[clamp(1rem,2.2vw,1.35rem)] font-bold leading-8 tracking-tight">
                   React 19 + TS + Vite 7 + Tailwind v4.{' '}
-                  <span className="bg-[#8B5CF6] px-1 text-white">No fluff.</span>
+                  <span className="inline-block whitespace-nowrap bg-[#8B5CF6] px-1.5 py-0.5 leading-none text-white [box-decoration-break:clone]">
+                    Let&apos;s go
+                  </span>
                 </span>
               </h1>
 
               <p className="mt-6 max-w-[52ch] border-l-[4px] border-black pl-4 font-mono text-[13px] leading-6 text-zinc-700">
-                Thin pages. Decoupled components. API layer with 3-file pattern. Auth + SEO + a11y
-                baked in. Copy, ship, scale.
+                Pages stay thin. Components take props. API follows the same three files. Auth and
+                SEO already handled. You handle the product.
                 <br />
-                <span className="font-black">— clean, fast.</span>
+                <span className="font-black">Clean and fast.</span>
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3 font-mono text-xs font-black">
@@ -149,10 +151,10 @@ export function LandingPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-3 border-t-[3px] border-black bg-[#F2F0E9] p-3 font-mono text-[11px] font-bold">
                   <div className="border-[3px] border-black bg-white p-2 text-center shadow-[3px_3px_0_#000]">
-                    VITE 7 — HMR 40ms
+                    VITE 7 HMR 40ms
                   </div>
                   <div className="border-[3px] border-black bg-black p-2 text-center text-white shadow-[3px_3px_0_#000]">
-                    TS 5 — STRICT
+                    TS 5 STRICT
                   </div>
                 </div>
               </div>
@@ -252,7 +254,7 @@ export function LandingPage() {
           <div className="grid border-b-[3px] border-black md:grid-cols-[1.1fr_0.9fr]">
             <div className="border-r-0 border-black p-0 md:border-r-[3px]">
               <div className="bg-black px-4 py-2 font-mono text-xs font-black tracking-widest text-white">
-                STACK — SPEC SHEET
+                STACK SPEC SHEET
               </div>
               <table className="w-full border-collapse font-mono text-xs">
                 <thead>
@@ -308,8 +310,7 @@ export function LandingPage() {
                 </a>
               </div>
               <p className="mt-3 font-mono text-[11px] leading-4 text-zinc-500">
-                No tracking. No bloat. Performance budget enforced in CI — build fails if you add
-                100KB of junk.
+                Keep it lean. CI blocks the build if the bundle gets too big.
               </p>
             </div>
           </div>
@@ -317,9 +318,9 @@ export function LandingPage() {
 
         <section className="mx-auto max-w-[1280px] border-x-[3px] border-black bg-[#8B5CF6] px-4 py-3 text-white">
           <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs font-black">
-            <span>THE BAR IS “SENIOR DESIGNER + SENIOR ENGINEER WOULD BOTH SIGN OFF”</span>
+            <span>BUILT FOR REAL PROJECTS. NOT DEMOS.</span>
             <span className="border-[3px] border-black bg-black px-2 py-1 text-white">
-              — AGENTS.md
+              AGENTS.md
             </span>
           </div>
         </section>
@@ -327,11 +328,11 @@ export function LandingPage() {
 
       <footer className="mx-auto max-w-[1280px] border-x-[3px] border-t-0 border-black bg-black px-4 py-6 text-white sm:px-6">
         <div className="flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
-          <span className="tracking-widest">© 2026 REACT RAPIDO — SHIP IT & FORGET IT ®</span>
+          <span className="tracking-widest">© 2026 REACT RAPIDO</span>
           <div className="flex gap-2">
             <span className="border border-white px-2 py-1">RAW</span>
             <span className="border border-white bg-white px-2 py-1 text-black">CLEAN</span>
-            <span className="border border-white px-2 py-1">BRUTAL</span>
+            <span className="border border-white px-2 py-1">SOLID</span>
           </div>
         </div>
       </footer>
