@@ -13,7 +13,7 @@ export function FormError({ message, className }: FormErrorProps) {
   return (
     <div
       className={cn(
-        'flex items-center gap-2 text-sm text-destructive bg-destructive/10 p-3 rounded-md',
+        'flex items-center gap-2 border-[3px] border-black bg-red-50 px-3 py-2 font-mono text-xs font-black text-red-700 shadow-[3px_3px_0_#000]',
         className
       )}
     >

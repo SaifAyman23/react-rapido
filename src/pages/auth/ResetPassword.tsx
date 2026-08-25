@@ -75,30 +75,34 @@ export function ResetPassword() {
   }
 
   return (
-    <AuthLayout
-      title="Create new password"
-      subtitle="Your password must be different from previous passwords"
-    >
+    <AuthLayout title="New password" subtitle="8+ chars, uppercase, number, symbol.">
       <form onSubmit={handleSubmit} className="space-y-4">
         <FormError message={error} />
 
         <div className="space-y-2">
-          <Label htmlFor="newPassword">New Password</Label>
+          <Label
+            htmlFor="newPassword"
+            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+          >
+            New password
+          </Label>
           <div className="relative">
             <Input
               id="newPassword"
               type={showNewPassword ? 'text' : 'password'}
-              placeholder="Create a new password"
+              placeholder="••••••••"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               required
               autoComplete="new-password"
               autoFocus
+              className="rounded-none border-[3px] border-black bg-white pr-10 font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
             />
             <button
               type="button"
               onClick={() => setShowNewPassword(!showNewPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-black bg-white p-1 hover:bg-black hover:text-white"
+              aria-label={showNewPassword ? 'Hide' : 'Show'}
             >
               {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
@@ -107,29 +111,40 @@ export function ResetPassword() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label
+            htmlFor="confirmPassword"
+            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+          >
+            Confirm
+          </Label>
           <div className="relative">
             <Input
               id="confirmPassword"
               type={showConfirmPassword ? 'text' : 'password'}
-              placeholder="Confirm your new password"
+              placeholder="••••••••"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               autoComplete="new-password"
+              className="rounded-none border-[3px] border-black bg-white pr-10 font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-black bg-white p-1 hover:bg-black hover:text-white"
+              aria-label={showConfirmPassword ? 'Hide' : 'Show'}
             >
               {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
         </div>
 
-        <Button type="submit" className="w-full" disabled={resetPasswordMutation.isPending}>
-          {resetPasswordMutation.isPending ? 'Resetting password...' : 'Reset password'}
+        <Button
+          type="submit"
+          className="w-full rounded-none border-[3px] border-black bg-black font-mono text-xs font-black uppercase tracking-widest text-white shadow-[4px_4px_0_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-black"
+          disabled={resetPasswordMutation.isPending}
+        >
+          {resetPasswordMutation.isPending ? 'Resetting...' : 'Reset →'}
         </Button>
       </form>
     </AuthLayout>

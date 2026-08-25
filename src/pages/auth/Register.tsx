@@ -46,12 +46,17 @@ export function Register() {
   }
 
   return (
-    <AuthLayout title="Create your account" subtitle="Get started with your free account">
+    <AuthLayout title="Create account" subtitle="Free forever. No credit card.">
       <form onSubmit={handleSubmit} className="space-y-4">
         <FormError message={error} />
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label
+            htmlFor="email"
+            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+          >
+            Email
+          </Label>
           <Input
             id="email"
             type="email"
@@ -60,25 +65,33 @@ export function Register() {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
+            className="rounded-none border-[3px] border-black bg-white font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label
+            htmlFor="password"
+            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+          >
+            Password
+          </Label>
           <div className="relative">
             <Input
               id="password"
               type={showPassword ? 'text' : 'password'}
-              placeholder="Create a password"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="new-password"
+              className="rounded-none border-[3px] border-black bg-white pr-10 font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-black bg-white p-1 hover:bg-black hover:text-white"
+              aria-label={showPassword ? 'Hide' : 'Show'}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
@@ -87,35 +100,49 @@ export function Register() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label
+            htmlFor="confirmPassword"
+            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+          >
+            Confirm
+          </Label>
           <div className="relative">
             <Input
               id="confirmPassword"
               type={showConfirmPassword ? 'text' : 'password'}
-              placeholder="Confirm your password"
+              placeholder="••••••••"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               autoComplete="new-password"
+              className="rounded-none border-[3px] border-black bg-white pr-10 font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-black bg-white p-1 hover:bg-black hover:text-white"
+              aria-label={showConfirmPassword ? 'Hide' : 'Show'}
             >
               {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
         </div>
 
-        <Button type="submit" className="w-full" disabled={register.isPending}>
-          {register.isPending ? 'Creating account...' : 'Create account'}
+        <Button
+          type="submit"
+          className="w-full rounded-none border-[3px] border-black bg-black font-mono text-xs font-black uppercase tracking-widest text-white shadow-[4px_4px_0_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-black"
+          disabled={register.isPending}
+        >
+          {register.isPending ? 'Creating...' : 'Create account →'}
         </Button>
       </form>
 
-      <p className="text-center text-sm text-muted-foreground">
-        Already have an account?{' '}
-        <Link to="/login" className="text-primary hover:underline font-medium">
+      <p className="mt-6 text-center font-mono text-xs font-bold text-black">
+        Have an account?{' '}
+        <Link
+          to="/login"
+          className="border-b-[3px] border-black bg-[#8B5CF6] px-1 py-0.5 text-white hover:bg-black"
+        >
           Sign in
         </Link>
       </p>

@@ -50,17 +50,22 @@ export function Login() {
   }
 
   return (
-    <AuthLayout title="Welcome back" subtitle="Sign in to your account to continue">
+    <AuthLayout title="Welcome back" subtitle="Sign in to continue — brutal, clean, fast.">
       <form onSubmit={handleSubmit} className="space-y-4">
         <FormError message={error} />
         {success && !error && (
-          <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 p-3 rounded-md">
-            <span>{success}</span>
+          <div className="border-[3px] border-black bg-emerald-50 px-3 py-2 font-mono text-xs font-bold text-emerald-700">
+            {success}
           </div>
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label
+            htmlFor="email"
+            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+          >
+            Email
+          </Label>
           <Input
             id="email"
             type="email"
@@ -69,44 +74,62 @@ export function Login() {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
+            className="rounded-none border-[3px] border-black bg-white font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
           />
         </div>
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-            <Link to="/forgot-password" className="text-xs text-primary hover:underline">
-              Forgot password?
+            <Label
+              htmlFor="password"
+              className="font-mono text-xs font-black uppercase tracking-wide text-black"
+            >
+              Password
+            </Label>
+            <Link
+              to="/forgot-password"
+              className="font-mono text-xs font-bold text-black underline decoration-2 underline-offset-2 hover:bg-black hover:text-white hover:decoration-black"
+            >
+              Forgot?
             </Link>
           </div>
           <div className="relative">
             <Input
               id="password"
               type={showPassword ? 'text' : 'password'}
-              placeholder="Enter your password"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
+              className="rounded-none border-[3px] border-black bg-white pr-10 font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 border-[2px] border-black bg-white p-1 hover:bg-black hover:text-white"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
         </div>
 
-        <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
-          {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
+        <Button
+          type="submit"
+          className="w-full rounded-none border-[3px] border-black bg-black font-mono text-xs font-black uppercase tracking-widest text-white shadow-[4px_4px_0_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-black"
+          disabled={loginMutation.isPending}
+        >
+          {loginMutation.isPending ? 'Signing in...' : 'Sign in →'}
         </Button>
       </form>
 
-      <p className="text-center text-sm text-muted-foreground">
-        Don't have an account?{' '}
-        <Link to="/register" className="text-primary hover:underline font-medium">
+      <p className="mt-6 text-center font-mono text-xs font-bold text-black">
+        No account?{' '}
+        <Link
+          to="/register"
+          className="border-b-[3px] border-black bg-[#8B5CF6] px-1 py-0.5 text-white hover:bg-black hover:text-white"
+        >
           Sign up
         </Link>
       </p>

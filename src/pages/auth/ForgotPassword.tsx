@@ -49,15 +49,17 @@ export function ForgotPassword() {
   }
 
   return (
-    <AuthLayout
-      title="Reset your password"
-      subtitle="Enter your email to receive a verification code"
-    >
+    <AuthLayout title="Reset password" subtitle="We’ll send a 6-digit code.">
       <form onSubmit={handleSubmit} className="space-y-4">
         <FormError message={error} />
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label
+            htmlFor="email"
+            className="font-mono text-xs font-black uppercase tracking-wide text-black"
+          >
+            Email
+          </Label>
           <Input
             id="email"
             type="email"
@@ -67,17 +69,22 @@ export function ForgotPassword() {
             required
             autoComplete="email"
             autoFocus
+            className="rounded-none border-[3px] border-black bg-white font-mono text-sm shadow-[3px_3px_0_#000] focus-visible:ring-black"
           />
         </div>
 
-        <Button type="submit" className="w-full" disabled={sendCodeMutation.isPending}>
-          {sendCodeMutation.isPending ? 'Sending code...' : 'Send verification code'}
+        <Button
+          type="submit"
+          className="w-full rounded-none border-[3px] border-black bg-black font-mono text-xs font-black uppercase tracking-widest text-white shadow-[4px_4px_0_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-black"
+          disabled={sendCodeMutation.isPending}
+        >
+          {sendCodeMutation.isPending ? 'Sending...' : 'Send code →'}
         </Button>
       </form>
 
       <Link
         to="/login"
-        className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="mt-6 flex items-center justify-center gap-2 border-[3px] border-black bg-white px-3 py-2 font-mono text-xs font-black uppercase tracking-wide text-black shadow-[3px_3px_0_#000] hover:bg-black hover:text-white"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to login
