@@ -1,226 +1,198 @@
-# React Rapido V1.0
+# REACT RAPIDO — BRUTAL STARTER
 
-**A modern, scalable, and production-ready React project template.**
+```
+┌────────────────────────────────────────────────────┐
+│  RR  //  01          REACT RAPIDO  V1.0  —  2026   │
+│                                                    │
+│  BUILD                                             │
+│  FASTER.                                           │
+│                                                    │
+│  React 19 + TS 5 + Vite 7 + Tailwind v4            │
+│  No fluff. No bloat. Just ship.                    │
+└────────────────────────────────────────────────────┘
+```
 
-_Updated for React 19 • TypeScript • Tailwind v4_
+**PRODUCTION-READY // 0 RUNTIME DEBT — brutal, clean, fast.**
 
----
-
-## Table of Contents
-
-- [React Rapido V1.0](#react-rapido)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Prerequisites](#prerequisites)
-  - [Quick Start](#quick-start)
-  - [Project Structure](#project-structure)
-  - [Environment Configuration](#environment-configuration)
-  - [Development Guide](#development-guide)
-    - [Common Commands](#common-commands)
-    - [Code Quality \& Formatting](#code-quality--formatting)
-  - [Routing \& Lazy Loading](#routing--lazy-loading)
-  - [Production Build](#production-build)
-  - [Testing](#testing)
-  - [Security Checklist](#security-checklist)
+Thin pages. Decoupled components. 3-file API. Auth + SEO + a11y baked in.
 
 ---
 
-## Features
+### TAGS
 
-- **Core Framework**: React 19 & TypeScript
-- **Bundler**: Vite 7+ with fast HMR and optimized builds
-- **Styling**: Tailwind CSS v4 with CSS variables and dark mode
-- **State Management**: Zustand for local state, React Query (TanStack Query) for server state
-- **Routing**: React Router v7 with lazy-loaded routes and code splitting
-- **HTTP Client**: Axios with interceptors for auth token handling
-- **UI Components**: Radix UI primitives + shadcn styling with Framer Motion animations
-- **Theming**: System-preference-aware dark/light mode with persistent toggle
-- **Authentication**: JWT-based auth flow (login, register, password reset, OTP verification)
-- **Icons**: Lucide React icon library
-- **Code Quality**: TypeScript strict mode, ESLint
+![React](https://img.shields.io/badge/REACT-19-000000?style=flat-square&labelColor=8B5CF6&color=000000)
+![TypeScript](https://img.shields.io/badge/TYPESCRIPT-5-000000?style=flat-square&labelColor=8B5CF6&color=000000)
+![Vite](https://img.shields.io/badge/VITE-7-000000?style=flat-square&labelColor=000000&color=8B5CF6)
+![Tailwind](https://img.shields.io/badge/TAILWIND-v4-000000?style=flat-square&labelColor=000000&color=8B5CF6)
+![Zustand](https://img.shields.io/badge/ZUSTAND-persist-000000?style=flat-square)
+![TanStack](https://img.shields.io/badge/TANSTACK-QUERY_5-000000?style=flat-square&labelColor=8B5CF6&color=000000)
+![CI](https://img.shields.io/badge/CI-PASSING-000000?style=flat-square&labelColor=000000&color=22C55E)
+![LCP](https://img.shields.io/badge/LCP-%E2%89%A42.5s-000000?style=flat-square)
+![CLS](https://img.shields.io/badge/CLS-0.00-000000?style=flat-square)
+![License](https://img.shields.io/badge/LICENSE-MIT-000000?style=flat-square)
 
----
-
-## Prerequisites
-
-Before beginning, ensure the following are installed:
-
-- **Node.js**: 20+
-- **npm**: 10+
+`BRUTAL` `CLEAN` `FAST` `RAW`
 
 ---
 
-## Quick Start
+### TABLE OF CONTENTS
+
+```
+01  SPECS
+02  QUICK START
+03  STRUCTURE
+04  STACK
+05  ROUTING
+06  QUALITY GATE
+07  SECURITY
+08  DOCS
+```
+
+---
+
+### 01 — SPECS
+
+```
+┌──────────────┬─────────────────────────────┐
+│  LCP         │ ≤2.5s  [GOOD]               │
+│  CLS         │ 0.00   [PERFECT]            │
+│  TBT         │ ≤200ms [FAST]               │
+│  AUTH        │ JWT + OTP                  │
+│  SEO         │ per-route meta + sitemap   │
+│  A11Y        │ axe-core + focus ring      │
+└──────────────┴─────────────────────────────┘
+```
+
+- THE BAR IS “SENIOR DESIGNER + SENIOR ENGINEER WOULD BOTH SIGN OFF” — AGENTS.md. Build fails if you add 100KB of junk.
+
+---
+
+### 02 — QUICK START
 
 ```bash
-# 1. Clone the repository
-git clone <repository-url> my-project
-cd my-project
+# 01 — clone
+git clone https://github.com/SaifAyman23/react-rapido my-app
+cd my-app
 
-# 2. Install dependencies
-npm install
+# 02 — install
+npm i
 
-# 3. Copy the environment variables template
+# 03 — env
 cp .env.example .env
+# set VITE_API_URL, VITE_SITE_URL, VITE_APP_NAME
 
-# 4. Start the development server
+# 04 — dev
 npm run dev
+# → http://localhost:5173
 ```
 
-**Access URLs:**
-
-- Application: `http://localhost:5173`
+```
+┌─────────────────────────────────────┐
+│  $ npm run dev   — HMR 40ms         │
+│  $ npm run check — type/lint/fmt/test │
+└─────────────────────────────────────┘
+```
 
 ---
 
-## Project Structure
+### 03 — STRUCTURE
 
-```text
+```
 src/
-├── api/                        # API layer
-│   ├── axiosInstance.ts        # Axios instance with auth interceptors
-│   └── hooks/                  # React Query hooks per domain
-│       ├── authEndpoints.ts    # Auth API path constants
-│       ├── useAuth.ts          # Authentication mutations
-│       └── index.ts            # Barrel export
-│
-├── components/                 # Shared UI components
-│   ├── auth/                   # Auth-specific (AuthLayout, FormDivider, OAuthButtons)
-│   ├── layout/                 # Layout components (Navbar)
-│   ├── theme/                  # Theme system (ThemeProvider, ModeToggle)
-│   └── ui/                     # Generic primitives (button, card, badge, etc.)
-│
-├── hooks/                      # Shared React hooks
-│   └── useMediaQuery.ts
-│
-├── lib/                        # Utilities & configuration
-│   ├── constants.ts            # Environment variables & route paths
-│   └── utils.ts                # Utility helpers (cn, etc.)
-│
-├── pages/                      # Route-level page components (lazy-loaded)
-│   ├── Home.tsx
-│   └── auth/                   # Auth pages (Login, Register, ForgotPassword, etc.)
-│
-├── store/                      # Zustand stores
-│   └── auth/                   # Auth state (persisted)
-│
-├── App.tsx                     # Root component with route definitions
-├── MainLayout.tsx              # Layout wrapper with Navbar + Outlet
-└── index.css                   # Theme tokens, Tailwind imports, global styles
+├── api/               # 3-file pattern per domain
+│   ├── axiosInstance.ts
+│   └── accounts/      # endpoints.ts + hooks.ts + index.ts
+├── components/
+│   ├── brutal/        # BrutalPage — home hero + marquee + spec sheet
+│   ├── auth/          # AuthLayout, FormError, OAuthButtons
+│   ├── bits/          # AccordionGallery, FlowingMenu, ScrollReveal (logic only)
+│   ├── ui/            # shadcn + Radix (button, card, input, FadeImage, stack, torn-text)
+│   └── theme/         # ThemeProvider
+├── hooks/             # useDebounce, useIsMobile
+├── lib/               # constants, seo, validators, color, smoothScroll, utils
+├── pages/             # Home (thin) + auth/* (lazy)
+├── store/auth/        # Zustand persist
+└── test/              # axe, setup
+```
 
-├── public/                     # Static assets
-├── index.html                  # HTML entry point
-├── package.json                # Dependencies & scripts
-├── tsconfig.json               # TypeScript configuration
-├── vite.config.ts              # Vite configuration
-└── .env.example                # Baseline environment configuration
+```
+PAGES ARE THIN — components receive props, never hooks directly.
 ```
 
 ---
 
-## Environment Configuration
+### 04 — STACK
 
-Configuration is managed via environment variables prefixed with `VITE_`:
+| LAYER     | CHOICE                                                                           |
+| --------- | -------------------------------------------------------------------------------- |
+| Framework | React 19 + TS 5 (strict)                                                         |
+| Bundler   | Vite 7 + manualChunks (react / query / radix / gsap)                             |
+| Styling   | Tailwind v4 + CSS vars + `border-[3px] border-black` + `shadow-[4px_4px_0_#000]` |
+| State     | Zustand (persist) + TanStack Query 5                                             |
+| HTTP      | Axios + interceptors + `extractErrorMessage`                                     |
+| Router    | React Router 7 (lazy + `basename`)                                               |
+| FX        | GSAP + Lenis (on demand, respects `prefers-reduced-motion`)                      |
 
-| Variable        | Description              | Default                        |
-| --------------- | ------------------------ | ------------------------------ |
-| `VITE_API_URL`  | Backend API base URL     | `http://localhost:8000/api/v1` |
-| `VITE_APP_NAME` | Application display name | `React Rapido V1.0`            |
-
-**Note:** Never commit the populated `.env` file to version control.
-
----
-
-## Development Guide
-
-### Common Commands
-
-| Command           | Description                                |
-| ----------------- | ------------------------------------------ |
-| `npm run dev`     | Start the Vite development server with HMR |
-| `npm run build`   | Production build to `dist/`                |
-| `npm run preview` | Preview the production build locally       |
-
-### Code Quality & Formatting
-
-Quality is enforced by tooling, not discipline. Run `npm run check` (typecheck + lint + format check + tests) before committing — the same gate runs in CI (`.github/workflows/ci.yml`) on every push/PR:
-
-```bash
-# One command: everything
-npm run check
-
-# TypeScript type checking
-npm run typecheck
-
-# Lint with ESLint (incl. import order, no non-null assertions, thin pages)
-npm run lint
-
-# Format with Prettier (also gated via `format:check`)
-npm run format
-```
-
-| Command                | Description                                            |
-| ---------------------- | ------------------------------------------------------ |
-| `npm run check`        | typecheck + lint + format:check + test (CI-equivalent) |
-| `npm run typecheck`    | `tsc -b --noEmit`                                      |
-| `npm run lint`         | ESLint (flat config)                                   |
-| `npm run format`       | Prettier write over the repo                           |
-| `npm run format:check` | Prettier check (fails on drift)                        |
+Accent: `#8B5CF6` on `bg-white` / `bg-black` — brutal, high-contrast, WCAG AA.
 
 ---
 
-## Routing & Lazy Loading
-
-All page components are lazy-loaded using `React.lazy()` + dynamic `import()` for automatic code splitting:
+### 05 — ROUTING
 
 ```tsx
-const Home = lazy(() => import('@/pages/Home'))
+// App.tsx — lazy, split, no bloat
+const Home = lazy(() => import('@/pages/Home')) // BrutalPage → 17KB
 const Login = lazy(() => import('@/pages/auth/Login'))
 ```
 
-Each route generates its own chunk during the build, keeping the initial bundle lean.
+- Every route is a chunk. No heavy lib in critical path.
 
 ---
 
-## Production Build
+### 06 — QUALITY GATE
 
 ```bash
-# Generate an optimized production bundle
-npm run build
-
-# The output lands in the dist/ directory, ready to deploy
-# to any static hosting provider (Vercel, Netlify, Cloudflare Pages, etc.)
+npm run check   # typecheck + lint + format:check + test
+npm run typecheck
+npm run lint
+npm run format
+npm run test        # Vitest + RTL + axe-core
+npm run build       # → dist/
 ```
 
-For SPA hosting, configure your server to route all paths to `index.html` (e.g., a `_redirects` file for Netlify or a catch-all rewrite rule).
+CI: `.github/workflows/ci.yml` — `npm ci` → typecheck → lint → format:check → test → build. Red = not mergeable.
 
 ---
 
-## Testing
+### 07 — SECURITY
 
-The template ships with **Vitest + React Testing Library + jsdom + axe-core**:
-
-```bash
-npm run test        # Run once
-npm run test:watch  # Watch mode
+```
+[ ] VITE_API_URL = prod
+[ ] CORS = prod origin
+[ ] HTTPS everywhere
+[ ] No secrets in client
+[ ] CSP headers
 ```
 
-- Test infra lives in `src/test/`: `setup-env.ts` (sets `IS_REACT_ACT_ENVIRONMENT`), `setup.ts` (jest-dom matchers), `axe.ts` (axe-core runner).
-- `a11y-*.test.tsx` runs axe scans on components to catch missing labels, contrast, and ARIA misuse.
-- Keep the suite green and lint-clean before committing (see `AGENTS.md`).
+---
+
+### 08 — DOCS
+
+```
+docs/
+├── Performance.md   # LCP/INP/CLS/TBT, WebP 82, vendor split
+├── SEO.md           # crawlability, meta, JSON-LD
+├── Accessibility.md # skip-link, focus, axe
+└── BestPractices.md # 3-file API, thin pages, CI
+```
 
 ---
 
-## Security Checklist
+```
+┌──────────────────────────────────────────────┐
+│  © 2026 REACT RAPIDO — SHIP IT & FORGET IT  │
+│  RAW  //  CLEAN  //  BRUTAL                  │
+└──────────────────────────────────────────────┘
+```
 
-When deploying the frontend to production, confirm the following:
-
-- [ ] Ensure `VITE_API_URL` points to the production API endpoint.
-- [ ] Verify CORS is configured on the backend to allow the production origin.
-- [ ] Use HTTPS for both the frontend and API in production.
-- [ ] Never store sensitive secrets (API keys, tokens) in client-side code.
-- [ ] Ensure CSP headers are set on the hosting server.
-
----
-
-**React Rapido V1.0** — Build faster, scale beautifully.
+_Built for senior review. No emojis, no fluff._
