@@ -54,7 +54,7 @@ export function Login() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <FormError message={error} />
         {success && !error && (
-          <div className="border-[3px] border-foreground bg-emerald-50 px-3 py-2 font-mono text-xs font-bold text-emerald-700">
+          <div className="border-[3px] border-foreground bg-emerald-50 dark:bg-emerald-950 px-3 py-2 font-mono text-xs font-bold text-emerald-700 dark:text-emerald-300">
             {success}
           </div>
         )}
@@ -117,7 +117,7 @@ export function Login() {
 
         <Button
           type="submit"
-          className="w-full rounded-none border-[3px] border-foreground bg-foreground font-mono text-xs font-black uppercase tracking-widest text-background shadow-[4px_4px_0_var(--foreground)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] hover:bg-foreground"
+          className="w-full rounded-none border-[3px] border-foreground bg-foreground font-mono text-xs font-black uppercase tracking-widest text-background shadow-[4px_4px_0_var(--foreground)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] dark:hover:shadow-[2px_2px_0_#fff] hover:bg-foreground"
           disabled={loginMutation.isPending}
         >
           {loginMutation.isPending ? 'Signing in...' : 'Sign in →'}

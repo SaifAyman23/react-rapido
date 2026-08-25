@@ -40,13 +40,13 @@ export function LandingPage() {
                 href="https://github.com/SaifAyman23/react-rapido"
                 target="_blank"
                 rel="noreferrer"
-                className="border-[3px] border-foreground bg-card px-3 py-1.5 shadow-[3px_3px_0_var(--foreground)] transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000]"
+                className="border-[3px] border-foreground bg-card px-3 py-1.5 shadow-[3px_3px_0_var(--foreground)] transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] dark:hover:shadow-[2px_2px_0_#fff]"
               >
                 GITHUB [02]
               </a>
               <Link
                 to={ROUTES.LOGIN}
-                className="border-[3px] border-foreground bg-foreground px-3 py-1.5 text-background shadow-[3px_3px_0_var(--foreground)] transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000]"
+                className="border-[3px] border-foreground bg-foreground px-3 py-1.5 text-background shadow-[3px_3px_0_var(--foreground)] transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] dark:hover:shadow-[2px_2px_0_#fff]"
               >
                 DEMO →
               </Link>
@@ -74,7 +74,7 @@ export function LandingPage() {
               </div>
 
               <h1 className="mt-6 font-black leading-[0.88] tracking-[-0.04em]">
-                <span className="block font-mono text-[13px] tracking-[0.32em] text-zinc-500">
+                <span className="block font-mono text-[13px] tracking-[0.32em] text-zinc-500 dark:text-zinc-400">
                   001 STARTER KIT
                 </span>
                 <span className="mt-3 block text-[clamp(2.8rem,9vw,5.8rem)]">BUILD</span>
@@ -89,7 +89,7 @@ export function LandingPage() {
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-[52ch] border-l-[4px] border-foreground pl-4 font-mono text-[13px] leading-6 text-zinc-700">
+              <p className="mt-6 max-w-[52ch] border-l-[4px] border-foreground pl-4 font-mono text-[13px] leading-6 text-zinc-700 dark:text-zinc-300">
                 Pages stay thin. Components take props. API follows the same three files. Auth and
                 SEO already handled. You handle the product.
                 <br />
@@ -118,9 +118,13 @@ export function LandingPage() {
                   ['TBT', '≤200ms', 'FAST'],
                 ].map(([k, v, s]) => (
                   <div key={k} className="p-3">
-                    <div className="text-[10px] tracking-widest text-zinc-500">{k}</div>
+                    <div className="text-[10px] tracking-widest text-zinc-500 dark:text-zinc-400">
+                      {k}
+                    </div>
                     <div className="text-sm font-black">{v}</div>
-                    <div className="text-[10px] font-black text-emerald-600">{s}</div>
+                    <div className="text-[10px] font-black text-emerald-600 dark:text-emerald-400">
+                      {s}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -130,7 +134,7 @@ export function LandingPage() {
               <div className="border-[3px] border-foreground bg-card shadow-[8px_8px_0_var(--foreground)]">
                 <div className="flex items-center justify-between border-b-[3px] border-foreground bg-foreground px-3 py-2 text-background">
                   <div className="flex items-center gap-1.5">
-                    <span className="h-3 w-3 border border-background bg-red-500" />
+                    <span className="h-3 w-3 border border-background bg-red-50 dark:bg-red-9500" />
                     <span className="h-3 w-3 border border-background bg-yellow-400" />
                     <span className="h-3 w-3 border border-background bg-green-500" />
                   </div>
@@ -139,15 +143,15 @@ export function LandingPage() {
                   </span>
                 </div>
                 <div className="p-4 font-mono text-[12px] leading-5">
-                  <div className="text-zinc-500">// create → ship</div>
+                  <div className="text-zinc-500 dark:text-zinc-400">// create → ship</div>
                   <div>
-                    <span className="text-zinc-500">$</span> npx degit SaifAyman23/react-rapido
-                    my-app
+                    <span className="text-zinc-500 dark:text-zinc-400">$</span> npx degit
+                    SaifAyman23/react-rapido my-app
                   </div>
                   <div>
-                    <span className="text-zinc-500">$</span> npm i && npm run dev
+                    <span className="text-zinc-500 dark:text-zinc-400">$</span> npm i && npm run dev
                   </div>
-                  <div className="mt-3 text-zinc-500"># structure</div>
+                  <div className="mt-3 text-zinc-500 dark:text-zinc-400"># structure</div>
                   <div>src/api/ → 3-file pattern</div>
                   <div>src/components/ui/ → shadcn + Radix</div>
                   <div>src/lib/seo.ts → per-route meta</div>
@@ -252,7 +256,9 @@ export function LandingPage() {
                 <h3 className="mt-4 font-mono text-[17px] font-black uppercase tracking-tight">
                   {f.t}
                 </h3>
-                <p className="mt-2 font-mono text-[12px] leading-5 text-zinc-600">{f.d}</p>
+                <p className="mt-2 font-mono text-[12px] leading-5 text-zinc-600 dark:text-zinc-400">
+                  {f.d}
+                </p>
               </div>
             ))}
           </div>
@@ -280,7 +286,7 @@ export function LandingPage() {
                     ['FX', 'GSAP + OGL + three (on demand)'],
                   ].map(([k, v]) => (
                     <tr key={k}>
-                      <td className="border-r-[3px] border-foreground bg-zinc-50 px-3 py-2 font-black">
+                      <td className="border-r-[3px] border-foreground bg-zinc-50 dark:bg-zinc-900 px-3 py-2 font-black">
                         {k}
                       </td>
                       <td className="px-3 py-2">{v}</td>
@@ -315,7 +321,7 @@ export function LandingPage() {
                   GITHUB
                 </a>
               </div>
-              <p className="mt-3 font-mono text-[11px] leading-4 text-zinc-500">
+              <p className="mt-3 font-mono text-[11px] leading-4 text-zinc-500 dark:text-zinc-400">
                 Keep it lean. CI blocks the build if the bundle gets too big.
               </p>
             </div>
@@ -337,7 +343,9 @@ export function LandingPage() {
           <span className="tracking-widest">© 2026 REACT RAPIDO</span>
           <div className="flex gap-2">
             <span className="border border-background px-2 py-1">RAW</span>
-            <span className="border border-background bg-background px-2 py-1 text-foreground">CLEAN</span>
+            <span className="border border-background bg-background px-2 py-1 text-foreground">
+              CLEAN
+            </span>
             <span className="border border-background px-2 py-1">SOLID</span>
           </div>
         </div>

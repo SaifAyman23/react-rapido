@@ -46,7 +46,9 @@ export function AuthLayout({ children, title, subtitle, className }: AuthLayoutP
             <div className="inline-block border-[2px] border-foreground bg-violet-500 px-2 py-0.5 font-mono text-[10px] font-black tracking-widest text-white">
               AUTH // 02
             </div>
-            <h1 className="mt-3 font-mono text-2xl font-black uppercase tracking-tight text-foreground">{title}</h1>
+            <h1 className="mt-3 font-mono text-2xl font-black uppercase tracking-tight text-foreground">
+              {title}
+            </h1>
             {subtitle && (
               <p className="mt-1 font-mono text-xs leading-5 text-muted-foreground">{subtitle}</p>
             )}
