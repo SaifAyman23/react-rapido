@@ -1,3 +1,4 @@
+import fs from 'node:fs'
 import path from 'path'
 
 import tailwindcss from '@tailwindcss/vite'
@@ -32,6 +33,21 @@ function siteFiles(siteUrl: string): Plugin {
   }
 }
 
+function ghPagesSpa(): Plugin {
+  return {
+    name: 'gh-pages-spa',
+    apply: 'build',
+    closeBundle() {
+      const dist = path.resolve(__dirname, 'dist')
+      const index = path.join(dist, 'index.html')
+      if (fs.existsSync(index)) {
+        fs.copyFileSync(index, path.join(dist, '404.html'))
+        fs.writeFileSync(path.join(dist, '.nojekyll'), '')
+      }
+    },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
@@ -46,6 +62,7 @@ export default defineConfig(({ mode }) => {
       }),
       tailwindcss(),
       siteFiles(siteUrl),
+      ghPagesSpa(),
     ],
     resolve: {
       alias: {
@@ -67,6 +84,8 @@ export default defineConfig(({ mode }) => {
               '@radix-ui/react-label',
             ],
             'vendor-motion': ['motion'],
+            'vendor-gsap': ['gsap'],
+            'vendor-three': ['three'],
           },
         },
       },

@@ -1,4 +1,5 @@
 export { useDebounce } from './useDebounce'
+export { useIsMobile } from './useIsMobile'
 export {
   useLogin,
   useRegister,

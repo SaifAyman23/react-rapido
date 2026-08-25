@@ -7,9 +7,80 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
+   FONTS — self-hosted
+   ============================================================ */
+@font-face {
+  font-family: 'Linux Libertine';
+  src: url('./assets/fonts/linux_libertine/LinLibertine_R.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Linux Libertine';
+  src: url('./assets/fonts/linux_libertine/LinLibertine_RB.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Linux Libertine';
+  src: url('./assets/fonts/linux_libertine/LinLibertine_RI.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Linux Libertine';
+  src: url('./assets/fonts/linux_libertine/LinLibertine_RBI.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nexa';
+  src: url('./assets/fonts/nexa/Nexa-ExtraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nexa';
+  src: url('./assets/fonts/nexa/Nexa-Heavy.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Heavitas';
+  src: url('./assets/fonts/heavitas/Heavitas.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
    THEME TOKENS
    ============================================================ */
 @theme inline {
+  /* Typography */
+  /* --font-heading: 'Linux Libertine', Georgia, 'Times New Roman', serif; */
+  --font-heading: 'Heavitas', Georgia, 'Times New Roman', serif;
+  --font-body: 'Nexa', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Heavitas', var(--font-heading);
+  --font-libertine: 'Linux Libertine', Georgia, 'Times New Roman', serif;
+  --font-nexa: 'Nexa', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-heavitas: 'Heavitas', var(--font-heading);
+
+  /* Accent */
+  --color-accent-sky: #68bdf2;
+
   /* Radius scale */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -147,17 +218,17 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* ── Headings — JetBrains Mono ── */
+  /* ── Headings — Linux Libertine ── */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
-    font-weight: 700;
+    font-family: var(--font-heading);
+    font-weight: 500;
     line-height: 1.15;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     color: var(--foreground);
   }
 
@@ -193,22 +264,26 @@
     font-weight: 600;
   }
 
-  /* ── Paragraphs ── */
+  /* ── Paragraphs — Nexa ── */
   p {
+    font-family: var(--font-body);
+    font-weight: 200;
     font-size: 1rem;
     line-height: 1.7;
     color: var(--foreground);
   }
 
-  /* ── Lead paragraph ── */
-  p.lead {
-    font-size: clamp(1.05rem, 2vw, 1.2rem);
-    font-weight: 300;
-    line-height: 1.75;
+  /* ── Eyebrow — small lead-in text above headings ── */
+  .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.8125rem;
+    line-height: 1.4;
     color: var(--muted-foreground);
+    @apply text-accent-sky dark:text-accent-sky;
   }
-
-  /* ── Small text ── */
 
   /* ── Small text ── */
   small,
@@ -226,13 +301,6 @@
 
   a:hover {
     opacity: 0.8;
-  }
-
-  /* ── Small text ── */
-  small,
-  .text-small {
-    font-size: 0.8125rem;
-    line-height: 1.5;
   }
 
   /* ── Strong / Bold ── */

@@ -29,7 +29,10 @@ export function SeoUpdater() {
 
   useEffect(() => {
     const seo = matchRouteSeo(pathname)
-    const title = seo.title === SITE_NAME ? SITE_NAME : `${seo.title} | ${SITE_NAME}`
+    const title =
+      seo.title === SITE_NAME || seo.title.startsWith(SITE_NAME)
+        ? seo.title
+        : `${seo.title} | ${SITE_NAME}`
     const url = SITE_URL + (pathname === '/' ? '/' : pathname)
 
     document.title = title

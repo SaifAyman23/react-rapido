@@ -1,30 +1,42 @@
-# AGENTS.md — React Rapido Template
+# AGENTS.md — The Portfolio
 
 This document is the single source of truth for AI coding assistants working on this project. It captures the **organizational and Web Vitals principles** that make a React frontend excellent: structure, conventions, performance, SEO, and accessibility.
 
-> This is the generalized playbook. When you start a new project from this template, keep Parts B–F verbatim and replace Part A with your project's context (stack, routes, API conventions, env vars).
+> This is my personal portfolio — the code IS the first impression. Every change should make it faster, sharper, or more alive. If a change makes it slower, uglier, or harder to use: reject it. The bar is "a senior designer and a senior engineer would both sign off."
 
 ---
 
-# Part A — Project Context (replace for your project)
+# Part A — Project Context
+
+## 0. What This Site Is
+
+A personal portfolio: the public face of my work on the web.
+
+- **Home / hero** — WebGL-backed visual moment (MoltenMetal shader background, MagicBento cards), fast first paint despite the flair
+- **Work showcase** — projects with real detail pages, reachable via `<Link>` (crawlable)
+- **About & contact** — human, direct, no corporate filler
+- **Auth stack** — inherited intact from the template (login/register/reset/OTP); reserved for a future private admin/dashboard area, not part of the public story
+
+Design direction: confident, dark-leaning, atmospheric visuals over an engineering-grade foundation. Motion earns its place — GPU-friendly, subtle, always respecting `prefers-reduced-motion`.
 
 ## 1. Tech Stack
 
-| Layer         | Technology                   | Notes                                           |
-| ------------- | ---------------------------- | ----------------------------------------------- |
-| Framework     | React 19                     | —                                               |
-| Language      | TypeScript 5.x               | strict mode                                     |
-| Bundler       | Vite 7+                      | HMR, code splitting                             |
-| Styling       | Tailwind CSS v4              | CSS variables, nesting                          |
-| UI primitives | Radix UI (`radix-ui`)        | via shadcn/ui                                   |
-| Animations    | `motion` (framer-motion v12) | use sparingly; respect `prefers-reduced-motion` |
-| Icons         | `lucide-react`               | —                                               |
-| Client state  | Zustand                      | persisted auth store                            |
-| Server state  | TanStack Query v5            | mutations, queries                              |
-| HTTP          | Axios 1.x                    | interceptors                                    |
-| Routing       | React Router v7              | lazy-loaded routes                              |
-| Font          | DM Sans + JetBrains Mono     | loaded non-render-blocking                      |
-| Testing       | Vitest 4 + RTL 16 + jsdom    | axe-core a11y scans                             |
+| Layer         | Technology                   | Notes                                                      |
+| ------------- | ---------------------------- | ---------------------------------------------------------- |
+| Framework     | React 19                     | —                                                          |
+| Language      | TypeScript 5.x               | strict mode                                                |
+| Bundler       | Vite 7+                      | HMR, code splitting                                        |
+| Styling       | Tailwind CSS v4              | CSS variables, nesting                                     |
+| UI primitives | Radix UI (`radix-ui`)        | via shadcn/ui                                              |
+| Animations    | `motion` (framer-motion v12) | use sparingly; respect `prefers-reduced-motion`            |
+| Shaders / FX  | `ogl`, `gsap`                | WebGL hero visuals only; never in the critical bundle path |
+| Icons         | `lucide-react`               | —                                                          |
+| Client state  | Zustand                      | persisted auth store                                       |
+| Server state  | TanStack Query v5            | mutations, queries                                         |
+| HTTP          | Axios 1.x                    | interceptors                                               |
+| Routing       | React Router v7              | lazy-loaded routes                                         |
+| Font          | DM Sans + JetBrains Mono     | loaded non-render-blocking                                 |
+| Testing       | Vitest 4 + RTL 16 + jsdom    | axe-core a11y scans                                        |
 
 ## 2. Project Structure
 
@@ -40,6 +52,8 @@ src/
 │
 ├── components/
 │   ├── auth/                     # AuthLayout, FormDivider, FormError, OAuthButtons
+│   ├── astral/                   # Atmospheric visuals: AuroraBackground, GridHighlight
+│   ├── bits/                     # Showpiece widgets: MagicBento, MoltenMetal (WebGL/GLSL)
 │   ├── layout/                   # Navbar
 │   ├── theme/                    # ThemeProvider, ModeToggle (dark/light/system)
 │   ├── ui/                       # shadcn primitives: button, input, card, select, label, ...
@@ -58,7 +72,7 @@ src/
 │   └── markdown.tsx              # Simple markdown-to-JSX renderer
 │
 ├── pages/                        # Lazy-loaded route components (thin orchestrators)
-│   ├── Home.tsx
+│   ├── Home.tsx                  # Hero: MoltenMetal background + MagicBento showcase
 │   └── auth/                     # Login, Register, ForgotPassword, VerifyOTP, ResetPassword
 │
 ├── store/
