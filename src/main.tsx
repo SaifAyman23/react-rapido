@@ -1,4 +1,9 @@
+import { useGSAP } from '@gsap/react'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { gsap } from 'gsap'
+import { Observer } from 'gsap/Observer'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { SplitText } from 'gsap/SplitText'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -8,6 +13,13 @@ import App from './App.tsx'
 import { ThemeProvider } from '@/components/theme/ThemeProvider'
 import { APP_NAME } from '@/lib/constants'
 import { queryClient } from '@/lib/queryClient'
+import { initWebVitals } from '@/lib/vitals'
+
+// Register once at startup: lazy chunks create triggers, so registration
+// must live in the entry — never only in the chunks themselves.
+gsap.registerPlugin(useGSAP, Observer, ScrollTrigger, SplitText)
+
+initWebVitals()
 
 const skeleton = document.getElementById('loading-skeleton')
 if (skeleton) {
