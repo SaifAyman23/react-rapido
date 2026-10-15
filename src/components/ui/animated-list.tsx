@@ -1,20 +1,28 @@
-import { AnimatePresence, motion, type MotionProps } from 'motion/react'
+import { useGSAP } from '@gsap/react'
+import { gsap } from 'gsap'
 import React, { type ComponentPropsWithoutRef, useEffect, useMemo, useState } from 'react'
 
+import { prefersReducedMotion } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
+gsap.registerPlugin(useGSAP)
+
 export function AnimatedListItem({ children }: { children: React.ReactNode }) {
-  const animations: MotionProps = {
-    initial: { scale: 0, opacity: 0 },
-    animate: { scale: 1, opacity: 1, originY: 0 },
-    exit: { scale: 0, opacity: 0 },
-    transition: { type: 'spring', stiffness: 350, damping: 40 },
-  }
+  const ref = React.useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    if (!ref.current || prefersReducedMotion()) return
+    gsap.fromTo(
+      ref.current,
+      { scale: 0, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(1.7)' }
+    )
+  }, [])
 
   return (
-    <motion.div {...animations} layout className="mx-auto w-full">
+    <div ref={ref} className="mx-auto w-full">
       {children}
-    </motion.div>
+    </div>
   )
 }
 
@@ -45,11 +53,9 @@ export const AnimatedList = React.memo(
 
     return (
       <div className={cn(`flex flex-col items-center gap-4`, className)} {...props}>
-        <AnimatePresence>
-          {itemsToShow.map((item) => (
-            <AnimatedListItem key={(item as React.ReactElement).key}>{item}</AnimatedListItem>
-          ))}
-        </AnimatePresence>
+        {itemsToShow.map((item) => (
+          <AnimatedListItem key={(item as React.ReactElement).key}>{item}</AnimatedListItem>
+        ))}
       </div>
     )
   }
