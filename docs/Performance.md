@@ -1,7 +1,6 @@
 # Performance — World-Grade Playbook
 
-> **Scope:** Applies to **any** website (static, SPA, SSR, SSG, e-commerce, portfolio, docs). Framework-agnostic unless a note says otherwise.
-> **Goal:** green Core Web Vitals on real devices, not just on a fast laptop.
+> **Scope:** Applies to **any** website. Framework-agnostic unless a note says otherwise.
 > **Sources of truth:** [web.dev Vitals](https://web.dev/vitals/), [LCP](https://web.dev/articles/lcp), [INP](https://web.dev/articles/inp), [CLS](https://web.dev/articles/cls), [TBT](https://web.dev/articles/tbt), [Learn Performance](https://web.dev/learn/performance), [MDN Performance](https://developer.mozilla.org/en-US/docs/Web/Performance).
 
 ---
@@ -97,9 +96,13 @@ This is the decision most teams get wrong.
 
 Any single JS task > 50 ms blocks the main thread (counts toward TBT, hurts INP). Split with `setTimeout(…, 0)`, `requestIdleCallback`, or scheduling APIs. Yield to the browser between chunks of work.
 
+> **TBT is a window total:** deferring work to later _inside_ the measurement window moves _when_ it runs, not _how much_ runs — TBT only drops through elimination or sub-50ms splitting. Deferral still helps LCP/Speed Index (visual timing), which is why gating below-fold setup works: unviewed work never runs inside the window at all.
+
 ### 3.5 Keep WebGL / three.js / heavy canvas off the critical path
 
 WebGL contexts are expensive. Load them lazily, cap devicePixelRatio (e.g. `min(dpr, 1.5)`), pause rendering when off-screen (`IntersectionObserver`) or when the tab is hidden (`visibilitychange`), and freeze for `prefers-reduced-motion`.
+
+Two lab caveats: headless browsers without a GPU execute WebGL on the main thread in software — lab TBT for a GPU-heavy page can exceed real-device TBT by an order of magnitude, so never chase lab TBT on a GPU-less rig. And if the hero visual is a lazily-initialized canvas with no static poster, the viewport reads "incomplete" until it renders — Speed Index waits for it (see the poster trap in §8).
 
 ### 3.6 Smooth scrolling without jank
 
@@ -107,6 +110,11 @@ WebGL contexts are expensive. Load them lazily, cap devicePixelRatio (e.g. `min(
 - Use `will-change` sparingly and remove it after the animation (permanent `will-change` on many elements destroys performance).
 - Respect `prefers-reduced-motion`: collapse animations to ~0.
 - Debounce/throttle scroll, resize, and input handlers.
+- Serialize heavy section mounts during scroll: a fast scroll must never land several mount cascades (render + measure + observer wiring) on the same frames — stagger them so each hitch stays small.
+
+### 3.7 Register animation plugins once, at startup
+
+If anything in the initial bundle can create animations/triggers before lazy chunks evaluate, plugin registration must live in the app entry — not in the lazy chunks. Otherwise the first creation races the chunk load and throws against an unregistered plugin. Chunk-level registration is harmless to keep (idempotent).
 
 ---
 
@@ -123,7 +131,8 @@ WebGL contexts are expensive. Load them lazily, cap devicePixelRatio (e.g. `min(
 ## 5. Fonts — fast and never shift
 
 - Use `font-display: swap` (or `optional`) — never block render on fonts.
-- Preconnect to the font origin (`<link rel="preconnect" crossorigin>`).
+- Self-host fonts instead of third-party font CDNs: one variable font file plus a `<link rel="preload">` removes DNS/TLS handshakes, extra stylesheets, and render-blocking chains entirely. Same pixels, zero third parties.
+- Preconnect to the font origin (`<link rel="preconnect" crossorigin>`) — only needed while a remote origin remains.
 - Load non-render-blocking: `media="print" onload="this.media='all'"` + `<noscript>` fallback.
 - Subset fonts (only ship glyphs you use); use `size-adjust` / `fallback` metrics to avoid layout shift when the web font swaps in.
 - Avoid more than 2–3 font families / weights; each is a network + parse cost.
@@ -135,6 +144,7 @@ WebGL contexts are expensive. Load them lazily, cap devicePixelRatio (e.g. `min(
 - Animate `transform` and `opacity` only.
 - Honor `prefers-reduced-motion: reduce` globally (set `animation-duration: 0.01ms !important; transition-duration: 0.01ms !important` under the media query).
 - Keep entrance animations subtle and short (< 600 ms).
+- Cap ambient loops or accept their Speed Index cost: infinite viewport motion keeps the filmstrip changing and SI accumulates to the end of the trace.
 - Never animate layout properties in scroll-driven effects; use `transform` with `will-change` scoped to the animation.
 
 ---
@@ -152,7 +162,40 @@ WebGL contexts are expensive. Load them lazily, cap devicePixelRatio (e.g. `min(
 
 ---
 
-## 8. Pre-merge performance checklist
+## 8. Field notes — what actually moves the numbers
+
+The items below earned their place by moving real measurements, ranked by typical effect size. Everything else in this file is theory until it does the same on your page.
+
+| Change                                                        | Why it works                                                                                                                                                                                            | Typical effect                                                                         |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Gate below-fold animation setup behind viewport proximity     | Scroll/animation libraries do their most expensive work at setup: DOM splitting, forced layout measurements, observer wiring. Running all of it inside the first commit creates one giant mount cascade | Often the single biggest TBT drop on animation-heavy pages (seconds, not milliseconds) |
+| Modern formats + sources sized to display size                | Transfer weight dominates LCP and Speed Index on throttled networks. Oversized sources (e.g. 1900px file shown at 600px) waste the majority of their bytes                                              | Roughly proportional to bytes removed                                                  |
+| No lazy boundary on the landing page itself                   | A lazy route/page adds a full round trip plus parse before _anything_ can paint, directly delaying LCP                                                                                                  | One round trip off the critical path                                                   |
+| Heavy canvases (WebGL/WebGPU) behind idle + lazy chunks       | Their download, parse, GPU init, and shader compile land in one expensive burst                                                                                                                         | ~100–200ms TBT and up to ~0.5s LCP each, when measured by removal                      |
+| Gate text measurement on the display face only                | Waiting on "all fonts ready" stalls entrances on unrelated font loads                                                                                                                                   | Removes unexplained entrance delays                                                    |
+| Idle prefetch of below-fold chunks, staggered                 | Separates chunk parse cost from mount cost — but see the idle trap in §8                                                                                                                                | Small alone; enables the bigger wins                                                   |
+| `loading="lazy"` + explicit dimensions on non-critical images | Fewer early requests, zero layout shift, clean Best-Practices audits                                                                                                                                    | Small individually, free in aggregate                                                  |
+
+Smaller or unproven in practice: mobile-resize guards (correctness, rarely measurable), pin anticipation tweaks (feel, not lab numbers), `startTransition` on mount flags (no measurable delta found), chunk reshuffling past the obvious splits.
+
+### Traps found here more than once
+
+- **Idle callbacks all fire in the first idle gap.** Deferring five things to "idle" schedules them back-to-back in the same window. Stagger genuinely independent work (timeouts, separate idles) or it still sums into one long task.
+- **`immediateRender` in scrubbed `fromTo` tweens** hides content at timeline creation, before the playhead arrives — panels start invisible on load. Set `immediateRender: false` on scrubbed entries unless hiding is the point.
+- **Sub-pixel parking.** Sweep panels parked at exactly `100%` show a 1px sliver at fractional zooms (their edge lands exactly on the clip boundary). Park at `110%` instead.
+- **Duplicate element IDs** break every selector-based animation silently (GSAP warns, keeps going, animates the wrong node or nothing).
+- **Stale hot tabs lie.** After edits that only touch setup closures (`deps: []` never re-runs them), the browser keeps running pre-edit timelines. Hard-reload before trusting what you see.
+- **Unregistered plugin races.** Register animation plugins in the app entry, not in lazy chunks, when anything in the main bundle can create triggers before those chunks evaluate — otherwise the first creation throws against an unregistered plugin.
+- **No-poster canvas heroes.** If the hero visual is a lazily-initialized canvas, the viewport reads "incomplete" until it renders and Speed Index waits. Ship a static poster matching the final frame, or accept the SI cost explicitly.
+- **Infinite viewport motion inflates Speed Index.** Ambient loops (word rolls, carousels, canvases) keep the filmstrip changing and SI accumulates to the end of the trace. Cap the cycles or accept it — FCP/LCP/TBT won't warn you.
+
+### When a tight cluster still misleads
+
+A 5-run median landing far from a previous median feels conclusive, but tight spreads only rule out _transient_ noise, not _sustained_ confounders. Before blaming code, exclude: dev-server rebuilds firing mid-measurement on every source edit, leaked headless browser processes competing for CPU, thermal throttling after long sessions, and general machine load. The protocol that settles it: quiet the rig (no dev server, no stray browsers, one cooldown run), then bisect single variables with back-to-back replicates on the same rig. And when a suspect is structural (e.g. "removing X added commits"), check the mechanism first — if no mechanism exists, suspect the rig, not the code. A stash-control build (pristine HEAD measured the same way) tells you whether the working tree helped or hurt overall, independent of any single suspect. A measured "best" that was never committed is unrecoverable — commit the tree with the number, or the number didn't happen.
+
+---
+
+## 9. Pre-merge performance checklist
 
 - [ ] LCP ≤ 2.5 s (mobile, throttled)
 - [ ] CLS ≤ 0.1 (zero layout shift from images/fonts/ads/injected content)
