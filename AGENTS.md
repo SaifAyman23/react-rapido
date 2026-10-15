@@ -1,5 +1,7 @@
 # AGENTS.md — The Portfolio
 
+> SKILL GUARDRAIL (mandatory, overrides convenience): before loading, reading, or using ANY skill (`skill` tool or any file under any `skills/` dir), you MUST first read `SKILL_RULES.md` in full and follow it. Reads of `expo-skill-eval`, `eas-app-stores`, `eas-simulator`, `expo-skill-feedback`, `expo-web-to-native` require explicit user approval every time via the `question` tool. Never execute skill scripts without separate explicit approval.
+
 This document is the single source of truth for AI coding assistants working on this project. It captures the **organizational and Web Vitals principles** that make a React frontend excellent: structure, conventions, performance, SEO, and accessibility.
 
 > This is my personal portfolio — the code IS the first impression. Every change should make it faster, sharper, or more alive. If a change makes it slower, uglier, or harder to use: reject it. The bar is "a senior designer and a senior engineer would both sign off."
@@ -21,22 +23,22 @@ Design direction: confident, dark-leaning, atmospheric visuals over an engineeri
 
 ## 1. Tech Stack
 
-| Layer         | Technology                   | Notes                                                      |
-| ------------- | ---------------------------- | ---------------------------------------------------------- |
-| Framework     | React 19                     | —                                                          |
-| Language      | TypeScript 5.x               | strict mode                                                |
-| Bundler       | Vite 7+                      | HMR, code splitting                                        |
-| Styling       | Tailwind CSS v4              | CSS variables, nesting                                     |
-| UI primitives | Radix UI (`radix-ui`)        | via shadcn/ui                                              |
-| Animations    | `motion` (framer-motion v12) | use sparingly; respect `prefers-reduced-motion`            |
-| Shaders / FX  | `ogl`, `gsap`                | WebGL hero visuals only; never in the critical bundle path |
-| Icons         | `lucide-react`               | —                                                          |
-| Client state  | Zustand                      | persisted auth store                                       |
-| Server state  | TanStack Query v5            | mutations, queries                                         |
-| HTTP          | Axios 1.x                    | interceptors                                               |
-| Routing       | React Router v7              | lazy-loaded routes                                         |
-| Font          | DM Sans + JetBrains Mono     | loaded non-render-blocking                                 |
-| Testing       | Vitest 4 + RTL 16 + jsdom    | axe-core a11y scans                                        |
+| Layer         | Technology                                    | Notes                                                      |
+| ------------- | --------------------------------------------- | ---------------------------------------------------------- |
+| Framework     | React 19                                      | —                                                          |
+| Language      | TypeScript 5.x                                | strict mode                                                |
+| Bundler       | Vite 7+                                       | HMR, code splitting                                        |
+| Styling       | Tailwind CSS v4                               | CSS variables, nesting                                     |
+| UI primitives | Radix UI (`radix-ui`)                         | via shadcn/ui                                              |
+| Animations    | `gsap` (+ ScrollTrigger, SplitText, Observer) | use sparingly; respect `prefers-reduced-motion`            |
+| Shaders / FX  | `ogl`, `gsap`                                 | WebGL hero visuals only; never in the critical bundle path |
+| Icons         | `lucide-react`                                | —                                                          |
+| Client state  | Zustand                                       | persisted auth store                                       |
+| Server state  | TanStack Query v5                             | mutations, queries                                         |
+| HTTP          | Axios 1.x                                     | interceptors                                               |
+| Routing       | React Router v7                               | lazy-loaded routes                                         |
+| Font          | DM Sans + JetBrains Mono                      | loaded non-render-blocking                                 |
+| Testing       | Vitest 4 + RTL 16 + jsdom                     | axe-core a11y scans                                        |
 
 ## 2. Project Structure
 
@@ -129,7 +131,7 @@ api/<domain>/
 Enforced automatically by `eslint-plugin-import-x` (`import-x/order`) — alphabetical within group, blank line between groups:
 
 1. Builtins
-2. External (third-party libraries: `react`, `axios`, `@tanstack/react-query`, `lucide-react`, `motion`)
+2. External (third-party libraries: `react`, `axios`, `@tanstack/react-query`, `lucide-react`, `gsap`)
 3. Internal (`@/components/...`, `@/api/...`, `@/store`, `@/lib/...`)
 4. Parent / sibling (relative `./...`, `../...`)
 5. Index
@@ -240,7 +242,7 @@ This is the playbook that earns green Lighthouse scores: **FCP 0.5s, CLS 0.001, 
    - Never ship a multi-MB PNG on the critical path. A 1.4 MB PNG ≈ 7s LCP on throttled 4G; a 92 KB WebP ≈ 0.5s.
 2. Mark the LCP image `fetchPriority="high"` and give it explicit `width` + `height`.
 3. **Load fonts non-render-blocking**: async `media="print" onload="this.media='all'"` + `<noscript>` fallback. Use `font-display: swap`.
-4. **Minify + split JavaScript**: Vite minifies by default; add `manualChunks` for stable vendor splits (react, query, radix, motion, i18n). Lazy-load every route.
+4. **Minify + split JavaScript**: Vite minifies by default; add `manualChunks` for stable vendor splits (react, query, radix, gsap, i18n). Lazy-load every route.
 5. **Keep heavy SDKs out of the main bundle**: load them via dynamic `import()` only when needed (e.g., post-auth), never as a static import in the critical path.
 6. Serve a **loading skeleton** (inline in `index.html`) and fade it out once React mounts — avoids a blank screen flash and improves perceived FCP.
 
