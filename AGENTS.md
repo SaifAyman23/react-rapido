@@ -23,22 +23,24 @@ Design direction: confident, dark-leaning, atmospheric visuals over an engineeri
 
 ## 1. Tech Stack
 
-| Layer         | Technology                                    | Notes                                                      |
-| ------------- | --------------------------------------------- | ---------------------------------------------------------- |
-| Framework     | React 19                                      | —                                                          |
-| Language      | TypeScript 5.x                                | strict mode                                                |
-| Bundler       | Vite 7+                                       | HMR, code splitting                                        |
-| Styling       | Tailwind CSS v4                               | CSS variables, nesting                                     |
-| UI primitives | Radix UI (`radix-ui`)                         | via shadcn/ui                                              |
-| Animations    | `gsap` (+ ScrollTrigger, SplitText, Observer) | use sparingly; respect `prefers-reduced-motion`            |
-| Shaders / FX  | `ogl`, `gsap`                                 | WebGL hero visuals only; never in the critical bundle path |
-| Icons         | `lucide-react`                                | —                                                          |
-| Client state  | Zustand                                       | persisted auth store                                       |
-| Server state  | TanStack Query v5                             | mutations, queries                                         |
-| HTTP          | Axios 1.x                                     | interceptors                                               |
-| Routing       | React Router v7                               | lazy-loaded routes                                         |
-| Font          | DM Sans + JetBrains Mono                      | loaded non-render-blocking                                 |
-| Testing       | Vitest 4 + RTL 16 + jsdom                     | axe-core a11y scans                                        |
+| Layer          | Technology                                    | Notes                                                                                       |
+| -------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Framework      | React 19                                      | —                                                                                           |
+| Language       | TypeScript 5.x                                | strict mode                                                                                 |
+| Bundler        | Vite 7+                                       | HMR, code splitting                                                                         |
+| Styling        | Tailwind CSS v4                               | CSS variables, nesting                                                                      |
+| UI primitives  | Radix UI (`radix-ui`)                         | via shadcn/ui                                                                               |
+| Animations     | `gsap` (+ ScrollTrigger, SplitText, Observer) | use sparingly; respect `prefers-reduced-motion`                                             |
+| Shaders / FX   | `ogl`, `gsap`                                 | WebGL hero visuals only; never in the critical bundle path                                  |
+| 3D / particles | `three` + R3F (`vgpu` for WebGPU)             | Lazy chunks only (`particle-image-canvas`, `ShapeWaves`); never in the critical bundle path |
+| Field metrics  | `web-vitals` (`lib/vitals.ts`)                | CLS/INP/LCP via beacon or `window.__vitals`                                                 |
+| Icons          | `lucide-react`                                | —                                                                                           |
+| Client state   | Zustand                                       | persisted auth store                                                                        |
+| Server state   | TanStack Query v5                             | mutations, queries                                                                          |
+| HTTP           | Axios 1.x                                     | interceptors                                                                                |
+| Routing        | React Router v7                               | lazy-loaded routes                                                                          |
+| Font           | DM Sans + JetBrains Mono                      | loaded non-render-blocking                                                                  |
+| Testing        | Vitest 4 + RTL 16 + jsdom                     | axe-core a11y scans                                                                         |
 
 ## 2. Project Structure
 
@@ -55,22 +57,35 @@ src/
 ├── components/
 │   ├── auth/                     # AuthLayout, FormDivider, FormError, OAuthButtons
 │   ├── astral/                   # Atmospheric visuals: AuroraBackground, GridHighlight
-│   ├── bits/                     # Showpiece widgets: MagicBento, MoltenMetal (WebGL/GLSL)
-│   ├── layout/                   # Navbar
+│   ├── bits/                     # GSAP widgets: AccordionGallery, FlowingMenu, ScrollReveal
+│   ├── buttons/                  # Sweep Button (default/link/outline variants)
+│   ├── headers/                  # AnimatedHeader (side-sweep reveal)
+│   ├── landing/                  # Landing page sections
+│   ├── layout/                   # Navbar, ScrollBar, LazySection (gated section mount)
+│   ├── projects/                 # ProjectCard
 │   ├── theme/                    # ThemeProvider, ModeToggle (dark/light/system)
-│   ├── ui/                       # shadcn primitives: button, input, card, select, label, ...
+│   ├── ui/                       # shadcn primitives + gsap primitives (toast, word-rotate, text-effect, animated-group/list) + particle-image-canvas
+│   ├── ShapeWaves.tsx            # WebGPU wave field
 │   └── SeoUpdater.tsx            # Per-route <title>/description/OG/canonical (SEO)
 │
 ├── hooks/
 │   ├── useDebounce.ts            # Generic debounce hook
+│   ├── useIsMobile.ts            # Mobile viewport flag
+│   ├── useMediaQuery.ts          # Media-query match flag
+│   ├── useNearView.ts            # Viewport-proximity gate (mount/animation arming)
+│   ├── useSectionTracker.ts      # ScrollTrigger section tracker (active nav state)
 │   └── index.ts                  # Barrel re-export (also re-exports from api/accounts/hooks)
 │
 ├── lib/
+│   ├── color.ts                  # Color helpers
 │   ├── constants.ts              # ROUTES, APP_NAME, API_BASE_URL
+│   ├── motion.ts                 # SplitText helpers + reduced-motion flags
 │   ├── seo.ts                    # SITE_NAME, SITE_URL, ROUTE_SEO, route matcher
+│   ├── smoothScroll.ts           # Lenis + ScrollTrigger sync
 │   ├── queryClient.ts            # Shared React Query client (singleton)
 │   ├── utils.ts                  # cn() — tailwind-merge + clsx
 │   ├── validators.ts             # Form validation patterns
+│   ├── vitals.ts                 # Field RUM (CLS/INP/LCP)
 │   └── markdown.tsx              # Simple markdown-to-JSX renderer
 │
 ├── pages/                        # Lazy-loaded route components (thin orchestrators)
@@ -88,7 +103,7 @@ src/
 ├── App.tsx                       # Route definitions, lazy imports, SeoUpdater
 ├── MainLayout.tsx                # Layout shell: skip-link + Navbar + <main id="main-content"> + Outlet
 ├── index.css                     # Tailwind entry, design tokens, reduced-motion, :focus-visible
-├── main.tsx                      # Provider tree + loading-skeleton fadeout
+├── main.tsx                      # Provider tree + GSAP registration + vitals + skeleton fadeout
 └── vite-env.d.ts                 # ImportMetaEnv augmentation (typed env vars)
 ```
 
