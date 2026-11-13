@@ -87,21 +87,30 @@ npm run dev
 
 ```
 src/
-├── api/               # 3-file pattern per domain
-│   ├── axiosInstance.ts
-│   └── accounts/      # endpoints.ts + hooks.ts + index.ts
+├── api/               # 3-file pattern per domain (endpoints.ts + hooks.ts + index.ts)
+│   ├── contracts.ts   # wire shapes: AuthResponse, accounts, notifications, error envelope
+│   ├── axiosInstance.ts  # Bearer + Accept-Language, single-flight refresh
+│   ├── session.ts     # localStorage token pair helpers
+│   ├── accounts/      # full auth surface (me, accounts, OTP, reset, avatar, social)
+│   └── notifications/
 ├── components/
 │   ├── landing/       # LandingPage with marquee and spec sheet
 │   ├── auth/          # AuthLayout, FormError, OAuthButtons
 │   ├── bits/          # AccordionGallery, FlowingMenu, ScrollReveal
 │   ├── ui/            # shadcn + Radix (button, card, input, FadeImage, stack)
 │   └── theme/         # ThemeProvider
-├── hooks/             # useDebounce, useIsMobile
-├── lib/               # constants, seo, validators, color, smoothScroll, utils
+├── hooks/             # useDebounce, useIsMobile, useConnection, useRefresh
+├── i18n/              # i18next, en + ar (common/errors/account), applyDirection
+├── lib/               # constants, seo, validators, color, smoothScroll, date, queryKeys, utils
 ├── pages/             # Home (thin) + auth/* (lazy)
-├── store/auth/        # Zustand persist
+├── store/             # auth (persist + useSignOut), preferences, persist helper
 └── test/              # axe, setup
 ```
+
+Auth surface mirrors the backend: JWT Bearer + `AuthResponse` contract, one-time refresh
+(`/auth/token/refresh/`), and a single sign-out path via `useSignOut`. All requests go
+through `axiosInstance`; the refresh is single-flight and a 401 on refresh redirects to
+`/login`.
 
 Pages stay thin. Components get props, not hooks. That is how it stays readable six months from now.
 
