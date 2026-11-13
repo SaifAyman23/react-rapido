@@ -55,6 +55,15 @@ function isTokenFailure(error: AxiosError): boolean {
 const LOGIN_PATH = '/login'
 const REDIRECT_GUARD_MS = 1500
 
+/** The browser's IANA timezone; the backend activates it per request. */
+function clientTimezone(): string | null {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || null
+  } catch {
+    return null
+  }
+}
+
 let refreshPromise: Promise<string> | null = null
 let redirecting = false
 
@@ -71,6 +80,7 @@ async function refreshAccessToken(): Promise<string> {
       headers: {
         'Content-Type': 'application/json',
         'Accept-Language': i18n.language,
+        ...(clientTimezone() ? { 'X-Timezone': clientTimezone() } : {}),
       },
       timeout: 15000,
     }
@@ -119,7 +129,10 @@ function createAxiosInstance(): AxiosInstance {
   })
 
   instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+    const timeZone = clientTimezone()
+
     config.headers['Accept-Language'] = i18n.language
+    if (timeZone) config.headers['X-Timezone'] = timeZone
 
     if (!config.skipAuth) {
       const token = getAccessToken()
