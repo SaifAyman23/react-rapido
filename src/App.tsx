@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import MainLayout from './MainLayout'
 
+import { useAuthCurrentUser } from '@/api/accounts/hooks'
 import { SeoUpdater } from '@/components/SeoUpdater'
 import { ROUTES } from '@/lib/constants'
 
@@ -19,9 +20,16 @@ const ResetPassword = lazy(() =>
   import('@/pages/auth/ResetPassword').then((m) => ({ default: m.ResetPassword }))
 )
 
+/** Restores the signed-in person from a persisted token pair. */
+function SessionBridge() {
+  useAuthCurrentUser()
+  return null
+}
+
 function App() {
   return (
     <Router>
+      <SessionBridge />
       <SeoUpdater />
       <Suspense fallback={null}>
         <Routes>

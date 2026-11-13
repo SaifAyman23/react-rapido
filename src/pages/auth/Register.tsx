@@ -4,17 +4,34 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useRegister } from '@/api/accounts'
-import { extractErrorMessage } from '@/api/axiosInstance'
+import type { AccountRole } from '@/api/contracts'
+import { extractErrorMessage } from '@/api/errors'
 import { AuthLayout } from '@/components/auth/AuthLayout'
 import { FormError } from '@/components/auth/FormError'
 import { PasswordStrength } from '@/components/auth/PasswordStrength'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+
+const FIELD_CLASS =
+  'rounded-none border-[3px] border-foreground bg-card font-mono text-sm shadow-[3px_3px_0_var(--foreground)] focus-visible:ring-black'
+
+const ROLE_LABELS: Record<AccountRole, string> = {
+  client: 'Client',
+  coach: 'Coach',
+}
 
 export function Register() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
+  const [role, setRole] = useState<AccountRole>('client')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -33,14 +50,9 @@ export function Register() {
     }
 
     try {
-      await register.mutateAsync({
-        email,
-        password,
-        password_confirm: confirmPassword,
-      })
-      navigate('/verify-otp', { state: { email, purpose: 'email_verification' } })
+      await register.mutateAsync({ email, password, role })
+      navigate('/verify-otp', { state: { email } })
     } catch (err: unknown) {
-      console.error('Registration error:', err)
       setError(extractErrorMessage(err))
     }
   }
@@ -65,8 +77,26 @@ export function Register() {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
-            className="rounded-none border-[3px] border-foreground bg-card font-mono text-sm shadow-[3px_3px_0_var(--foreground)] focus-visible:ring-black"
+            className={FIELD_CLASS}
           />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="font-mono text-xs font-black uppercase tracking-wide text-foreground">
+            Account type
+          </Label>
+          <Select value={role} onValueChange={(value) => setRole(value as AccountRole)}>
+            <SelectTrigger className="h-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm shadow-[3px_3px_0_var(--foreground)]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-none border-[3px] border-foreground font-mono">
+              {(Object.keys(ROLE_LABELS) as AccountRole[]).map((value) => (
+                <SelectItem key={value} value={value}>
+                  {ROLE_LABELS[value]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
@@ -85,7 +115,7 @@ export function Register() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="new-password"
-              className="rounded-none border-[3px] border-foreground bg-card pr-10 font-mono text-sm shadow-[3px_3px_0_var(--foreground)] focus-visible:ring-black"
+              className={`${FIELD_CLASS} pr-10`}
             />
             <button
               type="button"
@@ -115,7 +145,7 @@ export function Register() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               autoComplete="new-password"
-              className="rounded-none border-[3px] border-foreground bg-card pr-10 font-mono text-sm shadow-[3px_3px_0_var(--foreground)] focus-visible:ring-black"
+              className={`${FIELD_CLASS} pr-10`}
             />
             <button
               type="button"

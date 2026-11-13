@@ -1,2 +1,5 @@
 export { useAuthStore } from './auth/authStore'
 export type { AuthState } from './auth/authStore'
+export { useSignOut } from './auth/useSignOut'
+export { usePreferencesStore } from './preferences/preferencesStore'
+export type { LanguageChoice } from './preferences/preferencesStore'

@@ -1,5 +1,18 @@
-export const APP_NAME = import.meta.env.VITE_APP_NAME || 'Saif Eldin Ayman'
-export const API_BASE_URL = import.meta.env.VITE_API_URL || ''
+export const APP_NAME = import.meta.env.VITE_APP_NAME || 'Rapido'
+
+/** Origin of the Django API, without a trailing slash. */
+export const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(
+  /\/+$/,
+  ''
+)
+
+/** Everything the app talks to lives under `/api/v1`. */
+export const API_V1_ROOT = API_BASE_URL.endsWith('/api/v1')
+  ? API_BASE_URL
+  : `${API_BASE_URL}/api/v1`
+
+/** Accounts are mounted here by `project/urls.py`. */
+export const AUTH_ROOT = '/auth'
 
 export const OAUTH_PROVIDERS = {
   GOOGLE: 'google',

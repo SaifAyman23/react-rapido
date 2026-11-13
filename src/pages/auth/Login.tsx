@@ -3,7 +3,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 
-import { extractErrorMessage } from '@/api/axiosInstance'
+import { extractErrorMessage } from '@/api/errors'
 import { AuthLayout } from '@/components/auth/AuthLayout'
 import { FormError } from '@/components/auth/FormError'
 import { Button } from '@/components/ui/button'

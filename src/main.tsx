@@ -7,19 +7,26 @@ import { SplitText } from 'gsap/SplitText'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
+import './i18n'
 import './index.css'
 import App from './App.tsx'
 
+import { hasSession } from '@/api/session'
 import { ThemeProvider } from '@/components/theme/ThemeProvider'
 import { APP_NAME } from '@/lib/constants'
 import { queryClient } from '@/lib/queryClient'
 import { initWebVitals } from '@/lib/vitals'
+import { useAuthStore } from '@/store/auth/authStore'
+import { usePreferencesStore } from '@/store/preferences/preferencesStore'
 
 // Register once at startup: lazy chunks create triggers, so registration
 // must live in the entry — never only in the chunks themselves.
 gsap.registerPlugin(useGSAP, Observer, ScrollTrigger, SplitText)
 
 initWebVitals()
+
+usePreferencesStore.getState().hydrate()
+useAuthStore.getState().setHasSession(hasSession())
 
 const skeleton = document.getElementById('loading-skeleton')
 if (skeleton) {

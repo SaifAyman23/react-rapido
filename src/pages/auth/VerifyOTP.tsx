@@ -1,79 +1,59 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 
-import { extractErrorMessage } from '@/api/axiosInstance'
+import { extractErrorMessage } from '@/api/errors'
 import { AuthLayout } from '@/components/auth/AuthLayout'
 import { FormError } from '@/components/auth/FormError'
 import { Button } from '@/components/ui/button'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp'
-import { useVerifyOTP, useSendVerificationCode } from '@/hooks'
+import { useResendVerification, useVerifyEmail } from '@/hooks'
 
-export type OTPurpose = 'email_verification' | 'password_reset'
-
-interface VerifyOTPLocationState {
+interface VerifyEmailLocationState {
   email: string
-  purpose: OTPurpose
 }
+
+const RESEND_SECONDS = 60
 
 export function VerifyOTP() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const state = location.state as VerifyOTPLocationState | null
+  const state = location.state as VerifyEmailLocationState | null
   const email = state?.email || ''
-  const purpose = state?.purpose || 'email_verification'
 
   const [otp, setOtp] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const [timer, setTimer] = useState(60)
+  const [timer, setTimer] = useState(RESEND_SECONDS)
 
   const canResend = timer <= 0
 
-  const verifyMutation = useVerifyOTP()
-  const sendCodeMutation = useSendVerificationCode()
+  const verifyMutation = useVerifyEmail()
+  const resendMutation = useResendVerification()
 
   useEffect(() => {
-    if (timer > 0) {
-      const interval = setInterval(() => {
-        setTimer((prev) => prev - 1)
-      }, 1000)
-      return () => clearInterval(interval)
-    }
+    if (timer <= 0) return
+    const interval = setInterval(() => setTimer((prev) => prev - 1), 1000)
+    return () => clearInterval(interval)
   }, [timer])
+
+  useEffect(() => {
+    if (!email) navigate('/register')
+  }, [email, navigate])
 
   const handleVerify = useCallback(async () => {
     if (otp.length !== 6) return
-
     setError('')
 
     try {
-      const response = await verifyMutation.mutateAsync({
-        code: otp,
-        email,
-        purpose,
-      })
-
-      if (purpose === 'password_reset') {
-        navigate('/reset-password', {
-          state: {
-            email,
-            token: response?.token,
-          },
-          replace: true,
-        })
-      } else {
-        navigate(`/`, {
-          replace: true,
-        })
-      }
+      await verifyMutation.mutateAsync({ email, code: otp })
+      navigate('/', { replace: true })
     } catch (err: unknown) {
-      console.error('OTP Verification Error:', err)
       setError(extractErrorMessage(err, 'Invalid or expired code. Please try again.'))
       setOtp('')
       setTimer(0)
     }
-  }, [otp, email, purpose, verifyMutation, navigate])
+  }, [otp, email, verifyMutation, navigate])
 
   const handleResend = async () => {
     if (!canResend) return
@@ -81,11 +61,11 @@ export function VerifyOTP() {
     setError('')
     setSuccess('')
     setOtp('')
-    setTimer(60)
+    setTimer(RESEND_SECONDS)
 
     try {
-      const data = await sendCodeMutation.mutateAsync({ email, type: purpose })
-      setSuccess(data?.message || 'A new verification code has been sent to your email.')
+      await resendMutation.mutateAsync({ email })
+      setSuccess('A new verification code has been sent to your email.')
     } catch (err) {
       setError(extractErrorMessage(err, 'Failed to resend code. Please try again.'))
     }
@@ -97,21 +77,8 @@ export function VerifyOTP() {
     return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
-  useEffect(() => {
-    if (!email) {
-      navigate('/register')
-    }
-  }, [email, navigate])
-
-  const pageTitle = purpose === 'password_reset' ? 'Reset your password' : 'Verify your email'
-
-  const pageSubtitle =
-    purpose === 'password_reset'
-      ? 'Enter the 6-digit code we sent to your email'
-      : `We sent a 6-digit code to ${email}`
-
   return (
-    <AuthLayout title={pageTitle} subtitle={pageSubtitle}>
+    <AuthLayout title="Verify your email" subtitle={`We sent a 6-digit code to ${email}`}>
       <div className="space-y-4">
         <FormError message={error} />
         {success && (
@@ -130,30 +97,13 @@ export function VerifyOTP() {
               className="gap-2"
             >
               <InputOTPGroup className="gap-2">
-                <InputOTPSlot
-                  index={0}
-                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground data-[active=true]:ring-0"
-                />
-                <InputOTPSlot
-                  index={1}
-                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground"
-                />
-                <InputOTPSlot
-                  index={2}
-                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground"
-                />
-                <InputOTPSlot
-                  index={3}
-                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground"
-                />
-                <InputOTPSlot
-                  index={4}
-                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground"
-                />
-                <InputOTPSlot
-                  index={5}
-                  className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground"
-                />
+                {[0, 1, 2, 3, 4, 5].map((index) => (
+                  <InputOTPSlot
+                    key={index}
+                    index={index}
+                    className="h-12 w-10 rounded-none border-[3px] border-foreground bg-card font-mono text-sm font-black shadow-[3px_3px_0_var(--foreground)] data-[active=true]:border-foreground data-[active=true]:ring-0"
+                  />
+                ))}
               </InputOTPGroup>
             </InputOTP>
           </div>
@@ -177,7 +127,8 @@ export function VerifyOTP() {
             <button
               type="button"
               onClick={handleResend}
-              className="border-[3px] border-foreground bg-violet-500 px-3 py-1 font-mono text-xs font-black uppercase tracking-wide text-white shadow-[3px_3px_0_var(--foreground)] hover:bg-foreground"
+              disabled={resendMutation.isPending}
+              className="border-[3px] border-foreground bg-violet-500 px-3 py-1 font-mono text-xs font-black uppercase tracking-wide text-white shadow-[3px_3px_0_var(--foreground)] hover:bg-foreground disabled:opacity-50"
             >
               Resend code
             </button>
@@ -185,10 +136,10 @@ export function VerifyOTP() {
 
           <div>
             <Link
-              to={purpose === 'password_reset' ? '/login' : '/register'}
+              to="/register"
               className="font-mono text-xs font-bold text-foreground underline decoration-2 underline-offset-2 hover:bg-foreground hover:text-background"
             >
-              {purpose === 'password_reset' ? '← Back to login' : 'Change email'}
+              Change email
             </Link>
           </div>
         </div>

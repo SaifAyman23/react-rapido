@@ -3,9 +3,8 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import type { OTPurpose } from '@/api/accounts/endpoints'
-import { useSendVerificationCode } from '@/api/accounts/hooks'
-import { extractErrorMessage } from '@/api/axiosInstance'
+import { useRequestPasswordReset } from '@/api/accounts/hooks'
+import { extractErrorMessage } from '@/api/errors'
 import { AuthLayout } from '@/components/auth/AuthLayout'
 import { FormError } from '@/components/auth/FormError'
 import { Button } from '@/components/ui/button'
@@ -17,7 +16,7 @@ export function ForgotPassword() {
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
 
-  const sendCodeMutation = useSendVerificationCode()
+  const requestReset = useRequestPasswordReset()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,16 +34,10 @@ export function ForgotPassword() {
     }
 
     try {
-      await sendCodeMutation.mutateAsync({
-        email,
-        type: 'password_reset' as OTPurpose,
-      })
-
-      navigate('/verify-otp', {
-        state: { email, purpose: 'password_reset' as OTPurpose },
-      })
+      await requestReset.mutateAsync({ email })
+      navigate('/reset-password', { state: { email } })
     } catch (err) {
-      setError(extractErrorMessage(err, 'Failed to send verification code'))
+      setError(extractErrorMessage(err, 'Failed to send the reset code'))
     }
   }
 
@@ -76,9 +69,9 @@ export function ForgotPassword() {
         <Button
           type="submit"
           className="w-full rounded-none border-[3px] border-foreground bg-foreground font-mono text-xs font-black uppercase tracking-widest text-background shadow-[4px_4px_0_var(--foreground)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_#000] dark:hover:shadow-[2px_2px_0_#fff] hover:bg-foreground"
-          disabled={sendCodeMutation.isPending}
+          disabled={requestReset.isPending}
         >
-          {sendCodeMutation.isPending ? 'Sending...' : 'Send code →'}
+          {requestReset.isPending ? 'Sending...' : 'Send code →'}
         </Button>
       </form>
 
