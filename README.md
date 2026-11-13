@@ -118,15 +118,15 @@ Pages stay thin. Components get props, not hooks. That is how it stays readable 
 
 ### 04 STACK
 
-| LAYER     | CHOICE                                                    |
-| --------- | --------------------------------------------------------- |
-| Framework | React 19 + TS 5 strict                                    |
-| Bundler   | Vite 7 + manualChunks (react / query / radix / gsap)      |
-| Styling   | Tailwind v4 + CSS vars + `border-[3px] border-black`      |
-| State     | Zustand persist + TanStack Query 5                        |
-| HTTP      | Axios + interceptors + `extractErrorMessage`              |
-| Router    | React Router 7 lazy + `basename`                          |
-| FX        | GSAP + Lenis on demand, respects `prefers-reduced-motion` |
+| LAYER     | CHOICE                                                                               |
+| --------- | ------------------------------------------------------------------------------------ |
+| Framework | React 19 + TS 5 strict                                                               |
+| Bundler   | Vite 7 + manualChunks (react / query / radix / gsap)                                 |
+| Styling   | Tailwind v4 + CSS vars + `border-[3px] border-black`                                 |
+| State     | Zustand persist + TanStack Query 5                                                   |
+| HTTP      | Axios + interceptors (Bearer refresh single-flight, `Accept-Language`, `X-Timezone`) |
+| Router    | React Router 7 lazy + `basename`                                                     |
+| FX        | GSAP + Lenis on demand, respects `prefers-reduced-motion`                            |
 
 Accent `#8B5CF6` on `bg-white` and `bg-black`. High contrast, WCAG AA.
 
