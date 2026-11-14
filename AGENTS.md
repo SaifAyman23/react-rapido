@@ -1,460 +1,297 @@
-# AGENTS.md — The Portfolio
+# AGENTS.md — React Rapido
 
-> SKILL GUARDRAIL (mandatory, overrides convenience): before loading, reading, or using ANY skill (`skill` tool or any file under any `skills/` dir), you MUST first read `SKILL_RULES.md` in full and follow it. Reads of `expo-skill-eval`, `eas-app-stores`, `eas-simulator`, `expo-skill-feedback`, `expo-web-to-native` require explicit user approval every time via the `question` tool. Never execute skill scripts without separate explicit approval.
+Authoritative instructions for AI agents working in this repository. These rules are
+mandatory unless a rule explicitly says otherwise.
 
-This document is the single source of truth for AI coding assistants working on this project. It captures the **organizational and Web Vitals principles** that make a React frontend excellent: structure, conventions, performance, SEO, and accessibility.
+Read this file before changing code. The `docs/` folder holds per-domain deep dives
+(`docs/Performance.md`, `docs/SEO.md`, `docs/Accessibility.md`, `docs/BestPractices.md`)
+— read the one relevant to your change and keep it accurate.
 
-> This is my personal portfolio — the code IS the first impression. Every change should make it faster, sharper, or more alive. If a change makes it slower, uglier, or harder to use: reject it. The bar is "a senior designer and a senior engineer would both sign off."
+## 1. What this is
 
----
+**React Rapido** is a generic Vite starter — the React sibling of
+[django-rapido](https://github.com/SaifAyman23/django-rapido). It ships landing + auth
+shells and a fully wired client-to-server auth stack ported from the mobile template.
+It is not a product, not a portfolio, not a demo — no domain data, no user types, no
+showcase sections. Your app ships your domain; this starter stays out of its way.
 
-# Part A — Project Context
+Non-negotiables:
 
-## 0. What This Site Is
+1. **The API contract lives in code, not in your head.** `src/api/contracts.ts` is the
+   single source of truth for wire shapes (`AuthResponse`, `AccountSummary`, error
+   envelope, token refresh). If you must change it, the backend changes in the same
+   slice — no client-only contract edits.
+2. **Every request goes through `src/api/axiosInstance.ts`.** It owns the Bearer token,
+   `Accept-Language`, `X-Timezone`, single-flight refresh (`/auth/token/refresh/`),
+   `skipAuth`/`skipRefresh` for public endpoints, and the session-expired redirect.
+   No second axios instance.
+3. **Single sign-out path: `useSignOut`.** It blacklists the refresh token (and the
+   rotated one, fire-and-forget), clears the session, the auth store and the query
+   cache, and returns to `/login`. Never hand-roll sign-out.
+4. **`npm run check` before committing** — typecheck + lint + format:check + tests.
+   CI (`.github/workflows/ci.yml`) runs the same gate, no exceptions.
+5. **No silent failures.** Errors surface via `src/api/errors.ts` (`normalizeApiError`,
+   `extractErrorMessage`). Empty `catch {}` in UI code is banned.
+6. **Accessibility is a hard requirement, not polish** (see §7).
+7. **Pages are thin.** TSX in `pages/` orchestrates; UI lives in `components/<domain>/`.
+8. **Generic stays generic.** No domain terms, sample data, or marketing copy that
+   presumes one specific product.
 
-A personal portfolio: the public face of my work on the web.
+## 2. Tech stack
 
-- **Home / hero** — WebGL-backed visual moment (MoltenMetal shader background, MagicBento cards), fast first paint despite the flair
-- **Work showcase** — projects with real detail pages, reachable via `<Link>` (crawlable)
-- **About & contact** — human, direct, no corporate filler
-- **Auth stack** — inherited intact from the template (login/register/reset/OTP); reserved for a future private admin/dashboard area, not part of the public story
+| Layer          | Technology                | Notes                                                          |
+| -------------- | ------------------------- | -------------------------------------------------------------- |
+| Framework      | React 19                  | —                                                              |
+| Language       | TypeScript 5.x            | strict                                                         |
+| Bundler        | Vite 7                    | manualChunks (react / query / radix / gsap), lazy routes       |
+| Styling        | Tailwind CSS v4           | CSS variables in `index.css`, nesting                          |
+| UI primitives  | Radix (`radix-ui`)        | via shadcn/ui                                                  |
+| Animation      | GSAP + Lenis              | respects `prefers-reduced-motion` (`lib/motion.ts`)            |
+| State (client) | Zustand                   | `auth` store persisted, `preferences` store                    |
+| State (server) | TanStack Query 5          | singleton client in `lib/queryClient.ts`                       |
+| HTTP           | Axios                     | see `src/api/`                                                 |
+| Routing        | React Router 7            | lazy-loaded; `<SessionBridge/>` restores the persisted session |
+| i18n           | i18next + react-i18next   | en/ar; direction via `applyDirection`                          |
+| Fonts          | DM Sans + JetBrains Mono  | loaded non-render-blocking                                     |
+| Testing        | Vitest 4 + RTL 16 + jsdom | axe-core a11y scans                                            |
 
-Design direction: confident, dark-leaning, atmospheric visuals over an engineering-grade foundation. Motion earns its place — GPU-friendly, subtle, always respecting `prefers-reduced-motion`.
+## 3. Project structure
 
-## 1. Tech Stack
-
-| Layer          | Technology                                    | Notes                                                                                       |
-| -------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Framework      | React 19                                      | —                                                                                           |
-| Language       | TypeScript 5.x                                | strict mode                                                                                 |
-| Bundler        | Vite 7+                                       | HMR, code splitting                                                                         |
-| Styling        | Tailwind CSS v4                               | CSS variables, nesting                                                                      |
-| UI primitives  | Radix UI (`radix-ui`)                         | via shadcn/ui                                                                               |
-| Animations     | `gsap` (+ ScrollTrigger, SplitText, Observer) | use sparingly; respect `prefers-reduced-motion`                                             |
-| Shaders / FX   | `ogl`, `gsap`                                 | WebGL hero visuals only; never in the critical bundle path                                  |
-| 3D / particles | `three` + R3F (`vgpu` for WebGPU)             | Lazy chunks only (`particle-image-canvas`, `ShapeWaves`); never in the critical bundle path |
-| Field metrics  | `web-vitals` (`lib/vitals.ts`)                | CLS/INP/LCP via beacon or `window.__vitals`                                                 |
-| Icons          | `lucide-react`                                | —                                                                                           |
-| Client state   | Zustand                                       | persisted auth store                                                                        |
-| Server state   | TanStack Query v5                             | mutations, queries                                                                          |
-| HTTP           | Axios 1.x                                     | interceptors                                                                                |
-| Routing        | React Router v7                               | lazy-loaded routes                                                                          |
-| Font           | DM Sans + JetBrains Mono                      | loaded non-render-blocking                                                                  |
-| Testing        | Vitest 4 + RTL 16 + jsdom                     | axe-core a11y scans                                                                         |
-
-## 2. Project Structure
-
-```
+```text
 src/
-├── api/                          # Domain-separated API layer (3-file pattern per domain)
-│   ├── accounts/                 # Auth: endpoints.ts + hooks.ts + index.ts
-│   ├── profile/                  # Profile endpoints
-│   ├── users/                    # User endpoints
-│   ├── axiosInstance.ts          # Axios config, auth interceptor, error normalization
-│   ├── types.ts                  # Shared response types
-│   └── index.ts                  # Barrel re-export
-│
+├── api/                       # everything talks to the server from here
+│   ├── contracts.ts           # wire shapes — auth/response/error/token types
+│   ├── errors.ts              # ApiError + normalizeApiError + extractErrorMessage
+│   ├── session.ts             # localStorage token pair (loadSession/hasSession)
+│   ├── axiosInstance.ts       # Bearer + headers + single-flight refresh
+│   ├── accounts/              # auth + multi-account hooks (me/accounts/OTP/avatar/social)
+│   ├── notifications/         # inbox, devices, reminders
+│   ├── types.ts               # re-exports used across the API surface
+│   └── index.ts               # barrel
 ├── components/
-│   ├── auth/                     # AuthLayout, FormDivider, FormError, OAuthButtons
-│   ├── astral/                   # Atmospheric visuals: AuroraBackground, GridHighlight
-│   ├── bits/                     # GSAP widgets: AccordionGallery, FlowingMenu, ScrollReveal
-│   ├── buttons/                  # Sweep Button (default/link/outline variants)
-│   ├── headers/                  # AnimatedHeader (side-sweep reveal)
-│   ├── landing/                  # Landing page sections
-│   ├── layout/                   # Navbar, ScrollBar, LazySection (gated section mount)
-│   ├── projects/                 # ProjectCard
-│   ├── theme/                    # ThemeProvider, ModeToggle (dark/light/system)
-│   ├── ui/                       # shadcn primitives + gsap primitives (toast, word-rotate, text-effect, animated-group/list) + particle-image-canvas
-│   ├── ShapeWaves.tsx            # WebGPU wave field
-│   └── SeoUpdater.tsx            # Per-route <title>/description/OG/canonical (SEO)
-│
-├── hooks/
-│   ├── useDebounce.ts            # Generic debounce hook
-│   ├── useIsMobile.ts            # Mobile viewport flag
-│   ├── useMediaQuery.ts          # Media-query match flag
-│   ├── useNearView.ts            # Viewport-proximity gate (mount/animation arming)
-│   ├── useSectionTracker.ts      # ScrollTrigger section tracker (active nav state)
-│   └── index.ts                  # Barrel re-export (also re-exports from api/accounts/hooks)
-│
-├── lib/
-│   ├── color.ts                  # Color helpers
-│   ├── constants.ts              # ROUTES, APP_NAME, API_BASE_URL
-│   ├── motion.ts                 # SplitText helpers + reduced-motion flags
-│   ├── seo.ts                    # SITE_NAME, SITE_URL, ROUTE_SEO, route matcher
-│   ├── smoothScroll.ts           # Lenis + ScrollTrigger sync
-│   ├── queryClient.ts            # Shared React Query client (singleton)
-│   ├── utils.ts                  # cn() — tailwind-merge + clsx
-│   ├── validators.ts             # Form validation patterns
-│   ├── vitals.ts                 # Field RUM (CLS/INP/LCP)
-│   └── markdown.tsx              # Simple markdown-to-JSX renderer
-│
-├── pages/                        # Lazy-loaded route components (thin orchestrators)
-│   ├── Home.tsx                  # Hero: MoltenMetal background + MagicBento showcase
-│   └── auth/                     # Login, Register, ForgotPassword, VerifyOTP, ResetPassword
-│
-├── store/
-│   └── auth/authStore.ts         # Zustand store (persisted)
-│
-├── types/                        # Shared TS interfaces
-│   ├── auth.ts, user.ts
-│   └── index.ts                  # Barrel re-export
-│
-├── test/                         # Vitest infra: setup-env.ts, setup.ts, axe.ts, *.test.*
-├── App.tsx                       # Route definitions, lazy imports, SeoUpdater
-├── MainLayout.tsx                # Layout shell: skip-link + Navbar + <main id="main-content"> + Outlet
-├── index.css                     # Tailwind entry, design tokens, reduced-motion, :focus-visible
-├── main.tsx                      # Provider tree + GSAP registration + vitals + skeleton fadeout
-└── vite-env.d.ts                 # ImportMetaEnv augmentation (typed env vars)
+│   ├── auth/                  # AuthLayout, FormError, OAuthButtons, … (routed pages use these)
+│   ├── landing/               # LandingPage (used by /)
+│   ├── theme/                 # ThemeProvider + ModeToggle
+│   ├── ui/                    # shadcn primitives + project UI (field, toast, …)
+│   ├── SeoUpdater.tsx         # per-route <title>/meta/OG/canonical
+│   ├── header.tsx, logo.tsx   # starter chrome
+│   └── ShapeWaves.tsx         # WebGPU hero waves (lazy; not in critical path)
+├── hooks/                     # useDebounce, useIsMobile, useMediaQuery, useNearView,
+│                              # useSectionTracker, useConnection, useRefresh (+ barrel)
+├── i18n/                      # i18next init; locales/{en,ar}/{common,errors,account}
+├── lib/                       # constants, date, queryKeys, queryClient, sessionReset,
+│                              # motion, seo, smoothScroll, validators, utils, vitals, index
+├── pages/                     # lazy routes: Home + auth/* (thin orchestrators)
+├── store/                     # auth (persist+useSignOut), preferences, persist helper
+├── types/                     # shared TS interfaces
+├── test/                      # Vitest setup + axe helpers
+├── App.tsx                    # routes; <SessionBridge/>
+├── MainLayout.tsx             # <main id="main-content"> + <Outlet/> wrapper
+└── main.tsx                   # providers, GSAP registration, vitals
 ```
 
----
+Notes:
 
-# Part B — Organization & Conventions
+- `astral/`, `projects/`, `headers/`, `buttons/`, `bits/`, `layout/` under `components/`
+  are **unreferenced legacy** from an earlier portfolio shape — no imports reach them.
+  Do not extend them; ask before deleting them.
+- Untracked `SKILL_RULES.md`, `src/lib/motion.ts`, `src/hooks/useMediaQuery.ts`,
+  `src/components/ui/cyber-frame*` and flanking files are in-progress work from another
+  session — leave them alone unless you are that session.
+- `docs/` holds per-domain guides: read the one touching your change; keep it current.
 
-## 3. Key Conventions
+## 4. Key conventions
 
-### 3.1 API Layer Pattern
+### 4.1 The API layer
 
-Each domain follows a strict three-file pattern:
+Each backend domain follows the three-file pattern:
 
-```
+```text
 api/<domain>/
-├── endpoints.ts      # API function calls + TypeScript interfaces for request/response
-├── hooks.ts          # React Query hooks (useQuery, useMutation)
-└── index.ts          # Barrel re-export
+├── endpoints.ts   # types + paths + API functions (one const object: domainApi)
+├── hooks.ts       # React Query hooks (useQuery/useMutation), onError wired
+└── index.ts       # barrel
 ```
 
-- `endpoints.ts` exports a const object `domainApi` with axios calls and a const `domainEndpoints` with URL paths
-- `hooks.ts` exports named hooks following the `use<Action>` pattern
-- Every mutation hook gets an `onError` handler that surfaces errors via `extractErrorMessage`
-- If your backend uses a specific URL convention (snake_case actions, trailing slashes, etc.), document it here
+- `endpoints.ts` exports `domainApi` (axios calls) and `domainEndpoints` (paths).
+- `hooks.ts` exports `use<Verb><Noun>` hooks. Every mutation hook surfaces errors
+  through `extractErrorMessage` — never let it swallow.
+- New domain → also add keys to `lib/queryKeys.ts`, and export from `api/index.ts`.
+- **The backend serves `/api/v1`; auth lives under `/api/v1/auth/`.** `API_V1_ROOT`
+  and `AUTH_ROOT` in `lib/constants.ts` are the only places those constants exist —
+  never re-derive them from strings.
+- **Refresh rotation:** `axiosInstance` rotates single-flight on 401
+  (`isTokenFailure` decides: only `ERROR_CODES.UNAUTHORIZED` rotates). Public paths
+  (`/auth/login/`, `/auth/register/`, `/auth/password-reset/`, `…social/`,
+  `/auth/verify-email`) never attempt refresh. A failed refresh signs the user out.
+- **Error envelope** is `{ error: { code, message, message_ar?, fields?, detail? } }`
+  (HTTP 429 carries `Retry-After`). `normalizeApiError` maps every axios rejection
+  to `ApiError` (`status`, `code`, `messageAr`, `fields`, `retryAfter`).
+
+### 4.2 Auth surface (`src/api/accounts/`)
+
+Exports the complete flow: register (with `role`), verify-email + resend, login,
+`me`, token refresh/blacklist/verify, accounts list + add/login/request/verify/resend
+
+- remove, avatar upload/remove, password change, email change, password reset
+  request/confirm, social (`google`/`apple`/`facebook`). `toUser(...)` adapts the API
+  user into `types/User`. The auth pages in `pages/auth/` consume these hooks —
+  no page hand-rolls requests.
+
+### 4.3 Naming
+
+| What             | Convention                 | Example                          |
+| ---------------- | -------------------------- | -------------------------------- |
+| API functions    | camelCase on a named const | `accountsApi.login`              |
+| Hooks            | `use<Verb><Noun>`          | `useLogin`, `useAuthCurrentUser` |
+| Pages            | Default export, PascalCase | `export default function Home()` |
+| Other components | Named export, PascalCase   | `export function OAuthButtons()` |
+| Types            | PascalCase                 | `RegisterRequest`                |
+
+### 4.4 Import order
+
+`eslint-plugin-import-x` enforces it — builtins → external → internal (`@/…`) →
+parent/sibling → index; alphabetical within group, blank line between groups.
+`npx eslint . --fix` fixes ordering.
+
+### 4.5 Components
+
+- Pages in `pages/` are default-export thin orchestrators: hooks + handlers + JSX
+  composition. Everything else lives in `components/<domain>/` with named exports and a
+  barrel `index.ts`.
+- Use existing `components/ui/` primitives; never raw `<button>`/`<input>` when one exists.
+- Components receive data via props; they don't reach into stores directly.
+- Every state is designed: loading (skeleton), empty, error (retry), success.
+
+### 4.6 State ownership
+
+| State                  | Tool                                        | Persisted          |
+| ---------------------- | ------------------------------------------- | ------------------ |
+| Auth user + tokens     | Zustand `useAuthStore` (+ `rapido.session`) | Yes (localStorage) |
+| Preferences (language) | Zustand `usePreferencesStore`               | Yes                |
+| Server data            | React Query                                 | Cache only         |
+| Form/UI                | `useState`                                  | No                 |
+| URL                    | React Router                                | URL                |
+
+- Sessions: `lib/session.ts` reads/writes `rapido.session` (single write path).
+  `setHasSession(hasSession())` runs at boot (`main.tsx`) and on logout.
+- `SessionBridge` inside `App.tsx` only mounts `useAuthCurrentUser` — it restores the
+  signed-in user from a persisted token pair on boot and navigates nowhere. Put
+  route-guard redirects in routes, not in the bridge.
+- Account-switch sequence lives in `lib/sessionReset.ts`
+  (`clearQueryCache` / `setAuthUser` / `refreshAuthMe` / `switchAccountSession`) — the
+  single source for wiping per-account state.
+
+### 4.7 i18n
+
+- i18next + react-i18next. Namespaces today: `common`, `errors`, `account` —
+  **en + ar** catalogs in `src/i18n/locales/`.
+- Default language from `VITE_LANGUAGE` (fallback `en`); user choice persists
+  (`rapido.language`). `applyDirection` sets `<html dir>`/`lang` (Arabic → `rtl`).
+- `Accept-Language` rides on every request; `X-Timezone` (IANA via `Intl`) too —
+  the backend activates both per request.
+- New user-facing strings: add both `en` and `ar` keys. `MODELTRANSLATION_FALLBACK`
+  analog does not exist on the web side — a missing `ar` string is a bug.
+- Screen strings are not yet migrated to `t()` everywhere; when you touch a screen,
+  move its strings into the catalogs.
+
+### 4.8 Quality gate
+
+`npm run check` = `typecheck` + `lint` + `format:check` + `test`. Non-negotiable rules:
+
+- `@typescript-eslint/no-non-null-assertion`
+- `no-console` (only `warn`/`error` allowed)
+- `import-x/order` (above)
+- `max-lines` ≤ 200 on `src/pages/**`
+
+## 5. Performance (Web Vitals)
+
+Targets to beat: FCP < 1.8s, LCP < 2.5s, CLS < 0.1, TBT < 200ms, INP < 200ms.
+
+- Hero/LCP image: WebP/AVIF, explicit `width`/`height`, `fetchPriority="high"`.
+- Below-fold images: `loading="lazy" decoding="async"`.
+- Fonts: async `media="print"` swap + `<noscript>`; `font-display: swap`.
+- Split with lazy routes + `manualChunks` in `vite.config.ts`; no heavy SDK in the
+  critical path — dynamic `import()` only at point of use.
+- Client paint: skeleton in `index.html`, fade out on mount.
+- Animations: transform/opacity only; respect `prefers-reduced-motion`
+  (`lib/motion.ts` is your reduced-motion-aware helper).
+- React Query: sane `staleTime`/`gcTime` in `lib/queryClient.ts` (retry transient
+  failures only, backoff); `useDebounce` for search inputs.
 
-### 3.2 Naming
+The system of record for budgets is `docs/Performance.md` — read and update it with any
+perf-relevant change.
 
-| What               | Convention                                  | Example                          |
-| ------------------ | ------------------------------------------- | -------------------------------- |
-| API functions      | `camelCase` on a named const                | `accountsApi.login`              |
-| Hooks              | `use<Verb><Noun>`                           | `useLogin`, `useRegister`        |
-| Mutation variables | `mutate({ data })` with destructured params | —                                |
-| Page components    | Default export, PascalCase                  | `export default function Home()` |
-| Other components   | Named export, PascalCase                    | `export function OAuthButtons()` |
-| Types/interfaces   | PascalCase                                  | `RegisterRequest`                |
-| CSS classes        | Tailwind utility classes                    | no custom CSS files              |
+## 6. SEO
 
-### 3.3 Imports Order
+- Build-time `robots.txt` + `sitemap.xml` via the `siteFiles` Vite plugin; host from
+  `VITE_SITE_URL`. Add new routes to `SITEMAP_PATHS` in `vite.config.ts`.
+- `index.html` carries the full head: OG, Twitter, geo, JSON-LD, fonts async.
+- Per-route meta via `SeoUpdater` + `ROUTE_SEO` in `lib/seo.ts`. **Every new route in
+  `App.tsx` gets an entry in `ROUTE_SEO`.** Detail pages append dynamic data to
+  `document.title` in a `useEffect`.
+- Every route reachable through `<Link>`; never click-only navigation.
+- `docs/SEO.md` is the deep dive — update it when the head or sitemap strategy changes.
 
-Enforced automatically by `eslint-plugin-import-x` (`import-x/order`) — alphabetical within group, blank line between groups:
+## 7. Accessibility
 
-1. Builtins
-2. External (third-party libraries: `react`, `axios`, `@tanstack/react-query`, `lucide-react`, `gsap`)
-3. Internal (`@/components/...`, `@/api/...`, `@/store`, `@/lib/...`)
-4. Parent / sibling (relative `./...`, `../...`)
-5. Index
+- First tab stop is the skip-to-content link; `<main id="main-content">`. Note the
+  `MainLayout` skip link is commented out pending a navbar — `LandingPage` ships its own
+  inline one — keep both, and re-enable the shell one when chrome lands.
+- Global `:focus-visible` ring; global reduced-motion media query collapses animation.
+- Meaningful `alt` on images (`alt=""` decorative); labels on every control;
+  errors via `role="alert"` + `aria-describedby`.
+- Semantic HTML; Radix primitives over hand-rolled widgets.
+- RTL: `dir="rtl"` when `ar` is active (Arabic catalog in use); logical properties
+  (`ms-`/`me-`, `start`/`end`) over left/right.
+- axe-core runs in Vitest (`src/test/axe.ts`); a11y tests must stay green.
+- `docs/Accessibility.md` — keep in sync.
 
-Run `npx eslint . --fix` to auto-sort imports.
+## 8. Common tasks
 
-### 3.4 Always Use Components
+**Add an API domain**
 
-Every UI element MUST use an existing component from `@/components/ui/` if one is available (Button, Input, Select, Badge, Card, etc.). If no component exists for the need, create one in `@/components/ui/` (for primitives) or `@/components/<domain>/` (for business components). Never use raw HTML elements (`<button>`, `<input>`, `<select>`, etc.) when a component exists.
+1. `api/<domain>/endpoints.ts` (types + paths + functions), `hooks.ts`, `index.ts`
+2. Keys in `lib/queryKeys.ts`; barrel in `api/index.ts`
+3. Error codes → both locale catalogs if genuinely new
 
-### 3.5 No Comments in Implementation Code
+**Add a page**
 
-Business logic files should NOT have explanatory comments. Code should be self-documenting through clear naming. Comments are reserved for:
+1. `pages/<Page>.tsx`, default export
+2. Lazy import + route in `App.tsx`
+3. Path in `ROUTES` (`lib/constants.ts`)
+4. Copy in `ROUTE_SEO` (`lib/seo.ts`)
 
-- JSDoc on public API functions
-- Section headers in complex files (e.g., `axiosInstance.ts` interceptor sections)
+**Add an endpoint to a domain** — extend `endpoints.ts`, add/adjust hook, update `queryKeys` if the shape implies new caches; never bypass `axiosInstance`.
 
-### 3.6 Component Architecture — Decoupled & Reusable
+**Add a hero image** — WebP/AVIF, explicit dimensions, `fetchPriority="high"` (LCP) or lazy loading, aspect container.
 
-Every UI piece must be extracted into its own component file. Pages are thin orchestrators — they fetch data, compose components, and wire event handlers. The `components/` directory mirrors domain areas:
+**Add a translation** — add keys to both `locales/en/*.ts` and `locales/ar/*.ts`.
 
-```
-components/<domain>/
-├── ComponentOne.tsx    # Named export, single responsibility
-├── ComponentTwo.tsx
-└── index.ts            # Barrel re-export
-```
+**Add a heavy SDK** — dynamic `import()` at point of use; never mixed static+dynamic imports of the same module.
 
-**Rules:**
+## 9. Environment variables
 
-- If a piece of UI appears in more than one page, extract it into `components/<domain>/`
-- Even if used once, extract if it has clear boundaries (form, card, filter panel, summary block)
-- Components receive data and callbacks via props — never access stores, routers, or query hooks directly
-- Use `children` slots for action buttons / custom content
-- Each component directory has a barrel `index.ts`; pages import from the barrel, never from the file directly
-- No single file should contain multiple major UI sections — split into separate component files
+| Variable                                                     | Required                    | Used in                                     |
+| ------------------------------------------------------------ | --------------------------- | ------------------------------------------- |
+| `VITE_API_URL`                                               | No (default localhost:8000) | `lib/constants.ts` → `API_V1_ROOT`          |
+| `VITE_SITE_URL`                                              | No (default example.com)    | `seo.ts`, `vite.config.ts` (robots/sitemap) |
+| `VITE_APP_NAME`                                              | No (default `Rapido`)       | `lib/constants.ts`                          |
+| `VITE_LANGUAGE`                                              | No (default `en`)           | `i18n/index.ts`                             |
+| `VITE_NETWORK_CHECK`                                         | No (`auto`)                 | `hooks/useConnection.ts` (`dev` only)       |
+| `VITE_CONTACT_EMAIL`, `VITE_GITHUB_URL`, `VITE_LINKEDIN_URL` | No                          | landing contact block                       |
+| `VITE_ANALYTICS_ENDPOINT`                                    | No                          | analytics beacon (if enabled)               |
 
-**Pages should look like this:**
+Never commit `.env`. Typing in `src/vite-env.d.ts` — extend it when you add a variable.
 
-```tsx
-export default function SomePage() {
-  // 1. Hooks: auth, data fetching, mutations
-  // 2. Event handlers (thin, delegate to mutations)
-  // 3. Render: compose components, pass props
-}
-```
+## 10. CI gate
 
-### 3.7 State Ownership
+`.github/workflows/ci.yml` runs on every push to `main` and every PR: `npm ci`,
+`typecheck`, `lint`, `format:check`, `test`, `build`. Red pipeline = not ready. Keep it.
 
-| State                                   | Tool             | Persisted?         |
-| --------------------------------------- | ---------------- | ------------------ |
-| Auth (user, token)                      | Zustand          | Yes (localStorage) |
-| Server data (queries, mutations)        | React Query      | No (cache only)    |
-| UI state (form inputs, modals, toggles) | React `useState` | No                 |
-| URL state (search params, route)        | React Router     | Yes (URL)          |
+## 11. Boundaries with the backend
 
-### 3.8 Linting, Formatting, Type Checking & Tests
-
-Formatting is enforced with **Prettier** (`.prettierrc.json`); consistency across editors comes from `.editorconfig`. Both are **gated in CI** (`.github/workflows/ci.yml`) and by the `check` script:
-
-```bash
-# One command: typecheck + lint + format check + tests
-npm run check
-
-# Type check only
-npm run typecheck
-
-# Lint (eslint)
-npm run lint
-
-# Format the whole repo
-npm run format
-
-# Verify formatting without modifying
-npm run format:check
-
-# Tests
-npm run test
-```
-
-Always run `npm run check` before committing. Do not commit code with type errors, lint errors, or formatting drift. Non-negotiable ESLint rules in this template (beyond the recommended sets):
-
-- `@typescript-eslint/no-non-null-assertion` — forbids `user!`-style assertions; guard explicitly instead
-- `no-console` — `console.warn`/`console.error` allowed, `console.log` banned
-- `import-x/order` — import grouping enforced (see 3.3)
-- `max-lines` (≤ 200 on `src/pages/**`) — keeps pages thin per the component architecture rule
-
----
-
-# Part C — Web Vitals & Performance Playbook
-
-This is the playbook that earns green Lighthouse scores: **FCP 0.5s, CLS 0.001, LCP < 2.5s target**.
-
-## 4. Core Metrics
-
-| Metric          | What it measures                                           | Good target              |
-| --------------- | ---------------------------------------------------------- | ------------------------ |
-| **FCP**         | First Contentful Paint — first text/image paints           | < 1.8s                   |
-| **LCP**         | Largest Contentful Paint — biggest visible element appears | < 2.5s                   |
-| **CLS**         | Cumulative Layout Shift — unexpected layout jumps          | < 0.1                    |
-| **TBT / INP**   | Main-thread blocking / interaction responsiveness          | TBT < 200ms, INP < 200ms |
-| **Speed Index** | How quickly content is visually complete                   | < 3.4s                   |
-
-## 5. LCP Rules (biggest element = fastest)
-
-1. **The LCP element is usually the hero image.** Compress it aggressively:
-   - Convert raster posters/photos to **WebP** (`ffmpeg -i in.png -c:v libwebp -quality 82 out.webp` — typically 10–16x smaller). AVIF is even better where supported.
-   - Never ship a multi-MB PNG on the critical path. A 1.4 MB PNG ≈ 7s LCP on throttled 4G; a 92 KB WebP ≈ 0.5s.
-2. Mark the LCP image `fetchPriority="high"` and give it explicit `width` + `height`.
-3. **Load fonts non-render-blocking**: async `media="print" onload="this.media='all'"` + `<noscript>` fallback. Use `font-display: swap`.
-4. **Minify + split JavaScript**: Vite minifies by default; add `manualChunks` for stable vendor splits (react, query, radix, gsap, i18n). Lazy-load every route.
-5. **Keep heavy SDKs out of the main bundle**: load them via dynamic `import()` only when needed (e.g., post-auth), never as a static import in the critical path.
-6. Serve a **loading skeleton** (inline in `index.html`) and fade it out once React mounts — avoids a blank screen flash and improves perceived FCP.
-
-## 6. CLS Rules (zero layout shift)
-
-1. Every image has explicit `width`/`height` attributes OR is inside a fixed-aspect container (`aspect-square`, `aspect-video`).
-2. Below-fold images use `loading="lazy"` + `decoding="async"` (render-safe decode).
-3. Fonts use `font-display: swap`; font metrics must not shift layout on load.
-4. Never inject content (banners, toasts, images) above the fold without reserving space.
-5. Set `width`/`height`/`viewBox` on all SVGs.
-
-## 7. INP / Main-Thread Rules
-
-1. Minimize work on the critical path: small, lazy chunks; no heavy animation libs in initial render unless needed.
-2. Debounce search/filter inputs (`useDebounce`).
-3. Pause background polling when not needed: `refetchIntervalInBackground: false`, `staleTime`.
-4. Animations should be CSS transforms/opacity (GPU-friendly), not layout properties.
-5. React Compiler + `useMemo`/`useCallback` for expensive derived values; avoid `setState` in `useEffect` (triggers re-render loops).
-
-## 8. Lighthouse Diagnostic Vocabulary
-
-| Lighthouse diagnostic                                  | Likely root cause & fix                                                                                |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| "Minify JavaScript" / huge savings                     | You're measuring a **dev build** (unminified). Re-run against `npm run build` output / production URL. |
-| "Reduce unused JavaScript"                             | Dead routes/libs still bundled; remove unused deps; tighten lazy chunks.                               |
-| "Avoid enormous network payloads"                      | Heavy images (→ WebP), huge bundles (→ split), or unminified JS.                                       |
-| "Improve image delivery"                               | Serve WebP/AVIF with `srcset`; add explicit dimensions.                                                |
-| "Duplicated JavaScript"                                | A module statically imported in two chunks. Standardize on one.                                        |
-| "Use efficient cache lifetimes"                        | Set `Cache-Control: max-age` on static assets at the hosting layer.                                    |
-| "Image elements do not have explicit width and height" | Add `width`/`height` attrs or aspect containers.                                                       |
-
-**Debugging rule of thumb**: FCP fast + LCP slow ⇒ the LCP element's _resource_ is slow (image size, late discovery, render-blocking). CLS > 0.1 ⇒ missing reserved space for images/fonts. TBT > 200ms ⇒ too much JS on the main thread.
-
----
-
-# Part D — SEO & Crawlability Playbook
-
-## 9. Build-time artifacts (robots.txt + sitemap.xml)
-
-Emitted by a small Vite plugin (`siteFiles` in `vite.config.ts`) on every build, so they can never go stale:
-
-- `robots.txt` → `User-agent: *` / `Allow: /` / `Sitemap: <SITE_URL>/sitemap.xml`
-- `sitemap.xml` → static routes with priorities (home 1.0, secondary 0.5, legal 0.3)
-- Host comes from `VITE_SITE_URL` (default `https://example.com`)
-
-## 10. Head meta (index.html)
-
-One hand-written, complete `<head>` in `index.html`:
-
-- `charset`, `viewport`, `description`, `author`, `robots` (`index, follow`)
-- `theme-color` (light + dark), `color-scheme`
-- `canonical` → `VITE_SITE_URL`
-- **Open Graph**: `og:type`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:image` (+ `og:image:width/height/alt`), `og:locale`, `og:locale:alternate` (for multilingual sites)
-- **Twitter card**: `summary_large_image`, `twitter:title/description/image`
-- **Geo meta** for local businesses: `geo.region`, `geo.placename`, `ICBM`, `geo.position`
-- `favicon`, `apple-touch-icon`, `msapplication-TileColor`
-- **JSON-LD** structured data: `Organization` + `WebSite` (with `inLanguage` for each locale)
-- All assets (fonts, images) referenced with non-render-blocking patterns
-
-## 11. Per-route SEO (SPA)
-
-Single-page apps get one `<title>` unless you handle it per route. This template uses:
-
-- `src/lib/seo.ts` — `SITE_NAME`, `SITE_URL`, `ROUTE_SEO` map (route pattern → title/description), and a `matchRouteSeo()` helper.
-- `src/components/SeoUpdater.tsx` — renders `null`; on route change it upserts `document.title`, `<meta name="description">`, OG tags, and the canonical link.
-- Wire it **inside the Router, above `<Suspense>`**, so every route gets meta.
-- Detail pages append dynamic data to the title (e.g., product name) in a `useEffect`.
-
-**When adding a route, always add its SEO copy to `ROUTE_SEO`.**
-
-## 12. SPA crawlability notes
-
-- Google renders client-side JS, but deliver a fast, meaningful first paint anyway (they use FCP/LCP as ranking signals).
-- Keep every route reachable via `<Link>` (crawlers follow links), never only via JS events.
-
----
-
-# Part E — Accessibility (a11y) Playbook
-
-## 13. Structural a11y (must-haves)
-
-1. **Skip-to-content link** — first focusable element in every layout; `href="#main-content"`; `<main id="main-content" tabIndex={-1}>`. Use `sr-only focus:not-sr-only focus:fixed ...` styling so it appears only on focus.
-2. **`:focus-visible` outline** — a global rule in `index.css` so every keyboard-focused element has a visible ring:
-   ```css
-   :focus-visible {
-     outline: 3px solid var(--ring);
-     outline-offset: 2px;
-   }
-   ```
-3. **`prefers-reduced-motion`** — a global media query that collapses animations/transitions to ~0 for users who ask:
-   ```css
-   @media (prefers-reduced-motion: reduce) {
-     *,
-     *::before,
-     *::after {
-       animation-duration: 0.01ms !important;
-       animation-iteration-count: 1 !important;
-       transition-duration: 0.01ms !important;
-       scroll-behavior: auto !important;
-     }
-   }
-   ```
-4. **Alt text** — meaningful `alt` on every informative image; `alt=""` on decorative ones (never omit the attribute).
-5. **Labels** — every form control has a visible `<Label>` or `aria-label`; errors are announced with `aria-describedby` / `role="alert"`.
-6. **Semantic HTML** — use real `<button>`, `<a>`, `<nav>`, `<main>`, `<section>`/headings; never fake buttons with `<div onClick>`.
-7. Radix primitives bring accessible dialog/select/tabs behavior for free — prefer them over hand-rolled widgets.
-
-## 14. Automated a11y enforcement
-
-- **axe-core scans run in Vitest** (`src/test/axe.ts` + `a11y-*.test.tsx`): render components, run `axe()`, assert no serious violations.
-- Test infra requirements: `IS_REACT_ACT_ENVIRONMENT` set in `src/test/setup-env.ts` (must stay first in `setupFiles`); `waitFor` must not be nested inside `act()`; test files import from `vitest`.
-- For RTL/multilingual sites: ensure `dir="rtl"` handling, mirrored layouts, and logical properties (`ms-`/`me-`, `start`/`end`).
-
----
-
-# Part F — UI/UX & Design System
-
-## 15. Design tokens
-
-- All colors/radii/shadows are **CSS variables** defined in `index.css` under `@theme inline` and exposed as Tailwind utilities (`bg-primary`, `text-muted-foreground`, etc.). Never hardcode hex values in components.
-- One primary brand color + one accent, applied globally. Light/dark via `.dark` class (tailwind `dark:` variant).
-
-## 16. UI quality bar
-
-- **Pages are thin** — data fetching + event wiring only; all UI lives in `components/<domain>/`.
-- **Every state is designed**: loading (skeleton), empty, error (retry), and success. No unhandled `undefined` renders.
-- **All failures are surfaced** to the user via `extractErrorMessage` — never silent `catch {}` in UI code.
-- **Responsive mobile-first**; nav collapses to a drawer/sheet on small screens.
-- **Motion is restrained**: entrance animations subtle, GPU-friendly, and disabled under `prefers-reduced-motion`.
-- Interactive elements have visible hover + focus states and adequate touch targets (≥ 44px).
-
----
-
-# Part G — Common Tasks
-
-### Adding a new API domain
-
-1. Create `api/<domain>/endpoints.ts` with types, endpoint paths, and API functions
-2. Create `api/<domain>/hooks.ts` with React Query hooks (add `onError`)
-3. Create `api/<domain>/index.ts` barrel export
-4. Add export to `api/index.ts`
-
-### Adding a new page
-
-1. Create `pages/<PageName>.tsx` with a default export
-2. Add lazy import in `App.tsx`: `const PageName = lazy(() => import('@/pages/<PageName>'))`
-3. Add route in `App.tsx` with the appropriate path and layout
-4. Add the route path to `ROUTES` in `lib/constants.ts`
-5. **Add SEO copy for the route** to `ROUTE_SEO` in `lib/seo.ts`
-
-### Adding a new API endpoint to an existing domain
-
-1. Add the function to the domain's `endpoints.ts`
-2. Add or update the hook in `hooks.ts`
-3. If creating a new hook file, add export to `index.ts`
-
-### Adding a hero/LCP image
-
-1. Export as WebP/AVIF (never a large PNG)
-2. Add explicit `width` + `height`
-3. Mark `fetchPriority="high"` if it's the LCP element; `loading="lazy"` + `decoding="async"` otherwise
-4. Ensure its container reserves space (aspect ratio) to keep CLS at 0
-
-### Adding a heavy third-party SDK
-
-1. Keep it out of the main bundle: dynamic `import()` at the point of use
-2. Never mix static + dynamic imports of the same module (causes duplicated JS)
-
-### Adding a route to the sitemap
-
-Add it to `SITEMAP_PATHS` in `vite.config.ts` (it regenerates on every build).
-
----
-
-# Part H — Continuous Integration
-
-## 17. CI Gate
-
-`.github/workflows/ci.yml` runs on every push to `main` and on every pull request. It is the **enforcement point** for all the standards above — never rely on self-discipline alone:
-
-1. `npm ci` (reproducible installs)
-2. `npm run typecheck`
-3. `npm run lint`
-4. `npm run format:check`
-5. `npm run test`
-6. `npm run build`
-
-A red pipeline means the PR is not ready to merge, period. When you start a new project from this template, the workflow comes with it — keep it.
-
----
-
-# Part I — Environment Variables
-
-| Variable        | Required         | Used In                                               |
-| --------------- | ---------------- | ----------------------------------------------------- |
-| `VITE_API_URL`  | No (has default) | `axiosInstance.ts`                                    |
-| `VITE_APP_NAME` | No (has default) | `constants.ts`                                        |
-| `VITE_SITE_URL` | No (has default) | `seo.ts`, `vite.config.ts` (robots/sitemap/canonical) |
-
-Never commit `.env` files. Type env vars in `src/vite-env.d.ts` (`ImportMetaEnv`) so `import.meta.env.VITE_*` is checked at compile time.
+- `django-rapido` serves the contract; auth mounts at `/api/v1/auth/`.
+- OTP flows expect `X-Timezone` / `Accept-Language` from the client.
+- Error throttling is server-side; respect `Retry-After` (exposed on `ApiError.retryAfter`).
+- Contract change = coordinated change in both repos in the same releasable slice.
